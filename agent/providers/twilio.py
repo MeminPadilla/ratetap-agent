@@ -25,7 +25,7 @@ class ProveedorTwilio(ProveedorWhatsApp):
 
         # Log de todos los campos recibidos para facilitar debugging
         campos = dict(form)
-        logger.debug(f"Twilio webhook campos recibidos: {list(campos.keys())}")
+        logger.info(f"Twilio webhook — campos recibidos: {campos}")
 
         # Twilio envía el texto en "Body" (capital B)
         texto = form.get("Body") or form.get("body") or ""
