@@ -14,7 +14,7 @@ echo ""
 
 # ── Verificar Python ──────────────────────────────────────────
 echo "  [1/4] Verificando Python..."
-if ! command -v python3 &> /dev/null; then
+if ! command -v python3.11 &> /dev/null; then
     echo ""
     echo "  ERROR: Python 3 no encontrado."
     echo "  Descargalo en: https://python.org/downloads"
@@ -22,17 +22,17 @@ if ! command -v python3 &> /dev/null; then
     exit 1
 fi
 
-PYTHON_MAJOR=$(python3 -c 'import sys; print(sys.version_info.major)')
-PYTHON_MINOR=$(python3 -c 'import sys; print(sys.version_info.minor)')
+PYTHON_MAJOR=$(python3.11 -c 'import sys; print(sys.version_info.major)')
+PYTHON_MINOR=$(python3.11 -c 'import sys; print(sys.version_info.minor)')
 if [ "$PYTHON_MAJOR" -lt 3 ] || ([ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -lt 11 ]); then
     echo ""
     echo "  ERROR: Necesitas Python 3.11 o superior."
-    echo "  Version actual: $(python3 --version)"
+    echo "  Version actual: $(python3.11 --version)"
     echo "  Descarga la ultima version en: https://python.org/downloads"
     echo ""
     exit 1
 fi
-echo "  OK — $(python3 --version)"
+echo "  OK — $(python3.11 --version)"
 
 # ── Verificar Claude Code ────────────────────────────────────
 echo "  [2/4] Verificando Claude Code..."
