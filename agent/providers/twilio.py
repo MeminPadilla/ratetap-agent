@@ -3,7 +3,6 @@
 
 import os
 import logging
-import base64
 import httpx
 from fastapi import Request
 from agent.providers.base import ProveedorWhatsApp, MensajeEntrante
@@ -72,7 +71,6 @@ class ProveedorTwilio(ProveedorWhatsApp):
         to = f"whatsapp:{telefono}" if not telefono.startswith("whatsapp:") else telefono
 
         url  = f"https://api.twilio.com/2010-04-01/Accounts/{account_sid}/Messages.json"
-        auth = base64.b64encode(f"{account_sid}:{auth_token}".encode()).decode()
         data = {
             "From": f"whatsapp:{phone_number}",
             "To":   to,
@@ -82,7 +80,7 @@ class ProveedorTwilio(ProveedorWhatsApp):
         logger.info(f"Enviando a {to} desde whatsapp:{phone_number}")
 
         async with httpx.AsyncClient() as client:
-            r = await client.post(url, data=data, headers={"Authorization": f"Basic {auth}"})
+            r = await client.post(url, data=data, auth=(account_sid, auth_token))
             if r.status_code != 201:
                 logger.error(f"Error Twilio {r.status_code}: {r.text}")
                 return False
