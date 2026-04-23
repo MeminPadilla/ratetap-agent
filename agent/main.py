@@ -79,23 +79,20 @@ async def webhook_handler(request: Request):
             if msg.es_propio or not msg.texto:
                 continue
 
-            logger.info(f"Mensaje de {msg.telefono}: {msg.texto}")
+            logger.info(f"[1/4] Mensaje recibido de {msg.telefono}: {msg.texto}")
 
-            # Obtener historial ANTES de guardar el mensaje actual
-            # (brain.py agrega el mensaje actual, evitando duplicados)
             historial = await obtener_historial(msg.telefono)
+            logger.info(f"[2/4] Historial obtenido ({len(historial)} mensajes)")
 
-            # Generar respuesta con Claude
             respuesta = await generar_respuesta(msg.texto, historial)
+            logger.info(f"[3/4] Respuesta generada: {respuesta[:80]}")
 
-            # Guardar mensaje del usuario Y respuesta del agente en memoria
             await guardar_mensaje(msg.telefono, "user", msg.texto)
             await guardar_mensaje(msg.telefono, "assistant", respuesta)
+            logger.info(f"[4/4] Llamando enviar_mensaje a {msg.telefono}")
 
-            # Enviar respuesta por WhatsApp via Twilio
-            await proveedor.enviar_mensaje(msg.telefono, respuesta)
-
-            logger.info(f"Respuesta a {msg.telefono}: {respuesta}")
+            resultado = await proveedor.enviar_mensaje(msg.telefono, respuesta)
+            logger.info(f"[4/4] enviar_mensaje resultado: {resultado}")
 
         return {"status": "ok"}
 

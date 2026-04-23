@@ -44,6 +44,7 @@ class ProveedorTwilio(ProveedorWhatsApp):
 
     async def enviar_mensaje(self, telefono: str, mensaje: str) -> bool:
         """Envía mensaje via Twilio API."""
+        logger.info(f"enviar_mensaje llamado — destino: {telefono}, largo mensaje: {len(mensaje)}")
         account_sid  = os.environ.get("TWILIO_ACCOUNT_SID")
         auth_token   = os.environ.get("TWILIO_AUTH_TOKEN")
         phone_number = os.environ.get("TWILIO_PHONE_NUMBER")
