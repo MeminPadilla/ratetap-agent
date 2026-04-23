@@ -69,6 +69,8 @@ async def webhook_handler(request: Request):
     Procesa el mensaje, genera respuesta con Claude y la envía de vuelta.
     """
     try:
+        logger.debug(f"Webhook recibido — Content-Type: {request.headers.get('content-type', 'no definido')}")
+
         # Parsear webhook — Twilio normaliza el formato a MensajeEntrante
         mensajes = await proveedor.parsear_webhook(request)
 
