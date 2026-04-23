@@ -54,6 +54,11 @@ class ProveedorTwilio(ProveedorWhatsApp):
         else:
             logger.info("auth_token: no encontrado en entorno")
 
+        if account_sid:
+            logger.info(f"account_sid en uso: {account_sid[:4]}...{account_sid[-4:]}")
+        else:
+            logger.info("account_sid: no encontrado en entorno")
+
         faltantes = [k for k, v in {
             "TWILIO_ACCOUNT_SID": account_sid,
             "TWILIO_AUTH_TOKEN": auth_token,
