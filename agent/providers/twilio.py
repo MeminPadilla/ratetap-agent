@@ -15,9 +15,7 @@ class ProveedorTwilio(ProveedorWhatsApp):
     """Proveedor de WhatsApp usando Twilio."""
 
     def __init__(self):
-        self.account_sid = os.getenv("TWILIO_ACCOUNT_SID")
-        self.auth_token = os.getenv("TWILIO_AUTH_TOKEN")
-        self.phone_number = os.getenv("TWILIO_PHONE_NUMBER")
+        pass
 
     async def parsear_webhook(self, request: Request) -> list[MensajeEntrante]:
         """Parsea el payload form-encoded de Twilio."""
@@ -46,26 +44,34 @@ class ProveedorTwilio(ProveedorWhatsApp):
 
     async def enviar_mensaje(self, telefono: str, mensaje: str) -> bool:
         """Envía mensaje via Twilio API."""
-        if not all([self.account_sid, self.auth_token, self.phone_number]):
-            logger.warning("Variables de Twilio no configuradas — mensaje no enviado")
+        account_sid  = os.environ.get("TWILIO_ACCOUNT_SID")
+        auth_token   = os.environ.get("TWILIO_AUTH_TOKEN")
+        phone_number = os.environ.get("TWILIO_PHONE_NUMBER")
+
+        faltantes = [k for k, v in {
+            "TWILIO_ACCOUNT_SID": account_sid,
+            "TWILIO_AUTH_TOKEN": auth_token,
+            "TWILIO_PHONE_NUMBER": phone_number,
+        }.items() if not v]
+
+        if faltantes:
+            logger.error(f"Variables de Twilio faltantes: {faltantes}")
             return False
 
-        # Asegurar que el número destino tenga el prefijo whatsapp:
         to = f"whatsapp:{telefono}" if not telefono.startswith("whatsapp:") else telefono
 
-        url = f"https://api.twilio.com/2010-04-01/Accounts/{self.account_sid}/Messages.json"
-        auth = base64.b64encode(f"{self.account_sid}:{self.auth_token}".encode()).decode()
-        headers = {"Authorization": f"Basic {auth}"}
+        url  = f"https://api.twilio.com/2010-04-01/Accounts/{account_sid}/Messages.json"
+        auth = base64.b64encode(f"{account_sid}:{auth_token}".encode()).decode()
         data = {
-            "From": f"whatsapp:{self.phone_number}",
-            "To": to,
+            "From": f"whatsapp:{phone_number}",
+            "To":   to,
             "Body": mensaje,
         }
 
-        logger.debug(f"Enviando a {to} desde whatsapp:{self.phone_number}")
+        logger.info(f"Enviando a {to} desde whatsapp:{phone_number}")
 
         async with httpx.AsyncClient() as client:
-            r = await client.post(url, data=data, headers=headers)
+            r = await client.post(url, data=data, headers={"Authorization": f"Basic {auth}"})
             if r.status_code != 201:
                 logger.error(f"Error Twilio {r.status_code}: {r.text}")
                 return False
