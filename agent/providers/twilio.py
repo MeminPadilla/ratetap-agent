@@ -49,6 +49,11 @@ class ProveedorTwilio(ProveedorWhatsApp):
         auth_token   = os.environ.get("TWILIO_AUTH_TOKEN")
         phone_number = os.environ.get("TWILIO_PHONE_NUMBER")
 
+        if auth_token:
+            logger.info(f"auth_token en uso: {auth_token[:4]}...{auth_token[-4:]}")
+        else:
+            logger.info("auth_token: no encontrado en entorno")
+
         faltantes = [k for k, v in {
             "TWILIO_ACCOUNT_SID": account_sid,
             "TWILIO_AUTH_TOKEN": auth_token,
