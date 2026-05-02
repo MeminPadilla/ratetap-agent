@@ -1,17 +1,40 @@
+import { useMemo } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { ScreenContainer } from '../components/ScreenContainer';
 import { ListRow } from '../components/ListRow';
+import { SplitBalanceCard } from '../components/SplitBalanceCard';
+import { InsightsCard } from '../components/InsightsCard';
+import { WeeklyChart } from '../components/charts/WeeklyChart';
+import { AccountSpendBar } from '../components/charts/AccountSpendBar';
+import { LeadFunnel } from '../components/charts/LeadFunnel';
 import { ACCOUNTS, accountById } from '../constants/accounts';
 import { colors, fontSize, formatMoney, radius, spacing } from '../constants/theme';
 import { useStore } from '../storage/useStore';
+import {
+  generateInsights,
+  leadCountsByStatus,
+  monthSpendByAccount,
+  weeklyBuckets,
+} from '../utils/analytics';
 
 export const DashboardScreen = () => {
   const { transactions, leads, balanceFor, totalBalance } = useStore();
   const recent = transactions.slice(0, 5);
+
+  const buckets = useMemo(() => weeklyBuckets(transactions), [transactions]);
+  const monthSpend = useMemo(() => monthSpendByAccount(transactions), [transactions]);
+  const leadCounts = useMemo(() => leadCountsByStatus(leads), [leads]);
+  const insights = useMemo(
+    () => generateInsights(transactions, leads, balanceFor),
+    [transactions, leads, balanceFor],
+  );
+
   const wonLeadsMrr = leads
     .filter((l) => l.status === 'won')
     .reduce((sum, l) => sum + (l.mrr ?? 0), 0);
-  const openLeads = leads.filter((l) => l.status === 'new' || l.status === 'qualified').length;
+  const openLeads = leads.filter(
+    (l) => l.status === 'new' || l.status === 'qualified',
+  ).length;
 
   return (
     <ScreenContainer>
@@ -29,6 +52,12 @@ export const DashboardScreen = () => {
         >
           {formatMoney(totalBalance())}
         </Text>
+
+        <SplitBalanceCard balanceFor={balanceFor} />
+
+        <WeeklyChart buckets={buckets} />
+
+        <InsightsCard insights={insights} />
 
         <Text style={styles.section}>Accounts</Text>
         <View style={styles.grid}>
@@ -57,6 +86,8 @@ export const DashboardScreen = () => {
           })}
         </View>
 
+        <AccountSpendBar slices={monthSpend} />
+
         <View style={styles.statRow}>
           <View style={styles.statBox}>
             <Text style={styles.statLabel}>Open leads</Text>
@@ -69,6 +100,8 @@ export const DashboardScreen = () => {
             </Text>
           </View>
         </View>
+
+        <LeadFunnel counts={leadCounts} />
 
         <Text style={styles.section}>Recent activity</Text>
         {recent.length === 0 ? (
@@ -116,13 +149,13 @@ const styles = StyleSheet.create({
     fontSize: fontSize.display,
     fontWeight: '800',
     marginTop: spacing.xs,
-    marginBottom: spacing.xl,
+    marginBottom: spacing.lg,
   },
   section: {
     color: colors.text,
     fontSize: fontSize.lg,
     fontWeight: '700',
-    marginTop: spacing.lg,
+    marginTop: spacing.md,
     marginBottom: spacing.md,
   },
   grid: {
@@ -170,7 +203,7 @@ const styles = StyleSheet.create({
   statRow: {
     flexDirection: 'row',
     gap: spacing.md,
-    marginTop: spacing.sm,
+    marginBottom: spacing.md,
   },
   statBox: {
     flex: 1,
