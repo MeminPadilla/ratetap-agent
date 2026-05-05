@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "RateTap",
+    "slug": "ratetap",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#0E1116",
+      "resizeMode": "contain"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0E1116"
+      }
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
