@@ -18,7 +18,7 @@ import {
 } from '../utils/analytics';
 
 export const DashboardScreen = () => {
-  const { transactions, leads, balanceFor, totalBalance } = useStore();
+  const { transactions, leads, balances, balanceFor } = useStore();
   const recent = transactions.slice(0, 5);
 
   const buckets = useMemo(() => weeklyBuckets(transactions), [transactions]);
@@ -47,10 +47,10 @@ export const DashboardScreen = () => {
         <Text
           style={[
             styles.netAmount,
-            { color: totalBalance() >= 0 ? colors.income : colors.expense },
+            { color: balances.total >= 0 ? colors.income : colors.expense },
           ]}
         >
-          {formatMoney(totalBalance())}
+          {formatMoney(balances.total)}
         </Text>
 
         <SplitBalanceCard balanceFor={balanceFor} />
@@ -62,7 +62,7 @@ export const DashboardScreen = () => {
         <Text style={styles.section}>Accounts</Text>
         <View style={styles.grid}>
           {ACCOUNTS.map((acc) => {
-            const bal = balanceFor(acc.id);
+            const bal = balances[acc.id];
             return (
               <View
                 key={acc.id}

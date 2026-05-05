@@ -1,4 +1,13 @@
-import { useCallback, useEffect, useState, createContext, useContext, createElement, ReactNode } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  createContext,
+  useContext,
+  createElement,
+  ReactNode,
+} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AccountId, Lead, Transaction } from '../types';
 
@@ -10,10 +19,19 @@ interface StoreState {
   leads: Lead[];
 }
 
+interface Balances {
+  mp: number;
+  bbva: number;
+  spin: number;
+  credit: number;
+  total: number;
+}
+
 interface StoreApi extends StoreState {
   ready: boolean;
   addTransaction: (t: Omit<Transaction, 'id' | 'createdAt'>) => void;
   addLead: (l: Omit<Lead, 'id' | 'createdAt'>) => void;
+  balances: Balances;
   balanceFor: (accountId: AccountId) => number;
   totalBalance: () => number;
   lastAccountId: AccountId | null;
@@ -54,67 +72,54 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         }
         if (lastAcc) setLastAccountIdState(lastAcc as AccountId);
       } catch {
-        // ignore — start fresh
+        // ignore
       } finally {
         setReady(true);
       }
     })();
   }, []);
 
-  const persist = useCallback((next: StoreState) => {
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next)).catch(() => {});
+  useEffect(() => {
+    if (!ready) return;
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(state)).catch(() => {});
+  }, [state, ready]);
+
+  const addTransaction: StoreApi['addTransaction'] = useCallback((t) => {
+    setState((prev) => ({
+      ...prev,
+      transactions: [
+        { ...t, id: newId(), createdAt: new Date().toISOString() },
+        ...prev.transactions,
+      ],
+    }));
   }, []);
 
-  const addTransaction: StoreApi['addTransaction'] = useCallback(
-    (t) => {
-      setState((prev) => {
-        const next: StoreState = {
-          ...prev,
-          transactions: [
-            { ...t, id: newId(), createdAt: new Date().toISOString() },
-            ...prev.transactions,
-          ],
-        };
-        persist(next);
-        return next;
-      });
-    },
-    [persist],
-  );
+  const addLead: StoreApi['addLead'] = useCallback((l) => {
+    setState((prev) => ({
+      ...prev,
+      leads: [
+        { ...l, id: newId(), createdAt: new Date().toISOString() },
+        ...prev.leads,
+      ],
+    }));
+  }, []);
 
-  const addLead: StoreApi['addLead'] = useCallback(
-    (l) => {
-      setState((prev) => {
-        const next: StoreState = {
-          ...prev,
-          leads: [
-            { ...l, id: newId(), createdAt: new Date().toISOString() },
-            ...prev.leads,
-          ],
-        };
-        persist(next);
-        return next;
-      });
-    },
-    [persist],
-  );
+  const balances = useMemo<Balances>(() => {
+    const acc: Balances = { mp: 0, bbva: 0, spin: 0, credit: 0, total: 0 };
+    for (const t of state.transactions) {
+      const delta = t.type === 'income' ? t.amount : -t.amount;
+      acc[t.accountId] += delta;
+      acc.total += delta;
+    }
+    return acc;
+  }, [state.transactions]);
 
   const balanceFor = useCallback(
-    (accountId: AccountId): number =>
-      state.transactions
-        .filter((t) => t.accountId === accountId)
-        .reduce((sum, t) => sum + (t.type === 'income' ? t.amount : -t.amount), 0),
-    [state.transactions],
+    (accountId: AccountId): number => balances[accountId],
+    [balances],
   );
 
-  const totalBalance = useCallback(
-    (): number =>
-      state.transactions.reduce(
-        (sum, t) => sum + (t.type === 'income' ? t.amount : -t.amount),
-        0,
-      ),
-    [state.transactions],
-  );
+  const totalBalance = useCallback((): number => balances.total, [balances]);
 
   const setLastAccountId = useCallback((id: AccountId) => {
     setLastAccountIdState(id);
@@ -127,6 +132,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     ready,
     addTransaction,
     addLead,
+    balances,
     balanceFor,
     totalBalance,
     lastAccountId,

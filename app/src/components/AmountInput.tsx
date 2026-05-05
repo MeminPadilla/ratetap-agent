@@ -12,12 +12,17 @@ interface Props {
 export const AmountInput = forwardRef<TextInput, Props>(
   ({ value, onChange, tint = colors.text, autoFocus }, ref) => {
     const handleChange = (raw: string) => {
-      // allow only digits and a single decimal
-      const cleaned = raw.replace(/[^0-9.]/g, '');
-      const parts = cleaned.split('.');
-      const normalized =
-        parts.length <= 2 ? cleaned : `${parts[0]}.${parts.slice(1).join('')}`;
-      onChange(normalized);
+      let v = raw.replace(/,/g, '.');
+      v = v.replace(/[^0-9.]/g, '');
+      const parts = v.split('.');
+      if (parts.length > 2) {
+        v = parts[0] + '.' + parts.slice(1).join('');
+      }
+      const [int, dec] = v.split('.');
+      if (dec !== undefined) {
+        v = int + '.' + dec.slice(0, 2);
+      }
+      onChange(v);
     };
 
     return (
