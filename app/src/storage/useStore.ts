@@ -10,9 +10,12 @@ import {
 } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AccountId, Lead, Transaction } from '../types';
+import { CURRENT_SCHEMA_VERSION } from './schemas';
+import { migrate } from './migrations';
 
 const STORAGE_KEY = '@ratetap/v1';
 const LAST_ACCOUNT_KEY = '@ratetap/lastAccount';
+const BACKUP_KEY_PREFIX = '@ratetap/backup/';
 
 interface StoreState {
   transactions: Transaction[];
@@ -51,6 +54,54 @@ export const useStore = (): StoreApi => {
   return ctx;
 };
 
+/**
+ * Backs up a raw blob under @ratetap/backup/{timestamp} so we can
+ * recover it manually later. Best-effort: silently swallows errors
+ * because if storage itself is broken there's nothing to do.
+ */
+const backupRawBlob = async (raw: string): Promise<void> => {
+  const key = `${BACKUP_KEY_PREFIX}${new Date().toISOString()}`;
+  try {
+    await AsyncStorage.setItem(key, raw);
+    if (__DEV__) console.warn(`[useStore] corrupted state backed up to ${key}`);
+  } catch {
+    // ignore
+  }
+};
+
+/**
+ * Loads + migrates + validates the persisted state. On any failure,
+ * backs up the raw blob and returns the empty initial state.
+ */
+const loadAndMigrate = async (): Promise<StoreState> => {
+  let raw: string | null = null;
+  try {
+    raw = await AsyncStorage.getItem(STORAGE_KEY);
+  } catch {
+    return initial;
+  }
+  if (!raw) return initial;
+
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    const result = migrate(parsed);
+    if (__DEV__ && (result.droppedTransactions > 0 || result.droppedLeads > 0)) {
+      console.warn(
+        `[useStore] migrated v${result.fromVersion} → v${CURRENT_SCHEMA_VERSION}: ` +
+          `dropped ${result.droppedTransactions} transactions, ${result.droppedLeads} leads`,
+      );
+    }
+    return {
+      transactions: result.state.transactions,
+      leads: result.state.leads,
+    };
+  } catch (e) {
+    if (__DEV__) console.warn('[useStore] state corrupt, backing up + resetting', e);
+    await backupRawBlob(raw);
+    return initial;
+  }
+};
+
 export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const [state, setState] = useState<StoreState>(initial);
   const [ready, setReady] = useState(false);
@@ -59,20 +110,12 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     (async () => {
       try {
-        const [raw, lastAcc] = await Promise.all([
-          AsyncStorage.getItem(STORAGE_KEY),
+        const [loaded, lastAcc] = await Promise.all([
+          loadAndMigrate(),
           AsyncStorage.getItem(LAST_ACCOUNT_KEY),
         ]);
-        if (raw) {
-          const parsed = JSON.parse(raw) as StoreState;
-          setState({
-            transactions: parsed.transactions ?? [],
-            leads: parsed.leads ?? [],
-          });
-        }
+        setState(loaded);
         if (lastAcc) setLastAccountIdState(lastAcc as AccountId);
-      } catch {
-        // ignore
       } finally {
         setReady(true);
       }
@@ -81,7 +124,12 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!ready) return;
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(state)).catch(() => {});
+    const payload = {
+      __schemaVersion: CURRENT_SCHEMA_VERSION,
+      transactions: state.transactions,
+      leads: state.leads,
+    };
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(payload)).catch(() => {});
   }, [state, ready]);
 
   const addTransaction: StoreApi['addTransaction'] = useCallback((t) => {
