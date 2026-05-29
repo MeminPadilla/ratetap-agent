@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#05070d">
+<title>RateTap · Herramienta de Ventas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">R</div>
+      <div class="brand-name">RateTap <b>· Ventas</b></div>
+    </div>
+    <div class="mode-pill"><span class="dot"></span><span id="mode-pill-label">Presentando</span></div>
+  </header>
+
+  <!-- STAGE -->
+  <div class="stage">
+
+    <!-- ===== MODO PRESENTAR ===== -->
+    <section class="screen active" data-mode="pitch" data-screen-label="Presentar">
+      <div class="pitch-wrap">
+        <div class="pitch-stage" id="pitch-stage"></div>
+        <div class="cue" id="cue"><span class="cue-ic">Tú</span><span id="cue-text"></span></div>
+        <nav class="pnav">
+          <button class="pnav-btn" id="p-prev" aria-label="Anterior">←</button>
+          <div class="pdots" id="pdots"></div>
+          <button class="pnav-btn next" id="p-next">Siguiente →</button>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ===== MODO VENDEDOR ===== -->
+    <section class="screen" data-mode="coach" data-screen-label="Vendedor">
+      <div class="coach">
+        <div class="coach-tabs" id="coach-tabs"></div>
+        <div class="csection active" id="sec-guion"></div>
+        <div class="csection" id="sec-objeciones"></div>
+        <div class="csection" id="sec-numeros"></div>
+        <div class="csection" id="sec-dinero"></div>
+        <div class="csection" id="sec-checklist"></div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- BOTTOM TAB BAR -->
+  <nav class="tabbar">
+    <button class="tab active" data-mode="pitch"><span class="tic">🎤</span>Presentar</button>
+    <button class="tab" data-mode="coach"><span class="tic">🎯</span>Vendedor</button>
+    <button class="tab cta" id="tab-cta"><span class="tic">✦</span>Cerrar</button>
+  </nav>
+
+</div>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" rx="20" fill="#0a0e1a"/>
+    <rect x="30" y="22" width="40" height="40" rx="9" fill="#2563eb"/>
+    <text x="50" y="52" font-family="Georgia,serif" font-size="26" font-weight="700" fill="#fff" text-anchor="middle">R</text>
+    <text x="50" y="80" font-family="Georgia,serif" font-size="13" font-style="italic" fill="#C8A24B" text-anchor="middle">Ventas</text>
+  </svg>
+</template>
+
+<script src="content.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
