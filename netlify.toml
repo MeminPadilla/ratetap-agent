@@ -1,0 +1,17 @@
+# Configuración de Netlify para publicar la app "Roll de Estaciones".
+# La app vive en la carpeta web/. Netlify lee este archivo automáticamente,
+# así que al importar el repo no tienes que configurar nada a mano.
+
+[build]
+  base = "web"            # la app está en la carpeta web/
+  command = "npm run build"
+  publish = "dist"        # Vite deja el sitio listo en web/dist
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# La app es de una sola pantalla: cualquier ruta sirve el index.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
