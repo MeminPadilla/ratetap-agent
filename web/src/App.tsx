@@ -160,7 +160,7 @@ function Plano(props: {
 // VISTA CAPITÁN — arma las zonas del día
 // ════════════════════════════════════════════════════════════
 function VistaCapitan() {
-  const { roll, agregarZona, eliminarZona, toggleMesa, liberarZona, zonaDeMesa, nuevoDia } = useStore();
+  const { roll, agregarZona, eliminarZona, toggleMesa, liberarZona, zonaDeMesa, nuevoDia, publicar } = useStore();
   const [sel, setSel] = useState<string | null>(null);
 
   const mesasAsignadas = roll.zonas.reduce((s, z) => s + z.mesas.length, 0);
@@ -225,6 +225,18 @@ function VistaCapitan() {
 
       <Auxiliares modoCapitan />
 
+      {/* Publicar: hasta que el capitán publica, el mesero no puede escoger */}
+      <div className={`publicar-bar ${roll.publicado ? 'on' : ''}`}>
+        <div className="pb-txt">
+          {roll.publicado
+            ? <><b>Publicado ✓</b> — los meseros ya pueden escoger su zona.</>
+            : <><b>Sin publicar</b> — arma las zonas y publícalas para que los meseros escojan.</>}
+        </div>
+        {roll.publicado
+          ? <button className="btn btn-ghost" onClick={() => publicar(false)}>Despublicar</button>
+          : <button className="btn btn-gold" onClick={() => publicar(true)} disabled={roll.zonas.length === 0}>Publicar zonas</button>}
+      </div>
+
       <PrintHeader />
 
       <div className="acciones">
@@ -246,6 +258,7 @@ function VistaMesero() {
   const miZona = roll.zonas.find((z) => z.mesero?.trim().toLowerCase() === yo.toLowerCase());
 
   const intentarTomar = (zonaId: string) => {
+    if (!roll.publicado) { alert('El capitán todavía no publica las zonas. Espera un momento ⏳'); return; }
     if (!yo) { alert('Primero escribe tu nombre arriba 👆'); return; }
     const z = roll.zonas.find((x) => x.id === zonaId);
     if (z?.mesero && z.mesero.trim().toLowerCase() !== yo.toLowerCase()) {
@@ -275,8 +288,8 @@ function VistaMesero() {
         </p>
       </div>
 
-      {roll.zonas.length === 0 ? (
-        <div className="vacio">El capitán todavía no arma las zonas del día. Espera un momento ⏳</div>
+      {!roll.publicado ? (
+        <div className="vacio">⏳ El capitán todavía no publica las zonas del día.<br />En cuanto publique, aquí podrás escoger la tuya.</div>
       ) : (
         <div className="zonas-bar">
           <div className="zonas-chips lista">
@@ -304,48 +317,75 @@ function VistaMesero() {
 
       <Plano onMesa={onMesa} miMesero={yo} />
 
-      <Auxiliares meseroNombre={yo} />
+      <Auxiliares />
     </>
   );
 }
 
 // ════════════════════════════════════════════════════════════
-// AUXILIARES
+// AUXILIARES DE PISO — nombre + zonas que cubre cada uno
+// Editable por el capitán; solo-lectura para el mesero y el PDF.
 // ════════════════════════════════════════════════════════════
-function Auxiliares(props: { modoCapitan?: boolean; meseroNombre?: string }) {
-  const { roll, tomarAux, liberarAux } = useStore();
-  const { modoCapitan, meseroNombre } = props;
+function Auxiliares(props: { modoCapitan?: boolean }) {
+  const { roll, setAuxNombre, toggleAuxZona } = useStore();
+  const { modoCapitan } = props;
 
-  const onTap = (id: string) => {
-    const actual = roll.aux[id];
-    if (modoCapitan) {
-      if (actual && confirm(`¿Soltar ${actual.mesero} de este rol?`)) liberarAux(id);
-      return;
-    }
-    const yo = (meseroNombre || '').trim();
-    if (!yo) { alert('Primero escribe tu nombre arriba 👆'); return; }
-    if (actual && actual.mesero.trim().toLowerCase() !== yo.toLowerCase()) {
-      alert(`Ese rol lo tiene ${actual.mesero}.`); return;
-    }
-    tomarAux(id, yo);
-  };
+  // resumen "Z2 · Z3" ordenado por número de zona
+  const resumenZonas = (ids: string[]) =>
+    ids
+      .map((id) => roll.zonas.findIndex((z) => z.id === id) + 1)
+      .filter((n) => n > 0)
+      .sort((a, b) => a - b)
+      .map((n) => `Z${n}`)
+      .join(' · ');
 
   return (
     <section className="area">
-      <div className="area-title"><span className="dot" /> Auxiliares</div>
-      <div className="aux-grid">
+      <div className="area-title"><span className="dot" /> Auxiliares de piso</div>
+      <div className="aux-list">
         {AUXILIARES.map((a) => {
-          const asig = roll.aux[a.id];
-          const mia = !!asig && !!meseroNombre && asig.mesero.trim().toLowerCase() === meseroNombre.trim().toLowerCase();
+          const info = roll.aux[a.id] ?? { nombre: '', zonas: [] };
           return (
-            <button key={a.id} className={`aux ${asig ? 'ocupada' : ''} ${mia ? 'mia' : ''}`} onClick={() => onTap(a.id)}>
-              <span className="aux-rol">{a.nombre}</span>
-              {asig ? (
-                <span className="aux-quien"><span className="avatar mini">{iniciales(asig.mesero)}</span>{asig.mesero}</span>
-              ) : (
-                <span className="aux-libre">Libre</span>
+            <div key={a.id} className="auxrow">
+              <div className="auxrow-rol">{a.nombre}</div>
+
+              {modoCapitan && (
+                <div className="auxrow-edit no-print">
+                  <input
+                    className="auxrow-input"
+                    placeholder="Nombre del auxiliar"
+                    value={info.nombre}
+                    onChange={(e) => setAuxNombre(a.id, e.target.value)}
+                  />
+                  <div className="auxrow-zonas">
+                    {roll.zonas.length === 0 ? (
+                      <span className="auxrow-hint">Crea zonas primero</span>
+                    ) : (
+                      roll.zonas.map((z, i) => (
+                        <button
+                          key={z.id}
+                          className={`zchip ${info.zonas.includes(z.id) ? 'on' : ''}`}
+                          style={{ ['--c' as string]: z.color }}
+                          onClick={() => toggleAuxZona(a.id, z.id)}
+                        >
+                          Z{i + 1}
+                        </button>
+                      ))
+                    )}
+                  </div>
+                </div>
               )}
-            </button>
+
+              {/* Solo-lectura (mesero siempre; capitán solo en el PDF) */}
+              <div className={`auxrow-ro ${modoCapitan ? 'print-only' : ''}`}>
+                {info.nombre ? (
+                  <span className="auxrow-name"><span className="avatar mini">{iniciales(info.nombre)}</span>{info.nombre}</span>
+                ) : (
+                  <span className="auxrow-name vacio-inline">Sin asignar</span>
+                )}
+                <span className="auxrow-zlist">{info.zonas.length ? resumenZonas(info.zonas) : '—'}</span>
+              </div>
+            </div>
           );
         })}
       </div>

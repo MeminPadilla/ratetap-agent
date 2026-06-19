@@ -9,17 +9,18 @@ export interface Zona {
   tomadaEn?: number; // timestamp de cuándo la tomaron
 }
 
-// Asignación de un rol auxiliar
-export interface Asignacion {
-  mesero: string;
-  asignadoEn: number;
+// Auxiliar de piso: una posición con su nombre y las zonas que cubre.
+export interface Auxiliar {
+  nombre: string;     // nombre de quien toma la posición
+  zonas: string[];    // ids de las zonas que le corresponden
 }
 
 // Estado del roll de un día
 export interface RollDelDia {
   fecha: string; // YYYY-MM-DD
   zonas: Zona[];
-  aux: Record<string, Asignacion>; // id de rol auxiliar -> asignación
+  aux: Record<string, Auxiliar>; // id de posición (Terraza, Salón...) -> auxiliar
+  publicado: boolean; // hasta que el capitán publica, el mesero no puede escoger
   creadoEn: number;
 }
 
