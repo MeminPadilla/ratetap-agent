@@ -1,79 +1,264 @@
-// Roll de Estaciones — pantalla principal
-// Dos modos: "Mesero" (escoge su zona) y "Capitán" (ve todo y exporta PDF).
+// Roll de Estaciones — La Estancia
+// Plano real de mesas. El capitán agrupa mesas en zonas; el mesero escoge zona.
 
-import { useState } from 'react';
-import { AREAS, AUXILIARES, NEGOCIO, ZONAS } from './config/restaurant';
+import { useMemo, useState } from 'react';
+import { AREAS, AUXILIARES, MESAS, NEGOCIO } from './config/restaurant';
+import type { Mesa } from './config/restaurant';
+import type { Zona } from './types';
 import type { Modo } from './types';
 import { useStore } from './store';
+import GatoScreen from './Gato';
 
-// Recordamos el nombre del mesero en este dispositivo
-const NOMBRE_KEY = 'mesero_nombre_v1';
+type Tab = 'roll' | 'gato';
+
+const NOMBRE_KEY = 'mesero_nombre_v2';
 
 function fechaBonita(iso: string): string {
   const [y, m, d] = iso.split('-').map(Number);
-  const fecha = new Date(y, m - 1, d);
+  const f = new Date(y, m - 1, d);
   const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
   const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-  return `${dias[fecha.getDay()]} ${d} de ${meses[fecha.getMonth()]} ${y}`;
+  return `${dias[f.getDay()]} ${d} de ${meses[f.getMonth()]} ${y}`;
+}
+
+function iniciales(nombre: string): string {
+  const p = nombre.trim().split(/\s+/);
+  return ((p[0]?.[0] ?? '') + (p[1]?.[0] ?? '')).toUpperCase() || '?';
+}
+
+// Centro aproximado de una zona (promedio de sus mesas) para poner su etiqueta
+function centroZona(zona: Zona): { x: number; y: number } | null {
+  const ms = MESAS.filter((m) => zona.mesas.includes(m.num));
+  if (ms.length === 0) return null;
+  const x = ms.reduce((s, m) => s + m.x, 0) / ms.length;
+  const y = ms.reduce((s, m) => s + m.y, 0) / ms.length;
+  return { x, y };
 }
 
 export default function App() {
-  const { roll } = useStore();
-  const [modo, setModo] = useState<Modo>('mesero');
-
+  const [tab, setTab] = useState<Tab>('roll');
   return (
     <div className="app">
-      <header className="header">
-        <div className="header-row">
-          <div>
-            <div className="brand">
-              <h1>{NEGOCIO.nombre}</h1>
-              <span>{NEGOCIO.marca}</span>
-            </div>
-            <p className="subtitle">Roll de Estaciones · {fechaBonita(roll.fecha)}</p>
-          </div>
-          <div className="modo-toggle">
-            <button className={modo === 'mesero' ? 'active' : ''} onClick={() => setModo('mesero')}>
-              Mesero
-            </button>
-            <button className={modo === 'capitan' ? 'active' : ''} onClick={() => setModo('capitan')}>
-              Capitán
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {modo === 'mesero' ? <VistaMesero /> : <VistaCapitan />}
+      {tab === 'roll' ? <RollScreen /> : <GatoScreen />}
+      <TabBar tab={tab} setTab={setTab} />
     </div>
   );
 }
 
-// ──────────────────────────────────────────────────────────
-// VISTA MESERO — escribe tu nombre y toca tu zona
-// ──────────────────────────────────────────────────────────
-function VistaMesero() {
-  const { roll, escoger, slotDeMesero } = useStore();
-  const [nombre, setNombre] = useState<string>(() => localStorage.getItem(NOMBRE_KEY) || '');
+// Barra de pestañas inferior: Roll del día / El Gato
+function TabBar({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
+  return (
+    <nav className="tabbar">
+      <button className={tab === 'roll' ? 'active' : ''} onClick={() => setTab('roll')}>
+        <span className="tb-ico">🗺️</span>
+        <span>Roll del día</span>
+      </button>
+      <button className={tab === 'gato' ? 'active' : ''} onClick={() => setTab('gato')}>
+        <span className="tb-ico">🎯</span>
+        <span>El Gato</span>
+      </button>
+    </nav>
+  );
+}
 
-  const nombreGuardado = nombre.trim();
-  const miSlot = nombreGuardado ? slotDeMesero(nombreGuardado) : null;
+function RollScreen() {
+  const { roll } = useStore();
+  const [modo, setModo] = useState<Modo>('capitan');
 
-  const guardarNombre = (v: string) => {
-    setNombre(v);
-    localStorage.setItem(NOMBRE_KEY, v);
-  };
+  return (
+    <>
+      <header className="header">
+        <div className="header-row">
+          <div>
+            <p className="eyebrow">{NEGOCIO.nombre} · {NEGOCIO.marca}</p>
+            <h1 className="brand">Roll de Estaciones</h1>
+            <p className="subtitle">{fechaBonita(roll.fecha)}</p>
+          </div>
+          <div className="modo-toggle">
+            <button className={modo === 'capitan' ? 'active' : ''} onClick={() => setModo('capitan')}>Capitán</button>
+            <button className={modo === 'mesero' ? 'active' : ''} onClick={() => setModo('mesero')}>Mesero</button>
+          </div>
+        </div>
+      </header>
 
-  const onEscoger = (slotId: string) => {
-    if (!nombreGuardado) {
-      alert('Primero escribe tu nombre arriba 👆');
+      {modo === 'capitan' ? <VistaCapitan /> : <VistaMesero />}
+    </>
+  );
+}
+
+// ════════════════════════════════════════════════════════════
+// PLANO — mesas posicionadas como en la realidad
+// ════════════════════════════════════════════════════════════
+function Plano(props: {
+  zonaSeleccionada?: string | null;
+  onMesa: (mesa: Mesa) => void;
+  miMesero?: string;
+}) {
+  const { roll } = useStore();
+  const { zonaSeleccionada, onMesa, miMesero } = props;
+
+  const colorDeMesa = useMemo(() => {
+    const map = new Map<number, Zona>();
+    for (const z of roll.zonas) for (const m of z.mesas) map.set(m, z);
+    return map;
+  }, [roll.zonas]);
+
+  const miNombre = miMesero?.trim().toLowerCase();
+
+  return (
+    <div className="plano-wrap">
+      <div className="plano">
+        {/* etiquetas de área (tenues, como el plano) */}
+        {AREAS.map((a) => (
+          <span
+            key={a.id}
+            className={`area-label ${a.rotar ? 'rot' : ''}`}
+            style={{ left: `${a.x}%`, top: `${a.y}%` }}
+          >
+            {a.nombre}
+          </span>
+        ))}
+
+        {/* mesas */}
+        {MESAS.map((m) => {
+          const zona = colorDeMesa.get(m.num);
+          const enSeleccion = zona && zona.id === zonaSeleccionada;
+          const esMia = !!zona?.mesero && zona.mesero.trim().toLowerCase() === miNombre;
+          return (
+            <button
+              key={m.num}
+              className={`mesa ${m.forma === 'circulo' ? 'circ' : ''} ${zona ? 'enzona' : ''} ${enSeleccion ? 'sel' : ''} ${esMia ? 'mia' : ''}`}
+              style={{
+                left: `${m.x}%`,
+                top: `${m.y}%`,
+                ...(zona ? { background: zona.color, borderColor: zona.color } : {}),
+              }}
+              onClick={() => onMesa(m)}
+            >
+              {m.num}
+            </button>
+          );
+        })}
+
+        {/* etiqueta de cada zona: número + mesero (esto sale tal cual en el PDF) */}
+        {roll.zonas.map((z, i) => {
+          const c = centroZona(z);
+          if (!c) return null;
+          return (
+            <span key={z.id} className="zona-tag" style={{ left: `${c.x}%`, top: `${c.y}%`, background: z.color }}>
+              <b>Z{i + 1}</b>
+              {z.mesero ? <span className="zt-nombre">{z.mesero}</span> : <span className="zt-libre">libre</span>}
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════
+// VISTA CAPITÁN — arma las zonas del día
+// ════════════════════════════════════════════════════════════
+function VistaCapitan() {
+  const { roll, agregarZona, eliminarZona, toggleMesa, liberarZona, zonaDeMesa, nuevoDia } = useStore();
+  const [sel, setSel] = useState<string | null>(null);
+
+  const mesasAsignadas = roll.zonas.reduce((s, z) => s + z.mesas.length, 0);
+
+  const onMesa = (m: Mesa) => {
+    if (!sel) {
+      // si no hay zona elegida, seleccionamos la de esa mesa (o avisamos)
+      const z = zonaDeMesa(m.num);
+      if (z) { setSel(z.id); return; }
+      alert('Primero crea o elige una zona (botón "Nueva zona"), luego toca las mesas.');
       return;
     }
-    const ocupante = roll.asignaciones[slotId];
-    if (ocupante && ocupante.mesero.trim().toLowerCase() !== nombreGuardado.toLowerCase()) {
-      const ok = confirm(`Esa zona ya la tiene ${ocupante.mesero}. ¿Seguro que es tuya?`);
-      if (!ok) return;
+    toggleMesa(sel, m.num);
+  };
+
+  const onNueva = () => setSel(agregarZona());
+  const onNuevoDia = () => { if (confirm('¿Empezar un roll nuevo en blanco? Se borra el de hoy.')) { nuevoDia(); setSel(null); } };
+
+  const zonaSel = roll.zonas.find((z) => z.id === sel);
+
+  return (
+    <>
+      <div className="resumen">
+        <div className="stat"><div className="n">{roll.zonas.length}</div><div className="l">Zonas</div></div>
+        <div className="stat acento"><div className="n">{roll.zonas.filter((z) => z.mesero).length}</div><div className="l">Tomadas</div></div>
+        <div className="stat"><div className="n">{mesasAsignadas}/{MESAS.length}</div><div className="l">Mesas</div></div>
+      </div>
+
+      {/* Zonas: chips + crear */}
+      <div className="zonas-bar">
+        <div className="zonas-chips">
+          {roll.zonas.map((z, i) => (
+            <button
+              key={z.id}
+              className={`chip ${sel === z.id ? 'sel' : ''}`}
+              style={{ ['--c' as string]: z.color }}
+              onClick={() => setSel(sel === z.id ? null : z.id)}
+            >
+              <span className="chip-dot" />
+              <span className="chip-txt">Z{i + 1}</span>
+              <span className="chip-sub">{z.mesas.length}</span>
+              <span className="chip-x" onClick={(e) => { e.stopPropagation(); if (confirm(`¿Borrar Zona ${i + 1}?`)) { eliminarZona(z.id); if (sel === z.id) setSel(null); } }}>×</span>
+            </button>
+          ))}
+          <button className="chip nueva" onClick={onNueva}>+ Nueva zona</button>
+        </div>
+      </div>
+
+      <p className="hint capitan-hint">
+        {zonaSel
+          ? <>Armando <strong>Zona {roll.zonas.indexOf(zonaSel) + 1}</strong> — toca las mesas para meterlas o sacarlas. {zonaSel.mesero && <>· La tomó <strong>{zonaSel.mesero}</strong></>}</>
+          : <>Crea una zona y toca las mesas del plano para agruparlas a tu gusto.</>}
+      </p>
+
+      <Plano zonaSeleccionada={sel} onMesa={onMesa} />
+
+      {zonaSel?.mesero && (
+        <button className="btn btn-ghost soltar" onClick={() => liberarZona(zonaSel.id)}>
+          Soltar la Zona {roll.zonas.indexOf(zonaSel) + 1} ({zonaSel.mesero})
+        </button>
+      )}
+
+      <Auxiliares modoCapitan />
+
+      <PrintHeader />
+
+      <div className="acciones">
+        <button className="btn btn-ghost" onClick={onNuevoDia}>Nuevo día</button>
+        <button className="btn btn-gold" onClick={() => window.print()}>Descargar PDF</button>
+      </div>
+    </>
+  );
+}
+
+// ════════════════════════════════════════════════════════════
+// VISTA MESERO — escoge una zona ya armada
+// ════════════════════════════════════════════════════════════
+function VistaMesero() {
+  const { roll, tomarZona, zonaDeMesa } = useStore();
+  const [nombre, setNombre] = useState<string>(() => localStorage.getItem(NOMBRE_KEY) || '');
+  const guardar = (v: string) => { setNombre(v); localStorage.setItem(NOMBRE_KEY, v); };
+  const yo = nombre.trim();
+  const miZona = roll.zonas.find((z) => z.mesero?.trim().toLowerCase() === yo.toLowerCase());
+
+  const intentarTomar = (zonaId: string) => {
+    if (!yo) { alert('Primero escribe tu nombre arriba 👆'); return; }
+    const z = roll.zonas.find((x) => x.id === zonaId);
+    if (z?.mesero && z.mesero.trim().toLowerCase() !== yo.toLowerCase()) {
+      alert(`La Zona ya la tiene ${z.mesero}. Escoge otra 🙏`);
+      return;
     }
-    escoger(slotId, nombreGuardado);
+    tomarZona(zonaId, yo);
+  };
+
+  const onMesa = (m: Mesa) => {
+    const z = zonaDeMesa(m.num);
+    if (!z) { alert('Esa mesa todavía no está en ninguna zona. Pregúntale al capitán.'); return; }
+    intentarTomar(z.id);
   };
 
   return (
@@ -81,166 +266,100 @@ function VistaMesero() {
       <div className="mesero-bar">
         <label htmlFor="nombre">Tu nombre</label>
         <div className="input-row">
-          <input
-            id="nombre"
-            placeholder="Ej: Carlos"
-            value={nombre}
-            onChange={(e) => guardarNombre(e.target.value)}
-          />
+          <input id="nombre" placeholder="Ej: Carlos" value={nombre} onChange={(e) => guardar(e.target.value)} />
         </div>
         <p className="hint">
-          {miSlot
-            ? <>Estás en <strong>{etiquetaSlot(miSlot)}</strong>. Toca otra para cambiarte.</>
-            : <>Toca la zona o el rol donde te quieres poner.</>}
+          {miZona
+            ? <>Estás en <strong>Zona {roll.zonas.indexOf(miZona) + 1}</strong>. Toca otra libre para cambiarte.</>
+            : <>Toca la <strong>zona</strong> que te convenga (o cualquier mesa de ella).</>}
         </p>
       </div>
 
-      <Tablero onSlotClick={onEscoger} miNombre={nombreGuardado} />
+      {roll.zonas.length === 0 ? (
+        <div className="vacio">El capitán todavía no arma las zonas del día. Espera un momento ⏳</div>
+      ) : (
+        <div className="zonas-bar">
+          <div className="zonas-chips lista">
+            {roll.zonas.map((z, i) => {
+              const tomadaPorOtro = !!z.mesero && z.mesero.trim().toLowerCase() !== yo.toLowerCase();
+              const mia = !!z.mesero && z.mesero.trim().toLowerCase() === yo.toLowerCase();
+              return (
+                <button
+                  key={z.id}
+                  className={`chip grande ${tomadaPorOtro ? 'bloqueada' : ''} ${mia ? 'sel' : ''}`}
+                  style={{ ['--c' as string]: z.color }}
+                  disabled={tomadaPorOtro}
+                  onClick={() => intentarTomar(z.id)}
+                >
+                  <span className="chip-dot" />
+                  <span className="chip-txt">Zona {i + 1}</span>
+                  <span className="chip-sub">{z.mesas.length} mesas</span>
+                  <span className="chip-estado">{z.mesero ? (mia ? '✓ Tú' : z.mesero) : 'Libre'}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      <Plano onMesa={onMesa} miMesero={yo} />
+
+      <Auxiliares meseroNombre={yo} />
     </>
   );
 }
 
-// ──────────────────────────────────────────────────────────
-// VISTA CAPITÁN — panorama completo, liberar, PDF, nuevo día
-// ──────────────────────────────────────────────────────────
-function VistaCapitan() {
-  const { roll, liberar, nuevoDia } = useStore();
+// ════════════════════════════════════════════════════════════
+// AUXILIARES
+// ════════════════════════════════════════════════════════════
+function Auxiliares(props: { modoCapitan?: boolean; meseroNombre?: string }) {
+  const { roll, tomarAux, liberarAux } = useStore();
+  const { modoCapitan, meseroNombre } = props;
 
-  const totalSlots = ZONAS.length + AUXILIARES.length;
-  const ocupados = Object.keys(roll.asignaciones).length;
-
-  const onNuevoDia = () => {
-    if (confirm('¿Empezar un roll nuevo en blanco? Se borra el de hoy.')) nuevoDia();
+  const onTap = (id: string) => {
+    const actual = roll.aux[id];
+    if (modoCapitan) {
+      if (actual && confirm(`¿Soltar ${actual.mesero} de este rol?`)) liberarAux(id);
+      return;
+    }
+    const yo = (meseroNombre || '').trim();
+    if (!yo) { alert('Primero escribe tu nombre arriba 👆'); return; }
+    if (actual && actual.mesero.trim().toLowerCase() !== yo.toLowerCase()) {
+      alert(`Ese rol lo tiene ${actual.mesero}.`); return;
+    }
+    tomarAux(id, yo);
   };
 
   return (
-    <>
-      <div className="resumen">
-        <div className="stat">
-          <div className="n">{ocupados}</div>
-          <div className="l">Zonas tomadas</div>
-        </div>
-        <div className="stat">
-          <div className="n">{totalSlots - ocupados}</div>
-          <div className="l">Libres</div>
-        </div>
-        <div className="stat">
-          <div className="n">{contarMeseros(roll.asignaciones)}</div>
-          <div className="l">Meseros en piso</div>
-        </div>
+    <section className="area">
+      <div className="area-title"><span className="dot" /> Auxiliares</div>
+      <div className="aux-grid">
+        {AUXILIARES.map((a) => {
+          const asig = roll.aux[a.id];
+          const mia = !!asig && !!meseroNombre && asig.mesero.trim().toLowerCase() === meseroNombre.trim().toLowerCase();
+          return (
+            <button key={a.id} className={`aux ${asig ? 'ocupada' : ''} ${mia ? 'mia' : ''}`} onClick={() => onTap(a.id)}>
+              <span className="aux-rol">{a.nombre}</span>
+              {asig ? (
+                <span className="aux-quien"><span className="avatar mini">{iniciales(asig.mesero)}</span>{asig.mesero}</span>
+              ) : (
+                <span className="aux-libre">Libre</span>
+              )}
+            </button>
+          );
+        })}
       </div>
-
-      <Tablero modoCapitan onSlotClick={(id) => liberar(id)} />
-
-      {/* Encabezado que solo aparece al imprimir/PDF */}
-      <div className="print-only print-header">
-        <h2>{NEGOCIO.nombre} {NEGOCIO.marca} · Roll de Estaciones</h2>
-        <p>{fechaBonita(roll.fecha)}</p>
-      </div>
-
-      <div className="action-bar">
-        <div className="action-bar-inner">
-          <button className="btn btn-danger" onClick={onNuevoDia}>Nuevo día</button>
-          <button className="btn btn-primary" onClick={() => window.print()}>Descargar PDF</button>
-        </div>
-      </div>
-    </>
+    </section>
   );
 }
 
-// ──────────────────────────────────────────────────────────
-// TABLERO — zonas por área + auxiliares
-// ──────────────────────────────────────────────────────────
-function Tablero(props: {
-  onSlotClick: (slotId: string) => void;
-  miNombre?: string;
-  modoCapitan?: boolean;
-}) {
+// Encabezado que solo aparece al imprimir / generar PDF
+function PrintHeader() {
   const { roll } = useStore();
-  const { onSlotClick, miNombre, modoCapitan } = props;
-
   return (
-    <>
-      {AREAS.map((area) => {
-        const zonasArea = ZONAS.filter((z) => z.area === area.id);
-        if (zonasArea.length === 0) return null;
-        return (
-          <section className="area" key={area.id}>
-            <div className="area-title">{area.nombre}</div>
-            <div className="zonas-grid">
-              {zonasArea.map((z) => {
-                const a = roll.asignaciones[z.id];
-                const mia = !!a && !!miNombre && a.mesero.trim().toLowerCase() === miNombre.toLowerCase();
-                return (
-                  <button
-                    key={z.id}
-                    className={`zona ${a ? 'ocupada' : ''} ${mia ? 'mia' : ''}`}
-                    onClick={() => onSlotClick(z.id)}
-                  >
-                    {mia && <span className="tag-mia">Tú</span>}
-                    {modoCapitan && a && (
-                      <span
-                        className="liberar"
-                        onClick={(e) => { e.stopPropagation(); onSlotClick(z.id); }}
-                      >×</span>
-                    )}
-                    <span className="num">{z.numero}</span>
-                    {z.mesas && z.mesas.length > 0 && (
-                      <span className="mesas">Mesas {z.mesas.join(', ')}</span>
-                    )}
-                    {a ? <span className="ocupante">{a.mesero}</span> : <span className="libre">Libre</span>}
-                  </button>
-                );
-              })}
-            </div>
-          </section>
-        );
-      })}
-
-      <section className="area">
-        <div className="area-title">Auxiliares</div>
-        <div className="aux-grid">
-          {AUXILIARES.map((aux) => {
-            const a = roll.asignaciones[aux.id];
-            const mia = !!a && !!miNombre && a.mesero.trim().toLowerCase() === miNombre.toLowerCase();
-            return (
-              <button
-                key={aux.id}
-                className={`zona ${a ? 'ocupada' : ''} ${mia ? 'mia' : ''}`}
-                onClick={() => onSlotClick(aux.id)}
-              >
-                {mia && <span className="tag-mia">Tú</span>}
-                {modoCapitan && a && (
-                  <span
-                    className="liberar"
-                    onClick={(e) => { e.stopPropagation(); onSlotClick(aux.id); }}
-                  >×</span>
-                )}
-                <span className="num" style={{ width: 'auto', padding: '0 10px', fontSize: 13 }}>
-                  {aux.nombre}
-                </span>
-                {a ? <span className="ocupante">{a.mesero}</span> : <span className="libre">Libre</span>}
-              </button>
-            );
-          })}
-        </div>
-      </section>
-    </>
+    <div className="print-only print-header">
+      <h2 className="brand">{NEGOCIO.nombre} {NEGOCIO.marca}</h2>
+      <p>Roll de Estaciones · {fechaBonita(roll.fecha)}</p>
+    </div>
   );
-}
-
-// ──────────────────────────────────────────────────────────
-// Helpers
-// ──────────────────────────────────────────────────────────
-function etiquetaSlot(slotId: string): string {
-  const z = ZONAS.find((z) => z.id === slotId);
-  if (z) return `Zona ${z.numero}`;
-  const aux = AUXILIARES.find((a) => a.id === slotId);
-  if (aux) return aux.nombre;
-  return slotId;
-}
-
-function contarMeseros(asignaciones: Record<string, { mesero: string }>): number {
-  const nombres = new Set(Object.values(asignaciones).map((a) => a.mesero.trim().toLowerCase()));
-  return nombres.size;
 }
