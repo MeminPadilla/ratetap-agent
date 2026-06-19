@@ -234,14 +234,14 @@ function VistaCapitan() {
         </div>
         {roll.publicado
           ? <button className="btn btn-ghost" onClick={() => publicar(false)}>Despublicar</button>
-          : <button className="btn btn-gold" onClick={() => publicar(true)} disabled={roll.zonas.length === 0}>Publicar zonas</button>}
+          : <button className="btn btn-primary" onClick={() => publicar(true)} disabled={roll.zonas.length === 0}>Publicar zonas</button>}
       </div>
 
       <PrintHeader />
 
       <div className="acciones">
         <button className="btn btn-ghost" onClick={onNuevoDia}>Nuevo día</button>
-        <button className="btn btn-gold" onClick={() => window.print()}>Descargar PDF</button>
+        <button className="btn btn-primary" onClick={() => window.print()}>Descargar PDF</button>
       </div>
     </>
   );
