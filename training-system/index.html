@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Academia La Estancia — Sistema de Capacitación</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Archivo:wght@300;400;500;600;700&family=Archivo+Narrow:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --negro:#080706;
+    --carbon:#100e0c;
+    --panel:#17140f;
+    --panel2:#1d1914;
+    --borde:#2c261d;
+    --borde2:#39301f;
+    --oro:#c9a04e;
+    --oro-claro:#e6c87f;
+    --oro-tenue:rgba(201,160,78,.14);
+    --hueso:#f3ece0;
+    --vino:#8a2b29;
+    --vino-claro:#b8453f;
+    --texto:#cfc6b6;
+    --texto-suave:#897f6e;
+    --texto-tenue:#5d5547;
+    --verde:#6a8a4e;
+    --sombra:0 24px 60px -20px rgba(0,0,0,.8);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--negro);
+    color:var(--texto);
+    font-family:'Archivo',sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -10%,rgba(201,160,78,.06),transparent 60%),
+      radial-gradient(ellipse 60% 40% at 100% 100%,rgba(138,43,41,.05),transparent 55%);
+  }
+
+  /* ===== TOP BAR ===== */
+  .topbar{
+    position:sticky;top:0;z-index:200;
+    background:rgba(8,7,6,.82);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--borde);
+    padding:14px clamp(16px,4vw,40px);
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+  }
+  .brand{display:flex;align-items:center;gap:14px;min-width:0}
+  .brand-logo{
+    height:40px;width:auto;flex-shrink:0;
+    background:#fff;padding:6px 10px;border-radius:8px;
+    box-shadow:0 4px 14px rgba(0,0,0,.25);
+  }
+  .brand-txt{min-width:0}
+  .brand-txt h1{
+    font-family:'Archivo Narrow',sans-serif;font-weight:700;
+    font-size:15px;letter-spacing:.5px;color:var(--hueso);
+    text-transform:uppercase;line-height:1;white-space:nowrap;
+  }
+  .brand-txt p{
+    font-size:10px;letter-spacing:2.5px;color:var(--oro);
+    text-transform:uppercase;margin-top:3px;
+  }
+  .topbar-tag{
+    font-family:'Archivo Narrow',sans-serif;font-size:11px;letter-spacing:1.5px;
+    text-transform:uppercase;color:var(--texto-suave);
+    border:1px solid var(--borde2);border-radius:40px;padding:6px 14px;white-space:nowrap;
+  }
+  @media(max-width:640px){.topbar-tag{display:none}}
+
+  /* ===== NAV TABS ===== */
+  .nav{
+    position:sticky;top:67px;z-index:190;
+    background:rgba(16,14,12,.9);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--borde);
+    display:flex;overflow-x:auto;scrollbar-width:none;
+    padding:0 clamp(8px,3vw,28px);
+  }
+  .nav::-webkit-scrollbar{display:none}
+  .nav button{
+    background:none;border:none;cursor:pointer;
+    font-family:'Archivo Narrow',sans-serif;font-weight:600;
+    font-size:13px;letter-spacing:1px;text-transform:uppercase;
+    color:var(--texto-suave);padding:16px 18px;white-space:nowrap;
+    border-bottom:2px solid transparent;transition:all .2s;position:relative;
+  }
+  .nav button .ix{
+    font-family:'Fraunces',serif;font-size:11px;color:var(--texto-tenue);
+    margin-right:7px;font-weight:600;
+  }
+  .nav button:hover{color:var(--texto)}
+  .nav button.on{color:var(--oro-claro);border-bottom-color:var(--oro)}
+  .nav button.on .ix{color:var(--oro)}
+
+  /* ===== LAYOUT ===== */
+  main{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:clamp(24px,5vw,56px) clamp(16px,4vw,40px) 120px}
+  .view{display:none;animation:fade .45s ease}
+  .view.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  .eyebrow{
+    font-family:'Archivo Narrow',sans-serif;font-size:12px;letter-spacing:3.5px;
+    text-transform:uppercase;color:var(--oro);margin-bottom:14px;
+    display:flex;align-items:center;gap:12px;
+  }
+  .eyebrow::before{content:"";width:28px;height:1px;background:var(--oro)}
+  h2.display{
+    font-family:'Fraunces',serif;font-weight:900;
+    font-size:clamp(30px,6vw,52px);line-height:1.02;color:var(--hueso);
+    letter-spacing:-.5px;margin-bottom:18px;
+  }
+  h2.display em{font-style:italic;color:var(--oro)}
+  .lead{font-size:clamp(15px,2vw,17.5px);color:var(--texto);max-width:60ch;margin-bottom:8px}
+  .lead strong{color:var(--hueso);font-weight:600}
+
+  .section-rule{height:1px;background:linear-gradient(90deg,var(--borde2),transparent);margin:40px 0}
+
+  /* ===== HOME / HERO ===== */
+  .hero{padding:clamp(20px,5vw,50px) 0 0}
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:38px 0}
+  @media(max-width:680px){.pillars{grid-template-columns:1fr}}
+  .pillars-full .pillar{padding:24px 22px}
+  .pillars-full .pillar p{font-size:13.5px;color:var(--texto);line-height:1.62}
+  .pillars-full .pillar p b{color:var(--oro-claro);font-weight:600}
+  .pillar{
+    border:1px solid var(--borde);border-radius:14px;padding:22px 20px;
+    background:linear-gradient(160deg,var(--panel),var(--carbon));position:relative;overflow:hidden;
+  }
+  .pillar::before{content:"";position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,var(--oro),transparent)}
+  .pillar .pn{font-family:'Fraunces',serif;font-size:13px;color:var(--oro);font-weight:600}
+  .pillar h3{font-family:'Fraunces',serif;font-size:21px;color:var(--hueso);margin:6px 0 8px;font-weight:600}
+  .pillar p{font-size:13.5px;color:var(--texto-suave);line-height:1.5}
+
+  .home-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:10px}
+  @media(max-width:680px){.home-grid{grid-template-columns:1fr}}
+  .module-card{
+    text-align:left;cursor:pointer;border:1px solid var(--borde);border-radius:16px;
+    padding:26px 24px;background:linear-gradient(165deg,var(--panel),var(--carbon));
+    transition:all .25s;position:relative;overflow:hidden;font-family:inherit;color:inherit;
+  }
+  .module-card:hover{border-color:var(--borde2);transform:translateY(-3px);box-shadow:var(--sombra)}
+  .module-card .mc-ix{
+    font-family:'Fraunces',serif;font-weight:900;font-size:40px;
+    color:var(--oro-tenue);position:absolute;top:14px;right:20px;line-height:1;
+  }
+  .module-card .mc-tag{font-family:'Archivo Narrow',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--oro)}
+  .module-card h3{font-family:'Fraunces',serif;font-size:23px;color:var(--hueso);margin:10px 0 8px;font-weight:600;max-width:14ch}
+  .module-card p{font-size:13.5px;color:var(--texto-suave);max-width:34ch}
+  .module-card .mc-go{margin-top:16px;font-family:'Archivo Narrow',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--oro-claro);display:flex;align-items:center;gap:8px}
+  .module-card .mc-go::after{content:"→";transition:transform .2s}
+  .module-card:hover .mc-go::after{transform:translateX(5px)}
+
+  /* ===== INDUCCION (días) ===== */
+  .day-track{display:flex;flex-direction:column;gap:14px;margin-top:30px}
+  .day{
+    border:1px solid var(--borde);border-radius:14px;overflow:hidden;
+    background:linear-gradient(165deg,var(--panel),var(--carbon));
+  }
+  .day-head{
+    display:flex;align-items:center;gap:18px;padding:20px 22px;cursor:pointer;
+    transition:background .2s;
+  }
+  .day-head:hover{background:var(--panel2)}
+  .day-num{
+    flex-shrink:0;width:54px;height:54px;border-radius:12px;
+    border:1px solid var(--borde2);display:grid;place-items:center;
+    background:var(--oro-tenue);
+  }
+  .day-num span{font-family:'Fraunces',serif;font-weight:900;font-size:24px;color:var(--oro-claro);line-height:1}
+  .day-num small{display:block;font-family:'Archivo Narrow',sans-serif;font-size:8px;letter-spacing:1.5px;color:var(--oro);text-transform:uppercase;margin-top:1px}
+  .day-head-txt{flex:1;min-width:0}
+  .day-head-txt .dt-tag{font-family:'Archivo Narrow',sans-serif;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--oro)}
+  .day-head-txt h3{font-family:'Fraunces',serif;font-size:21px;color:var(--hueso);font-weight:600;line-height:1.1;margin-top:2px}
+  .day-toggle{flex-shrink:0;width:30px;height:30px;border-radius:50%;border:1px solid var(--borde2);display:grid;place-items:center;color:var(--oro);transition:transform .3s;font-size:15px}
+  .day.open .day-toggle{transform:rotate(45deg)}
+  .day-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+  .day.open .day-body{max-height:1400px}
+  .day-body-inner{padding:4px 22px 24px;border-top:1px solid var(--borde)}
+  .day-body-inner h4{
+    font-family:'Archivo Narrow',sans-serif;font-size:12px;letter-spacing:1.5px;
+    text-transform:uppercase;color:var(--oro);margin:20px 0 10px;
+    display:flex;align-items:center;gap:9px;
+  }
+  .day-body-inner h4::before{content:"";width:5px;height:5px;background:var(--oro);transform:rotate(45deg)}
+  .check-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+  .check-list li{display:flex;gap:12px;font-size:14.5px;color:var(--texto);align-items:flex-start}
+  .check-list li::before{
+    content:"";flex-shrink:0;width:18px;height:18px;border-radius:5px;margin-top:1px;
+    border:1px solid var(--borde2);background:var(--panel2);
+  }
+  .day-goal{
+    margin-top:18px;padding:14px 16px;border-left:2px solid var(--oro);
+    background:var(--oro-tenue);border-radius:0 8px 8px 0;font-size:13.5px;
+  }
+  .day-goal b{color:var(--oro-claro);font-family:'Archivo Narrow',sans-serif;letter-spacing:1px;text-transform:uppercase;font-size:11px;display:block;margin-bottom:3px}
+
+  /* ===== ROLE PLAYS ===== */
+  .rp-intro{
+    border:1px solid var(--borde2);border-radius:16px;padding:24px 26px;margin:28px 0;
+    background:linear-gradient(160deg,var(--panel2),var(--carbon));
+  }
+  .rp-intro h3{font-family:'Fraunces',serif;font-size:22px;color:var(--hueso);margin-bottom:10px;font-weight:600}
+  .rp-intro p{font-size:14.5px;color:var(--texto);max-width:62ch}
+  .rp-intro .how{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:20px}
+  @media(max-width:680px){.rp-intro .how{grid-template-columns:repeat(2,1fr)}}
+  .rp-step{text-align:center;padding:14px 8px;border:1px solid var(--borde);border-radius:10px;background:var(--carbon)}
+  .rp-step .s{font-family:'Fraunces',serif;font-size:20px;color:var(--oro);font-weight:900}
+  .rp-step p{font-size:11.5px;color:var(--texto-suave);margin-top:4px;max-width:none}
+
+  .rp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:8px}
+  @media(max-width:680px){.rp-grid{grid-template-columns:1fr}}
+  .rp-card{
+    cursor:pointer;border:1px solid var(--borde);border-radius:14px;padding:20px;
+    background:linear-gradient(165deg,var(--panel),var(--carbon));transition:all .22s;
+    position:relative;overflow:hidden;display:flex;flex-direction:column;gap:8px;
+  }
+  .rp-card:hover{border-color:var(--oro);transform:translateY(-2px);box-shadow:var(--sombra)}
+  .rp-card.master{border-color:var(--vino)}
+  .rp-card.master:hover{border-color:var(--vino-claro)}
+  .rp-card .rp-n{font-family:'Fraunces',serif;font-weight:900;font-size:13px;color:var(--oro)}
+  .rp-card.master .rp-n{color:var(--vino-claro)}
+  .rp-card h4{font-family:'Fraunces',serif;font-size:19px;color:var(--hueso);font-weight:600;line-height:1.12}
+  .rp-card .rp-skill{font-family:'Archivo Narrow',sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--texto-suave)}
+  .rp-card .rp-diff{position:absolute;top:16px;right:18px;display:flex;gap:3px}
+  .rp-card .rp-diff i{width:6px;height:6px;border-radius:50%;background:var(--borde2)}
+  .rp-card .rp-diff i.f{background:var(--oro)}
+  .rp-card.master .rp-diff i.f{background:var(--vino-claro)}
+
+  /* MODAL role play */
+  .modal-bg{
+    position:fixed;inset:0;z-index:500;background:rgba(4,3,2,.86);backdrop-filter:blur(6px);
+    display:none;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto;
+  }
+  .modal-bg.on{display:flex}
+  .modal{
+    background:linear-gradient(170deg,var(--panel2),var(--carbon));
+    border:1px solid var(--borde2);border-radius:18px;max-width:680px;width:100%;
+    margin:auto;box-shadow:var(--sombra);animation:pop .35s ease;position:relative;
+  }
+  @keyframes pop{from{opacity:0;transform:scale(.96) translateY(14px)}to{opacity:1;transform:none}}
+  .modal-x{
+    position:absolute;top:16px;right:16px;width:34px;height:34px;border-radius:50%;
+    border:1px solid var(--borde2);background:var(--carbon);color:var(--oro);cursor:pointer;
+    font-size:18px;display:grid;place-items:center;z-index:2;transition:all .2s;
+  }
+  .modal-x:hover{background:var(--vino);color:var(--hueso);border-color:var(--vino)}
+  .modal-head{padding:30px 30px 22px;border-bottom:1px solid var(--borde)}
+  .modal-head .mh-tag{font-family:'Archivo Narrow',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--oro);margin-bottom:8px}
+  .modal-head h3{font-family:'Fraunces',serif;font-size:27px;color:var(--hueso);font-weight:600;line-height:1.05}
+  .modal-head .mh-setup{margin-top:14px;font-size:14.5px;color:var(--texto);padding:13px 15px;background:var(--carbon);border-radius:9px;border-left:2px solid var(--oro)}
+  .modal-body{padding:24px 30px 30px}
+  .mb-block{margin-bottom:22px}
+  .mb-block h4{font-family:'Archivo Narrow',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--oro);margin-bottom:11px;display:flex;align-items:center;gap:9px}
+  .mb-block h4::before{content:"";width:5px;height:5px;background:var(--oro);transform:rotate(45deg)}
+  .comanda{border:1px dashed var(--borde2);border-radius:10px;background:var(--carbon);padding:4px 0}
+  .comanda .ci{display:flex;justify-content:space-between;gap:14px;padding:9px 16px;font-size:14px;border-bottom:1px solid var(--borde)}
+  .comanda .ci:last-child{border-bottom:none}
+  .comanda .ci .nm{color:var(--texto)}
+  .comanda .ci .pr{font-family:'Archivo Narrow',sans-serif;color:var(--oro-claro);font-weight:600;white-space:nowrap}
+  .clavar{list-style:none;display:flex;flex-direction:column;gap:9px}
+  .clavar li{display:flex;gap:11px;font-size:14px;color:var(--texto);align-items:flex-start}
+  .clavar li::before{content:"▸";color:var(--oro);flex-shrink:0;font-size:13px;margin-top:1px}
+  .debrief{padding:16px 18px;border-radius:10px;background:var(--oro-tenue);border:1px solid var(--borde2)}
+  .debrief .dl{font-family:'Archivo Narrow',sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--oro);margin-bottom:6px}
+  .debrief p{font-size:15px;color:var(--hueso);font-style:italic;font-family:'Fraunces',serif}
+
+  /* ===== JEFE DE PISO ===== */
+  .jp-block{border:1px solid var(--borde);border-radius:14px;padding:24px 26px;margin-bottom:16px;background:linear-gradient(165deg,var(--panel),var(--carbon))}
+  .jp-block h3{font-family:'Fraunces',serif;font-size:22px;color:var(--hueso);font-weight:600;margin-bottom:12px;display:flex;align-items:baseline;gap:12px}
+  .jp-block h3 .jn{font-family:'Fraunces',serif;font-size:14px;color:var(--oro)}
+  .jp-block p{font-size:14.5px;color:var(--texto);margin-bottom:10px;max-width:64ch}
+  .jp-block p strong{color:var(--hueso)}
+  .jp-block ul{list-style:none;display:flex;flex-direction:column;gap:9px;margin-top:6px}
+  .jp-block ul li{display:flex;gap:11px;font-size:14px;align-items:flex-start}
+  .jp-block ul li::before{content:"▸";color:var(--oro);flex-shrink:0;margin-top:1px}
+  .alert-box{border-left:2px solid var(--vino-claro);background:rgba(138,43,41,.1);padding:16px 18px;border-radius:0 8px 8px 0;margin:14px 0}
+  .alert-box .al{font-family:'Archivo Narrow',sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--vino-claro);margin-bottom:5px}
+  .alert-box p{font-size:14px;color:var(--hueso);margin:0}
+
+  /* tables scenario for rush */
+  .mesas-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:8px 0 4px}
+  @media(max-width:560px){.mesas-grid{grid-template-columns:1fr}}
+  .mesa-c{border:1px solid var(--borde2);border-radius:10px;padding:14px 16px;background:var(--carbon)}
+  .mesa-c .mc-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .mesa-c .mc-h .mn{font-family:'Fraunces',serif;font-weight:600;color:var(--hueso);font-size:16px}
+  .mesa-c .mc-h .badge{font-family:'Archivo Narrow',sans-serif;font-size:9.5px;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:30px;font-weight:600}
+  .badge.urge{background:var(--vino);color:var(--hueso)}
+  .badge.calma{background:var(--oro-tenue);color:var(--oro-claro);border:1px solid var(--borde2)}
+  .badge.prep{background:rgba(106,138,78,.2);color:var(--verde);border:1px solid rgba(106,138,78,.3)}
+  .mesa-c p{font-size:13px;color:var(--texto-suave);margin:0}
+
+  /* ===== GENERADOR BRIEFING ===== */
+  .gen-wrap{margin-top:30px}
+  .gen-intro{border:1px solid var(--borde2);border-radius:16px;padding:24px 26px;margin-bottom:22px;background:linear-gradient(160deg,var(--panel2),var(--carbon))}
+  .gen-intro h3{font-family:'Fraunces',serif;font-size:22px;color:var(--hueso);font-weight:600;margin-bottom:8px}
+  .gen-intro p{font-size:14.5px;color:var(--texto);max-width:64ch}
+  .gen-form label{display:block;font-family:'Archivo Narrow',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--oro);margin:18px 0 9px}
+  .gen-form input,.gen-form textarea,.gen-form select{
+    width:100%;background:var(--carbon);border:1px solid var(--borde2);border-radius:10px;
+    color:var(--hueso);font-family:'Archivo',sans-serif;font-size:15px;padding:13px 15px;transition:border .2s;
+  }
+  .gen-form textarea{min-height:90px;resize:vertical;line-height:1.5}
+  .gen-form input:focus,.gen-form textarea:focus,.gen-form select:focus{outline:none;border-color:var(--oro)}
+  .gen-form input::placeholder,.gen-form textarea::placeholder{color:var(--texto-tenue)}
+  .gen-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:560px){.gen-row{grid-template-columns:1fr}}
+  .gen-btn{
+    margin-top:22px;width:100%;cursor:pointer;border:none;border-radius:11px;
+    background:linear-gradient(135deg,var(--oro),#a07e34);color:var(--negro);
+    font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:15px;letter-spacing:1.5px;
+    text-transform:uppercase;padding:16px;transition:all .2s;box-shadow:0 8px 24px -8px rgba(201,160,78,.5);
+  }
+  .gen-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 30px -8px rgba(201,160,78,.6)}
+  .gen-btn:disabled{opacity:.6;cursor:wait}
+  .gen-out{margin-top:26px;display:none}
+  .gen-out.on{display:block;animation:fade .5s}
+  .gen-out-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+  .gen-out-head .gl{font-family:'Archivo Narrow',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--oro);display:flex;align-items:center;gap:10px}
+  .gen-out-head .gl::before{content:"";width:24px;height:1px;background:var(--oro)}
+  .copy-btn{cursor:pointer;background:var(--carbon);border:1px solid var(--borde2);color:var(--oro-claro);font-family:'Archivo Narrow',sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:8px 14px;border-radius:8px;transition:all .2s}
+  .copy-btn:hover{background:var(--oro);color:var(--negro);border-color:var(--oro)}
+  .brief-paper{
+    border:1px solid var(--borde2);border-radius:14px;padding:28px 30px;
+    background:linear-gradient(170deg,var(--panel),var(--carbon));white-space:pre-wrap;
+    font-size:15px;line-height:1.7;color:var(--texto);font-family:'Archivo',sans-serif;
+  }
+  .brief-paper strong,.brief-paper b{color:var(--oro-claro)}
+  .gen-loading{display:none;text-align:center;padding:40px 20px;color:var(--texto-suave)}
+  .gen-loading.on{display:block}
+  .gen-loading .spin{width:34px;height:34px;border:2px solid var(--borde2);border-top-color:var(--oro);border-radius:50%;margin:0 auto 16px;animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .gen-loading p{font-family:'Fraunces',serif;font-style:italic;font-size:16px}
+  .gen-err{display:none;margin-top:20px;border-left:2px solid var(--vino-claro);background:rgba(138,43,41,.1);padding:14px 16px;border-radius:0 8px 8px 0;font-size:14px;color:var(--hueso)}
+  .gen-err.on{display:block}
+
+  /* ===== TIMER (sesión) ===== */
+  .timer-fab{
+    position:fixed;bottom:22px;right:22px;z-index:300;
+    background:linear-gradient(135deg,var(--oro),#9c7a36);color:var(--negro);
+    border:none;border-radius:50px;cursor:pointer;padding:14px 20px;
+    font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;
+    text-transform:uppercase;box-shadow:0 10px 30px -6px rgba(201,160,78,.5);
+    display:flex;align-items:center;gap:9px;transition:transform .2s;
+  }
+  .timer-fab:hover{transform:translateY(-2px)}
+  .timer-panel{
+    position:fixed;bottom:80px;right:22px;z-index:300;width:280px;
+    background:linear-gradient(170deg,var(--panel2),var(--carbon));
+    border:1px solid var(--borde2);border-radius:16px;padding:22px;box-shadow:var(--sombra);
+    display:none;animation:pop .3s;
+  }
+  .timer-panel.on{display:block}
+  .timer-panel .tp-label{font-family:'Archivo Narrow',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--oro);text-align:center;margin-bottom:4px}
+  .timer-clock{font-family:'Fraunces',serif;font-weight:900;font-size:54px;color:var(--hueso);text-align:center;line-height:1;letter-spacing:1px;font-variant-numeric:tabular-nums}
+  .timer-clock.warn{color:var(--vino-claro)}
+  .timer-presets{display:flex;gap:7px;justify-content:center;margin:16px 0}
+  .timer-presets button{flex:1;cursor:pointer;background:var(--carbon);border:1px solid var(--borde2);color:var(--texto);font-family:'Archivo Narrow',sans-serif;font-size:13px;font-weight:600;padding:9px 0;border-radius:8px;transition:all .2s}
+  .timer-presets button:hover,.timer-presets button.on{background:var(--oro-tenue);border-color:var(--oro);color:var(--oro-claro)}
+  .timer-ctrl{display:flex;gap:8px}
+  .timer-ctrl button{flex:1;cursor:pointer;border:none;border-radius:9px;font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;padding:12px 0;transition:all .2s}
+  .timer-ctrl .start{background:var(--oro);color:var(--negro)}
+  .timer-ctrl .start:hover{background:var(--oro-claro)}
+  .timer-ctrl .reset{background:var(--carbon);color:var(--texto-suave);border:1px solid var(--borde2)}
+  .timer-ctrl .reset:hover{color:var(--hueso)}
+
+  /* session plan */
+  .sesion{display:flex;flex-direction:column;gap:10px;margin-top:24px}
+  .ses-row{display:flex;align-items:center;gap:16px;border:1px solid var(--borde);border-radius:11px;padding:14px 18px;background:var(--carbon)}
+  .ses-time{font-family:'Fraunces',serif;font-weight:900;font-size:20px;color:var(--oro);flex-shrink:0;width:58px}
+  .ses-time small{display:block;font-family:'Archivo Narrow',sans-serif;font-size:9px;letter-spacing:1px;color:var(--texto-tenue);text-transform:uppercase}
+  .ses-txt h4{font-family:'Fraunces',serif;font-size:16px;color:var(--hueso);font-weight:600}
+  .ses-txt p{font-size:13px;color:var(--texto-suave);margin-top:2px}
+
+  footer{border-top:1px solid var(--borde);padding:30px 16px;text-align:center;position:relative;z-index:1}
+  footer p{font-family:'Archivo Narrow',sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--texto-tenue)}
+  footer p span{color:var(--oro)}
+
+  /* ===== CALENDARIO ===== */
+  .cal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:30px}
+  .cal-day{border:1px solid var(--borde);border-top:3px solid var(--accent);border-radius:14px;padding:22px 22px 20px;background:linear-gradient(165deg,var(--panel),var(--carbon));display:flex;flex-direction:column;gap:12px}
+  .cal-day-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .cal-dn{font-family:'Fraunces',serif;font-weight:900;font-size:24px;color:var(--hueso)}
+  .cal-foco{font-family:'Archivo Narrow',sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);text-align:right}
+  .cal-tema{font-family:'Fraunces',serif;font-size:16px;color:var(--oro-claro);font-style:italic;line-height:1.25;padding-bottom:10px;border-bottom:1px solid var(--borde)}
+  .cal-meta .cl,.cal-sect .cl,.cal-evi .cl{display:block;font-family:'Archivo Narrow',sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--texto-suave);margin-bottom:5px}
+  .cal-resp{font-size:13.5px;color:var(--texto)}
+  .cal-sect ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+  .cal-sect ul li{display:flex;gap:9px;font-size:13px;color:var(--texto);align-items:flex-start;line-height:1.4}
+  .cal-sect ul li::before{content:"▸";color:var(--accent);flex-shrink:0}
+  .cal-evi p{font-size:13px;color:var(--texto-suave);line-height:1.4}
+  .cal-check{display:flex;align-items:center;gap:10px;margin-top:4px;padding:11px 13px;border:1px dashed var(--borde2);border-radius:9px;cursor:pointer;transition:all .2s}
+  .cal-check:hover{border-color:var(--accent)}
+  .cal-check input{width:18px;height:18px;accent-color:var(--oro);cursor:pointer;flex-shrink:0}
+  .cal-check span{font-family:'Archivo Narrow',sans-serif;font-size:12px;letter-spacing:.5px;color:var(--texto-suave);text-transform:uppercase}
+  .cal-check input:checked ~ span{color:var(--oro-claro)}
+  .exp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:8px}
+  .exp-item{border:1px solid var(--borde);border-radius:12px;padding:20px;background:var(--carbon);position:relative}
+  .exp-item::before{content:"";position:absolute;top:0;left:20px;width:30px;height:2px;background:var(--oro)}
+  .exp-item h4{font-family:'Fraunces',serif;font-size:18px;color:var(--hueso);font-weight:600;margin-bottom:8px}
+  .exp-item p{font-size:13px;color:var(--texto-suave);line-height:1.5}
+
+  ::selection{background:var(--oro);color:var(--negro)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <img class="brand-logo" id="brandLogo" alt="La Estancia Argentina">
+    <div class="brand-txt">
+      <h1>Estancia Argentina León</h1>
+      <p>Sistema de Capacitación</p>
+    </div>
+  </div>
+  <div class="topbar-tag">Hospitalidad · Disciplina · Profesionalismo</div>
+</div>
+
+<nav class="nav" id="nav">
+  <button class="on" data-v="jefe"><span class="ix">01</span>Jefe de Piso</button>
+  <button data-v="home"><span class="ix">02</span>Sistema de Capacitación EAL</button>
+  <button data-v="induccion"><span class="ix">03</span>Inducción 1–5</button>
+  <button data-v="roleplay"><span class="ix">04</span>Role Plays</button>
+  <button data-v="briefing"><span class="ix">05</span>Generador Briefings</button>
+  <button data-v="sesion"><span class="ix">06</span>La Sesión</button>
+  <button data-v="calendario"><span class="ix">07</span>Calendario</button>
+</nav>
+
+<main id="main"><!-- views injected --></main>
+
+<button class="timer-fab" id="timerFab">⏱ Cronómetro</button>
+<div class="timer-panel" id="timerPanel">
+  <div class="tp-label">Cronómetro de sesión</div>
+  <div class="timer-clock" id="timerClock">15:00</div>
+  <div class="timer-presets" id="timerPresets">
+    <button data-m="5">5</button>
+    <button data-m="10">10</button>
+    <button class="on" data-m="15">15</button>
+    <button data-m="20">20</button>
+  </div>
+  <div class="timer-ctrl">
+    <button class="start" id="timerStart">Iniciar</button>
+    <button class="reset" id="timerReset">Reiniciar</button>
+  </div>
+</div>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modal"><!-- rp content --></div>
+</div>
+
+<footer><p>La Estancia Argentina León · <span>Gerencia General</span> · La cultura hace que el sistema corra como relojito</p></footer>
+
+<script>
+/* ============ DATA — Academia La Estancia ============ */
+
+const INDUCCION = [
+  {
+    dia:1, tag:"Bienvenida y propósito",
+    titulo:"Quién somos y por qué importas",
+    bloques:[
+      {h:"Lo que aprende hoy", items:[
+        "La filosofía de la casa: Hospitalidad, Disciplina y Profesionalismo — las tres juntas te hacen grande, no una sola.",
+        "Recorrido físico: cocina, barra, baños, estaciones, almacén, salidas.",
+        "Quién es quién: jefes de piso, barra, hostess, cocina. A quién le pregunto qué.",
+        "El uniforme y la presentación personal: cómo se ve un mesero de La Estancia.",
+        "La secuencia de servicio completa, vista de lejos (mañana la desglosamos)."
+      ]},
+      {h:"Lo que practica hoy", items:[
+        "Saludar a una mesa como lo hacemos aquí (su jefe de piso lo modela primero).",
+        "Cargar y caminar con charola vacía y con copas.",
+        "Montar y desmontar una mesa estándar."
+      ]}
+    ],
+    goal:"Que entienda que aquí no se sirve comida — se crea una experiencia. Y que él es parte de eso desde el día uno."
+  },
+  {
+    dia:2, tag:"La secuencia de servicio",
+    titulo:"El paso a paso, sin saltarse nada",
+    bloques:[
+      {h:"Lo que aprende hoy", items:[
+        "Secuencia completa: recibimiento → agua y carta → toma de orden → entradas → tiempo fuerte → postres (display) → cuenta → despedida → reseña.",
+        "Tiempos entre cada paso: qué va primero, qué nunca se adelanta.",
+        "El protocolo de retirar la silla al invitado (norma de la casa, al 100%).",
+        "Marcaje de mesa: cubiertos según lo que pidió el cliente.",
+        "Cómo y cuándo se presenta el display de postres dentro de la secuencia."
+      ]},
+      {h:"Lo que practica hoy", items:[
+        "Role play #1 con su jefe de piso: toma de orden de principio a fin.",
+        "Servir agua y montar marcaje sin interrumpir la conversación de la mesa."
+      ]}
+    ],
+    goal:"Que la secuencia le salga en orden, sin pensar. El orden es disciplina; la disciplina libera para dar hospitalidad."
+  },
+  {
+    dia:3, tag:"Domina la carne",
+    titulo:"Master de la carne: corte, término y sabor",
+    bloques:[
+      {h:"Lo que aprende hoy", items:[
+        "Los cortes de la casa y su carácter: Tomahawk 1kg ($2,150), Rib-Eye Akaushi 300g ($1,350), Dry Age NY/Rib-Eye ($890), Arrachera ($420–570), Filete Estancia ($450).",
+        "REGLA DE ORO: cada corte tiene un término donde da su mejor sabor. El mesero master sabe cuál y lo recomienda — no se lo deja al cliente a ciegas.",
+        "Akaushi y cortes marmoleados: término medio para que la grasa se funda y suelte sabor. Sobrecocido se seca y se desperdicia.",
+        "Filete (magro): no pasarlo de medio, se endurece. Arrachera: medio, jugosa.",
+        "Cómo describir un corte con sensación (marmoleo, en boca) y no con ficha técnica."
+      ]},
+      {h:"Lo que practica hoy", items:[
+        "Explicar 3 cortes a su jefe de piso como si fuera el cliente.",
+        "Recomendar término correcto para cada uno y justificar por qué."
+      ]}
+    ],
+    goal:"Que sepa vender el corte correcto en el término correcto. Eso es ser master de la carne, y eso sube el ticket y la satisfacción a la vez."
+  },
+  {
+    dia:4, tag:"Entradas, mar, pastas y vino",
+    titulo:"La carta completa y las casas Julia y Camperos",
+    bloques:[
+      {h:"Lo que aprende hoy", items:[
+        "Entradas: Carpaccio Salmón $275, Tártara Atún $240, Burrata $320, Tiradito Camarón/Pulpo $275, Mollejas $275, Jamón Ibérico 5 Jotas.",
+        "Mar: Sea Bass $620, Pulpo $450, Salmón $370. Pastas: Canelones Picaña $350, Tagliatelle Salmón $270.",
+        "VINOS DE LA CASA — la prioridad: Julia y Camperos, maquilas exclusivas de Bodegas Santo Tomás. Las empujamos hasta agotar (≈30 botellas de cada una).",
+        "El pitch del vino de la casa: 'tenemos un tinto exclusivo nuestro, no lo encuentras en otro lado'.",
+        "Cómo ofrecer una entrada 'para mientras llega el corte' (no dejar la mesa en seco)."
+      ]},
+      {h:"Lo que practica hoy", items:[
+        "Vender una botella de Julia o Camperos en role play (copa primero, botella si la mesa da).",
+        "Sugerir entrada + corte + vino como combinación natural, no como lista."
+      ]}
+    ],
+    goal:"Que venda la carta completa con naturalidad, con Julia y Camperos como bandera. Mover esas botellas es meta de la casa."
+  },
+  {
+    dia:5, tag:"Cierre, reseña y piso real",
+    titulo:"El cierre memorable y manejar tu estación",
+    bloques:[
+      {h:"Lo que aprende hoy", items:[
+        "Presentar el display de postres dentro de la secuencia — nunca preguntar '¿algo más?' (eso mata la venta).",
+        "El momento exacto de captar la reseña RateTap: después del postre, cliente contento, con la tarjeta en mano.",
+        "La despedida memorable: por nombre, invitando a volver.",
+        "Manejo de estación bajo presión: leer en qué etapa va cada mesa y a cuál darle preferencia.",
+        "La regla del 1: intenta resolver antes de pedir ayuda al jefe."
+      ]},
+      {h:"Lo que practica hoy", items:[
+        "Role play de cierre completo: postre → reseña → despedida.",
+        "Escenario de Rush con 2–3 mesas simuladas: ¿a quién atiende primero?"
+      ]}
+    ],
+    goal:"Que cierre vendiendo y dejando al cliente con ganas de volver — y que empiece a manejar varias mesas sin ahogarse. Listo para piso con supervisión."
+  }
+];
+
+/* ============ 12 ROLE PLAYS ============ */
+const ROLEPLAYS = [
+  { n:1, master:false, dif:2, titulo:"Pareja en cita", skill:"Venta sugestiva completa",
+    setup:"Mesero y cliente. Pareja, primera vez en La Estancia, presupuesto medio-alto, quieren consentirse.",
+    comanda:[
+      {nm:"Burrata",pr:"$320"},{nm:"Tiradito Camarón",pr:"$275"},
+      {nm:"Rib-Eye Akaushi 300g (compartir)",pr:"$1,350"},
+      {nm:"Botella de la casa — Julia o Camperos",pr:"botella"},
+      {nm:"2 postres",pr:"display"}
+    ],
+    clavar:[
+      "Leer que es cita: sugerir compartir, ritmo lento, atención sin invadir.",
+      "Vender entrada para 'mientras llega el corte'.",
+      "Describir el Akaushi con sensación (marmoleo, en boca) y recomendar término medio.",
+      "Anclar el vino de la casa: 'un tinto exclusivo nuestro, maquila de Santo Tomás'.",
+      "Presentar el display de postres antes de que pidan la cuenta."
+    ],
+    debrief:"¿Cómo lograste que pidieran la botella y no solo copa?" },
+
+  { n:2, master:false, dif:3, titulo:"Mesa de negocios", skill:"Rapidez + ticket alto",
+    setup:"4 ejecutivos, hora de comida, traen prisa pero quieren impresionar a un cliente. El que invita quiere verse generoso.",
+    comanda:[
+      {nm:"Mollejas",pr:"$275"},{nm:"Carpaccio Salmón",pr:"$275"},
+      {nm:"Tomahawk 1kg (compartir)",pr:"$2,150"},{nm:"Arrachera",pr:"$570"},
+      {nm:"2 botellas de la casa",pr:"ritmo rápido"},{nm:"Cafés al cierre",pr:"display"}
+    ],
+    clavar:[
+      "Detectar quién manda en la mesa y dirigirle la sugerencia.",
+      "Proponer el Tomahawk como 'pieza para presumir, lo cortamos en la mesa'.",
+      "Garantizar tiempos: avisar que el corte tarda, meter entradas ya.",
+      "No dejar copas vacías — aquí entra el auxiliar/garrotero.",
+      "Lectura: prisa = eficiencia, no improvisación."
+    ],
+    debrief:"Mesero y auxiliar: ¿cómo se coordinaron para que nunca esperaran?" },
+
+  { n:3, master:false, dif:2, titulo:"El que 'no toma vino'", skill:"Manejo de objeciones",
+    setup:"Mesa de 2. El cliente dice 'yo no sé de vinos' y 'solo vengo a comer carne'. Pregunta diferencias entre cortes. Quiere sentirse seguro, no presionado.",
+    comanda:[
+      {nm:"Tiradito Pulpo",pr:"$275"},
+      {nm:"Filete Estancia",pr:"$450"},{nm:"Dry Age NY",pr:"$890"},
+      {nm:"Convertir el 'no tomo vino' en copa de la casa",pr:"copa"},
+      {nm:"1 postre para compartir",pr:"display"}
+    ],
+    clavar:[
+      "Explicar 2 cortes en lenguaje simple: 'este más suave, este más intenso'.",
+      "Recomendar el término correcto de cada corte sin corregir feo al cliente.",
+      "Vender la copa con permiso: '¿le ofrezco una copa que va perfecto? Si no le late, no pasa nada'.",
+      "Nunca abrumar con fichas técnicas.",
+      "Hacerlo sentir experto, no ignorante."
+    ],
+    debrief:"¿Cómo vendiste la copa SIN presionar?" },
+
+  { n:4, master:false, dif:2, titulo:"Cierre + reseña", skill:"Postre, RateTap y despedida",
+    setup:"Familia terminó de comer, contentos, ya van de salida en su cabeza. El reto: subir ticket de cierre y captar la reseña.",
+    comanda:[
+      {nm:"Display de postres + digestivos/cafés",pr:"display"},
+      {nm:"Algo 'para llevar' si aplica",pr:"+"},
+      {nm:"Reseña RateTap en Google",pr:"★"},
+      {nm:"Despedida memorable",pr:"✓"}
+    ],
+    clavar:[
+      "No preguntar '¿algo más?' → presentar el display de postres.",
+      "Tras el postre, momento exacto de la reseña: 'si la pasaron bien, un escaneo rápido nos ayuda muchísimo'.",
+      "Acercar la tarjeta, no solo mencionarla.",
+      "Despedir por nombre, invitar a volver."
+    ],
+    debrief:"¿En qué momento exacto pediste la reseña y por qué ahí?" },
+
+  { n:5, master:false, dif:2, titulo:"El que ve el Tomahawk y se asusta", skill:"Manejo de precio",
+    setup:"Mesa de 4. Quieren carne pero el cliente ve el Tomahawk de $2,150 y dice 'está carísimo'. No quieres que se vayan al corte más barato por miedo.",
+    comanda:[
+      {nm:"Tabla de entradas para centro",pr:"$275+"},
+      {nm:"Rib-Eye Akaushi (alternativa premium justificada)",pr:"$1,350"},
+      {nm:"Botella de la casa Julia/Camperos",pr:"botella"},
+      {nm:"Postres del display",pr:"display"}
+    ],
+    clavar:[
+      "No defender el precio — defender el valor: peso, para cuántos alcanza, que se corta en mesa.",
+      "Ofrecer el Akaushi como 'la joya que rinde para compartir' sin que suene a 'lo barato'.",
+      "Anclar: el Tomahawk para 2-3 personas sale mejor que 3 platos individuales.",
+      "Subir con el vino de la casa, que da margen y eleva la mesa.",
+      "Cerrar sin que el cliente sienta que 'lo bajaste' — que sienta que 'lo aconsejaste'."
+    ],
+    debrief:"¿Cómo manejaste el precio sin que se fueran a lo más económico ni se sintieran juzgados?" },
+
+  { n:6, master:false, dif:3, titulo:"Cumpleaños sorpresa", skill:"Lectura de ocasión + hospitalidad",
+    setup:"Mesa de 8. Es cumpleaños, uno de ellos te lo dijo en secreto al llegar. Quieren un momento especial pero el festejado no debe enterarse de que tú sabes.",
+    comanda:[
+      {nm:"Entradas variadas para centro",pr:"$240+"},
+      {nm:"2 cortes grandes para compartir",pr:"$1,350+"},
+      {nm:"Botellas de la casa",pr:"botella"},
+      {nm:"Postre con vela / detalle de la casa",pr:"display"},
+      {nm:"Reseña RateTap al cierre",pr:"★"}
+    ],
+    clavar:[
+      "Coordinar el detalle de cumpleaños con cocina/barra SIN que el festejado lo note.",
+      "Manejar mesa grande: ritmo, no dejar a nadie sin atención, apoyo del auxiliar.",
+      "Vender para compartir (cortes grandes + botellas) porque es grupo.",
+      "El momento del postre con vela = pico emocional. Ahí se gana la reseña.",
+      "Despedir haciendo sentir que La Estancia hizo el cumpleaños memorable."
+    ],
+    debrief:"¿Cómo coordinaste el detalle sorpresa mientras seguías atendiendo a los otros 7?" },
+
+  { n:7, master:false, dif:3, titulo:"La queja en caliente", skill:"Recuperación de servicio",
+    setup:"El corte salió más cocido de lo que pidió el cliente. Está molesto. La mesa entera lo está mirando para ver cómo reaccionas.",
+    comanda:[
+      {nm:"Resolver el corte (cambio inmediato)",pr:"✓"},
+      {nm:"Detalle de cortesía para recuperar",pr:"casa"},
+      {nm:"Salvar la venta del resto de la mesa",pr:"$$"},
+      {nm:"Convertir queja en reseña positiva",pr:"★"}
+    ],
+    clavar:[
+      "No discutir ni justificar: reconocer rápido y resolver ('ahorita se lo corrijo, con mucho gusto').",
+      "Avisar al jefe de piso (la regla del 1: ya intentaste, ahora escala bien).",
+      "Ofrecer algo de la casa para recuperar el momento, no por culpa.",
+      "Cuidar que la espera del cambio no enfríe a toda la mesa.",
+      "Un cliente bien recuperado deja MEJOR reseña que uno sin problemas. Buscar ese cierre."
+    ],
+    debrief:"¿Recuperaste al cliente lo suficiente como para pedirle la reseña? ¿Cómo lo leíste?" },
+
+  { n:8, master:false, dif:2, titulo:"Mesa indecisa", skill:"Guiar sin presionar",
+    setup:"Mesa de 2 que no se decide. Llevan rato con la carta, preguntan de todo, no arrancan. El servicio se atora.",
+    comanda:[
+      {nm:"Entrada sugerida por el mesero (decisión por ellos)",pr:"$275"},
+      {nm:"2 cortes recomendados con criterio",pr:"$450+"},
+      {nm:"Copa de la casa para empezar",pr:"copa"},
+      {nm:"Postre del display al cierre",pr:"display"}
+    ],
+    clavar:[
+      "Tomar el mando con recomendaciones concretas: 'déjenme consentirlos, les traigo...'.",
+      "Reducir opciones, no aumentarlas: el mesero master decide por el indeciso.",
+      "Arrancar con una copa o entrada YA, para destrabar la mesa.",
+      "Recomendar corte + término con seguridad de master.",
+      "No dejar que la indecisión coma tiempo de tus otras mesas."
+    ],
+    debrief:"¿Cómo tomaste el control de la mesa sin que sintieran que los apuraste?" },
+
+  { n:9, master:false, dif:2, titulo:"Maridaje de la casa", skill:"Venta de vino Julia/Camperos",
+    setup:"Mesa que pidió cortes y dice 'tráenos un buen vino'. Tu misión: que sea Julia o Camperos, botella, y que queden encantados.",
+    comanda:[
+      {nm:"Botella Julia o Camperos",pr:"botella"},
+      {nm:"Maridar con el corte que ya pidieron",pr:"✓"},
+      {nm:"Segunda botella si la mesa da",pr:"+"},
+      {nm:"Copa digestiva al cierre",pr:"copa"}
+    ],
+    clavar:[
+      "Posicionar Julia/Camperos como exclusivos de la casa, no como 'el de la casa barato'.",
+      "Maridar con argumento: 'este tinto levanta el Akaushi, la grasa con el vino es otra cosa'.",
+      "Ofrecer botella, no copa, cuando hay 3+ personas.",
+      "Servir y presentar la botella con ritual (eso justifica el valor).",
+      "Mover inventario: tenemos ≈30 de cada una, son la prioridad de venta."
+    ],
+    debrief:"¿Vendiste la botella por su historia y maridaje, o solo la nombraste?" },
+
+  { n:10, master:false, dif:3, titulo:"El crítico que sabe", skill:"Conocimiento bajo prueba",
+    setup:"Cliente conocedor, pregunta por origen del Akaushi, maduración del Dry Age, diferencia real entre cortes. Te está midiendo.",
+    comanda:[
+      {nm:"Dry Age NY o Rib-Eye",pr:"$890"},
+      {nm:"Rib-Eye Akaushi",pr:"$1,350"},
+      {nm:"Botella de la casa con argumento técnico",pr:"botella"},
+      {nm:"Postre del display",pr:"display"}
+    ],
+    clavar:[
+      "Hablar con propiedad: marmoleo del Akaushi, qué aporta la maduración del Dry Age, por qué cada término.",
+      "Si no sabes algo, no inventes: 'déjeme confirmárselo con el chef' suma más que mentir.",
+      "Recomendar término por sabor con seguridad de master.",
+      "Ganar respeto = ganar la venta alta y la reseña de un cliente exigente.",
+      "Tratarlo como par, no como examen que hay que aprobar con miedo."
+    ],
+    debrief:"¿Dónde sentiste que te faltó conocimiento? Eso es lo que estudias esta semana." },
+
+  { n:11, master:false, dif:3, titulo:"Familia con niños", skill:"Mesa compleja + tiempos",
+    setup:"Familia de 6, dos niños pequeños inquietos. Los papás quieren disfrutar pero los niños marcan el ritmo. Reto de tiempos y hospitalidad.",
+    comanda:[
+      {nm:"Algo rápido para los niños primero",pr:"✓"},
+      {nm:"Entradas para los adultos mientras",pr:"$275+"},
+      {nm:"Cortes para compartir",pr:"$450+"},
+      {nm:"Copa/botella de la casa para los papás",pr:"vino"},
+      {nm:"Postre del display (gancho con niños)",pr:"display"}
+    ],
+    clavar:[
+      "Sacar comida de niños RÁPIDO — eso compra tranquilidad para vender a los adultos.",
+      "Leer que los papás quieren un respiro: anticipar, no hacerlos pedir todo.",
+      "Vender vino a los adultos sin que sientan que descuidas a los niños.",
+      "Manejar tiempos: la mesa con niños no espera como una mesa de adultos.",
+      "El postre como gancho final (a los niños les encanta el display)."
+    ],
+    debrief:"¿Cómo equilibraste la velocidad que pedían los niños con la venta a los adultos?" },
+
+  { n:12, master:true, dif:4, titulo:"RUSH: cuatro mesas a la vez", skill:"Manejo de estaciones bajo presión",
+    setup:"Estás en pico. Tienes 4 mesas en etapas distintas de la secuencia y te acaban de avisar que sientan una quinta. Antes de moverte, di EN VOZ ALTA tu plan: a quién atiendes primero, a quién haces esperar 30 seg, dónde metes al auxiliar. El jefe evalúa tu CRITERIO, no tu velocidad.",
+    mesas:[
+      {mn:"Mesa 1", badge:"urge", bclass:"urge", txt:"Acaba de sentarse. Necesita saludo, agua y carta YA. Primera impresión."},
+      {mn:"Mesa 2", badge:"déjala vivir", bclass:"calma", txt:"En el pico: comiendo el corte, felices. NO la interrumpas. Lee de lejos."},
+      {mn:"Mesa 3", badge:"urge", bclass:"urge", txt:"Terminó, mentalmente ya se fue. Aquí corres: display de postres + cuenta + RateTap."},
+      {mn:"Mesa 4", badge:"prepara", bclass:"prep", txt:"Te la sientan en 2 min. Prepara marcaje y terreno antes de que llegue."}
+    ],
+    comanda:[
+      {nm:"Mesa 1: saludo + agua + carta",pr:"0 min"},
+      {nm:"Mesa 3: display + cuenta + reseña",pr:"0 min"},
+      {nm:"Mesa 2: solo vigilar de lejos",pr:"espera"},
+      {nm:"Mesa 4: marcaje listo (auxiliar)",pr:"2 min"}
+    ],
+    clavar:[
+      "REGLA DE ORO: la mesa que ACABA DE LLEGAR y la que YA VA DE SALIDA son las dos urgencias. La que come feliz puede esperar — déjala vivir su momento.",
+      "Mesa 1 y Mesa 3 son urgentes por razones opuestas: una es primera impresión, otra es cierre + reseña + liberar la mesa.",
+      "Mesa 2 NO se toca: interrumpir el pico de la experiencia resta, no suma.",
+      "Mesa 4: adelanta lo que puedas (marcaje) y manda al auxiliar a preparar.",
+      "Delegar: tú vas a lo que solo tú puedes hacer; el auxiliar cubre agua, marcaje, retirar platos.",
+      "Decir el plan en voz alta ANTES de correr — el criterio se entrena hablándolo."
+    ],
+    debrief:"Antes de moverte dijiste tu plan: ¿en qué orden atacaste y por qué? ¿Dónde casi pierdes una mesa?" }
+];
+
+/* ============ JEFE DE PISO ============ */
+const JEFE = [
+  { n:"01", titulo:"Tu posición: tú marcas el estándar",
+    parras:[
+      "El jefe de piso no es el que más manda — es el que <strong>más cuida que las cosas se hagan</strong>. Tú eres el puente entre la gerencia y el piso. Si tú bajas la guardia, todo el equipo baja la guardia detrás de ti."
+    ],
+    lista:[
+      "Llegas antes que tu equipo y te vas asegurando que todo cerró bien.",
+      "Conoces el menú mejor que cualquier mesero — eres el master de masters.",
+      "Modelas la hospitalidad: si tú no saludas bien, ellos tampoco.",
+      "Tu trabajo no es atrapar errores para regañar; es entrenar para que no pasen."
+    ] },
+  { n:"02", titulo:"Capacitar todos los días — no es opcional",
+    parras:[
+      "El equipo no se entrena solo. Cada día muerto (de 1 a 6 está tranquilo) es una <strong>oportunidad de oro</strong>: en lugar de que la gente esté en sus teléfonos, corres role plays. Uno hace de mesero, otro de cliente, y rotan."
+    ],
+    lista:[
+      "Mínimo un bloque de capacitación por turno tranquilo. Sin excepción.",
+      "Usa el banco de 12 role plays — empieza por los básicos y sube a los difíciles.",
+      "El Rush (escenario 12) es el más importante: ahí se ve quién sabe manejar piso.",
+      "Después de cada role play, haz la pregunta de cierre. El aprendizaje está en la reflexión, no en la actuación."
+    ] },
+  { n:"03", titulo:"El briefing es donde se gana el servicio",
+    parras:[
+      "Antes de cada turno, 10 minutos en círculo, sin celulares. El briefing es donde el equipo se alinea ANTES de que entre el primer cliente. Usa el <strong>Generador de Briefings</strong> de esta app: tú escribes de qué quieres hablar y te arma el comunicado con nuestra estructura."
+    ],
+    lista:[
+      "Número y contexto del día → meta emocional → quién apoya a quién → qué hacer si... → la regla del 1 → cierre que enciende.",
+      "La meta del equipo nunca es dinero — es sensorial: memoria, festejar a la mesa, hospitalidad.",
+      "Anticipa mínimo 4 escenarios de '¿qué hacer si...?' cada briefing.",
+      "Aprende a darlo TÚ. Que el generador te enseñe a comunicar como líder, no que te haga dependiente."
+    ] },
+  { n:"04", titulo:"El error que nos tiene en caos hoy",
+    alert:{ label:"Lección crítica", txt:"Al principio revisabas todo. Luego asumiste que ya corría en automático y dejaste de cerciorarte. Ahí empezó el caos. La cultura NO es automática — es un músculo que se atrofia si nadie lo ejercita." },
+    parras:[
+      "Cuando un equipo viene funcionando bien, el error más fácil es <strong>confiarse y dejar de revisar</strong>. 'Ya saben, ya lo hacen.' No. En el momento en que dejas de verificar, las cosas empiezan a aflojarse — primero un detalle, luego dos, hasta que se cae el sistema y no sabes por dónde empezó."
+    ],
+    lista:[
+      "Verificar no es desconfiar — es liderar. Revisa aunque creas que ya está.",
+      "Haz rondas cada 20 min por todas las mesas (touch points), no solo aparezcas al cobro.",
+      "Si dejaste de capacitar 'porque ya saben', vuelve a empezar hoy mismo.",
+      "La cultura hace que el sistema corra como relojito. Sin cultura: caos. Tu trabajo es sostener la cultura todos los días."
+    ] },
+  { n:"05", titulo:"Cómo correr un role play (explícalo así)",
+    parras:[
+      "Cuando le expliques a un mesero el role play, no solo digas 'véndeme esto'. El reto completo es: <strong>QUÉ vendes Y CÓMO te comportas</strong> mientras manejas tu piso."
+    ],
+    lista:[
+      "Primero el QUÉ: 'En esta mesa vas a vender entrada + corte + vino + postre. Esa es tu comanda objetivo.'",
+      "Luego el CÓMO: 'Pero mientras atiendes esta, te va a llegar aquella. ¿Cómo controlas los tiempos? ¿A cuál le das preferencia?'",
+      "Enséñales a leer la etapa de cada mesa: quién acaba de llegar, quién está en el pico, quién ya va de salida.",
+      "El buen mesero controla las mesas, no las mesas a él. Eso se entrena con el escenario de Rush.",
+      "Cierra siempre con la pregunta de cierre: '¿Cómo lo hiciste? ¿Qué cambiarías?'"
+    ] }
+];
+
+/* ============ SESIÓN CRONOMETRADA ============ */
+const SESION = [
+  {t:"0–2", u:"min", h:"Arranque en círculo", p:"Sin celulares. El jefe dice el objetivo de hoy: qué role play y qué se busca mejorar."},
+  {t:"2–4", u:"min", h:"Demostración", p:"El jefe (o un mesero fuerte) modela el role play una vez. El equipo observa qué se ve bien."},
+  {t:"4–10", u:"min", h:"Práctica en pares", p:"Se sientan en mesa real. Uno mesero, uno cliente, con la comanda objetivo. Luego rotan los roles."},
+  {t:"10–13", u:"min", h:"Pregunta de cierre", p:"El jefe lanza la pregunta de cierre del escenario. Cada par comparte qué aprendió."},
+  {t:"13–15", u:"min", h:"Cierre y compromiso", p:"Una frase: '¿qué vas a aplicar hoy en piso?' Cada quien la dice en voz alta. Arrancan turno."}
+];
+
+/* ============ CALENDARIO SEMANAL DE CAPACITACIÓN ============ */
+const CALENDARIO = [
+  { dia:"Lunes", foco:"Carne y cortes", color:"oro",
+    tema:"Master de la carne: qué corte va en qué término",
+    responsable:"Jefe de piso del turno",
+    ejecuta:[
+      "Role play #10 (El crítico que sabe) + repaso de cortes y términos.",
+      "Cada mesero explica 2 cortes y su término ideal en voz alta."
+    ],
+    evidencia:"Foto del equipo en la dinámica + nota de quién falló en términos (para reforzar)."
+  },
+  { dia:"Martes", foco:"Vinos de la casa", color:"vino",
+    tema:"Vender Julia y Camperos hasta agotar — maridaje",
+    responsable:"Jefe de barra (Gabriel) + jefe de piso",
+    ejecuta:[
+      "Role play #9 (Maridaje de la casa). Cada mesero hace su pitch de botella.",
+      "Repaso: con qué corte marida cada casa y cómo presentar la botella."
+    ],
+    evidencia:"Conteo de botellas Julia/Camperos vendidas ese día vs. meta. Foto de la sesión."
+  },
+  { dia:"Miércoles", foco:"Secuencia y display", color:"oro",
+    tema:"Secuencia de servicio + presentar el display de postres",
+    responsable:"Jefe de piso del turno",
+    ejecuta:[
+      "Role play #4 (Cierre + reseña) y #8 (Mesa indecisa).",
+      "Práctica del display de postres dentro de la secuencia, sin preguntar '¿algo más?'."
+    ],
+    evidencia:"Video corto de un cierre bien hecho (postre→reseña→despedida) + reseñas RateTap captadas."
+  },
+  { dia:"Jueves", foco:"Manejo de piso", color:"vino",
+    tema:"Rush: controlar varias mesas y los tiempos",
+    responsable:"Jefe de piso del turno",
+    ejecuta:[
+      "Escenario Maestro #12 (Rush: 4 mesas a la vez).",
+      "Cada mesero dice EN VOZ ALTA su plan de ataque antes de moverse."
+    ],
+    evidencia:"Nota del jefe: quién leyó bien las mesas y quién se ahogó. Plan de mejora individual."
+  },
+  { dia:"Domingo", foco:"El grande de la semana", color:"oro-fuerte",
+    tema:"Briefing fuerte + cultura + repaso integral (30 min)",
+    responsable:"Gerencia / jefe de piso senior",
+    ejecuta:[
+      "Briefing dominical extendido (usa el Generador, módulo 04).",
+      "Repaso de los 3 pilares, refuerzo de cultura y el role play más flojo de la semana.",
+      "Reconocimiento al mesero de la semana (ventas, reseñas, actitud)."
+    ],
+    evidencia:"Briefing guardado + foto del equipo completo + ranking de la semana publicado."
+  }
+];
+
+const CAL_EXPECTATIVA = {
+  titulo:"Qué se espera del jefe de piso responsable",
+  puntos:[
+    { h:"Ejecutas", p:"No delegas la capacitación a 'cuando haya tiempo'. La corres TÚ, en el bloque tranquilo (1 a 6), con cronómetro. Todos los días que toca, sin excepción." },
+    { h:"Evidencias", p:"Cada sesión deja prueba: foto, video corto, conteo de ventas o nota de desempeño. Sin evidencia, no pasó. La evidencia es lo que nos saca del 'pensé que ya lo hacían'." },
+    { h:"Te cercioras", p:"Verificar no es desconfiar — es liderar. Al cierre del día confirmas que la capacitación se hizo y subes la evidencia al grupo. Si un día no se pudo, lo reportas, no lo escondes." },
+    { h:"Das seguimiento", p:"Lo que salió flojo en el role play, lo observas en piso esa misma noche. El aprendizaje se cierra cuando lo ves aplicado con cliente real." }
+  ]
+};
+
+</script>
+<script>
+/* ============ APP — Academia La Estancia ============ */
+
+const main = document.getElementById('main');
+
+/* logo */
+const LOGO_SRC = "data:image/png;base64,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";
+(function(){ const l=document.getElementById('brandLogo'); if(l) l.src=LOGO_SRC; })();
+
+/* ---------- VIEW RENDERERS ---------- */
+function viewHome(){
+  return `<section class="view on hero" data-view="home">
+    <div class="eyebrow">Sistema de Capacitación EAL</div>
+    <h2 class="display">El sistema que hace<br>correr el restaurante<br>como <em>relojito</em>.</h2>
+    <p class="lead">No capacitamos por capacitar. Entrenamos todos los días porque <strong>la cultura no es automática</strong> — se construye en cada turno, en cada role play, en cada briefing. Cuando hay cultura, el sistema fluye. Cuando se descuida, llega el caos.</p>
+
+    <div class="pillars pillars-full">
+      <div class="pillar">
+        <div class="pn">Pilar 01</div><h3>Hospitalidad</h3>
+        <p>La hospitalidad no es servir comida — es hacer sentir a cada persona que su visita importa. Es darle a la gente más de lo que espera, leerla, anticiparla, hacerla sentir en casa. Trabajar con hospitalidad significa que <b>el invitado se va sintiendo que aquí lo trataron distinto</b>. Eso se espera de ti: que cada mesa se sienta el cliente más importante del día.</p>
+      </div>
+      <div class="pillar">
+        <div class="pn">Pilar 02</div><h3>Disciplina</h3>
+        <p>La disciplina te lleva al éxito. Es <b>hacer todos los días lo que tienes que hacer, hasta lograrlo</b> — sin que nadie te lo recuerde. No se trata de tener ganas; se trata de cumplir aunque no las tengas. Tienes que querer ser el mejor, porque si no te exiges, no logras nada. La disciplina es lo que separa al que sueña del que lo consigue.</p>
+      </div>
+      <div class="pillar">
+        <div class="pn">Pilar 03</div><h3>Profesionalismo</h3>
+        <p>Profesionalismo es hacer lo correcto todos los días, <b>te vean o no te vean</b>. Es portarte bien, estar bien contigo mismo, y dejar afuera el odio, el resentimiento y los problemas. Vienes a trabajar aunque te duela la cabeza o la panza — no hay obstáculos, no hay excusas. Tu imagen personal, tu actitud y tu entrega son tu firma. Eres profesional, punto.</p>
+      </div>
+    </div>
+
+    <div class="section-rule"></div>
+    <div class="eyebrow">Los módulos</div>
+    <div class="home-grid">
+      <button class="module-card" data-goto="induccion"><div class="mc-ix">01</div><div class="mc-tag">5 días</div><h3>Inducción Día 1 a 5</h3><p>El camino del mesero nuevo, sin saltarse un solo paso.</p><div class="mc-go">Entrar</div></button>
+      <button class="module-card" data-goto="roleplay"><div class="mc-ix">02</div><div class="mc-tag">12 escenarios</div><h3>Banco de Role Plays</h3><p>Situaciones reales con producto real, listas para los tiempos muertos.</p><div class="mc-go">Entrar</div></button>
+      <button class="module-card" data-goto="jefe"><div class="mc-ix">03</div><div class="mc-tag">Liderazgo</div><h3>El Rol del Jefe de Piso</h3><p>Qué se espera de ti — y por qué dejar de revisar generó el caos.</p><div class="mc-go">Entrar</div></button>
+      <button class="module-card" data-goto="briefing"><div class="mc-ix">04</div><div class="mc-tag">Con IA</div><h3>Generador de Briefings</h3><p>Escribe de qué quieres hablar y arma el briefing perfecto con nuestra estructura.</p><div class="mc-go">Entrar</div></button>
+      <button class="module-card" data-goto="sesion"><div class="mc-ix">05</div><div class="mc-tag">15 min</div><h3>La Sesión</h3><p>Cómo correr una capacitación cronometrada en los tiempos muertos.</p><div class="mc-go">Entrar</div></button>
+      <button class="module-card" data-goto="calendario"><div class="mc-ix">06</div><div class="mc-tag">Lun–Jue + Dom</div><h3>Calendario Semanal</h3><p>Responsable, ejecución y evidencia por día. Sin evidencia, no pasó.</p><div class="mc-go">Entrar</div></button>
+    </div>
+  </section>`;
+}
+
+function viewInduccion(){
+  const days = INDUCCION.map(d=>`
+    <div class="day" data-day="${d.dia}">
+      <div class="day-head">
+        <div class="day-num"><span>${d.dia}</span><small>Día</small></div>
+        <div class="day-head-txt"><div class="dt-tag">${d.tag}</div><h3>${d.titulo}</h3></div>
+        <div class="day-toggle">+</div>
+      </div>
+      <div class="day-body"><div class="day-body-inner">
+        ${d.bloques.map(b=>`<h4>${b.h}</h4><ul class="check-list">${b.items.map(i=>`<li>${i}</li>`).join('')}</ul>`).join('')}
+        <div class="day-goal"><b>Meta del día</b>${d.goal}</div>
+      </div></div>
+    </div>`).join('');
+  return `<section class="view" data-view="induccion">
+    <div class="eyebrow">Módulo 01 · Inducción</div>
+    <h2 class="display">Cinco días para<br>formar un <em>mesero</em>.</h2>
+    <p class="lead">Cada día construye sobre el anterior. <strong>No se salta ningún paso.</strong> Al quinto día, el nuevo está listo para piso con supervisión — sabiendo el menú, la secuencia y cómo manejar su estación.</p>
+    <div class="day-track">${days}</div>
+  </section>`;
+}
+
+function viewRoleplay(){
+  const cards = ROLEPLAYS.map(r=>{
+    const dots = [1,2,3,4].map(i=>`<i class="${i<=r.dif?'f':''}"></i>`).join('');
+    return `<button class="rp-card ${r.master?'master':''}" data-rp="${r.n}">
+      <div class="rp-diff">${dots}</div>
+      <div class="rp-n">${r.master?'ESCENARIO MAESTRO':'Escenario '+String(r.n).padStart(2,'0')}</div>
+      <h4>${r.titulo}</h4>
+      <div class="rp-skill">${r.skill}</div>
+    </button>`;
+  }).join('');
+  return `<section class="view" data-view="roleplay">
+    <div class="eyebrow">Módulo 02 · Role Plays</div>
+    <h2 class="display">Doce escenarios.<br>Producto <em>real</em>.</h2>
+    <div class="rp-intro">
+      <h3>Cómo se corre un role play</h3>
+      <p>El reto no es solo vender — es vender <strong>mientras manejas tu piso</strong>. Cada escenario trae su comanda objetivo (el QUÉ) y los puntos de comportamiento (el CÓMO). Toca cualquiera para abrirlo.</p>
+      <div class="how">
+        <div class="rp-step"><div class="s">1</div><p>Se sientan en mesa real, uno mesero, uno cliente</p></div>
+        <div class="rp-step"><div class="s">2</div><p>El mesero logra la comanda objetivo</p></div>
+        <div class="rp-step"><div class="s">3</div><p>Rotan los roles</p></div>
+        <div class="rp-step"><div class="s">4</div><p>El jefe hace la pregunta de cierre</p></div>
+      </div>
+    </div>
+    <div class="rp-grid">${cards}</div>
+  </section>`;
+}
+
+function viewJefe(){
+  const blocks = JEFE.map(j=>`
+    <div class="jp-block">
+      <h3><span class="jn">${j.n}</span>${j.titulo}</h3>
+      ${j.parras.map(p=>`<p>${p}</p>`).join('')}
+      ${j.alert?`<div class="alert-box"><div class="al">${j.alert.label}</div><p>${j.alert.txt}</p></div>`:''}
+      <ul>${j.lista.map(l=>`<li>${l}</li>`).join('')}</ul>
+    </div>`).join('');
+  return `<section class="view" data-view="jefe">
+    <div class="eyebrow">Módulo 03 · Liderazgo</div>
+    <h2 class="display">Jefe de piso:<br>tú marcas el <em>estándar</em>.</h2>
+    <p class="lead">Si se está perdiendo el "por dónde vamos", empieza aquí. Tu posición no es mandar — es <strong>sostener la cultura todos los días</strong>.</p>
+    <div style="margin-top:30px">${blocks}</div>
+  </section>`;
+}
+
+function viewBriefing(){
+  return `<section class="view" data-view="briefing">
+    <div class="eyebrow">Módulo 04 · Generador con IA</div>
+    <h2 class="display">Arma tu briefing<br>como <em>líder</em>.</h2>
+    <div class="gen-wrap">
+      <div class="gen-intro">
+        <h3>Tú dices de qué hablar. La herramienta te enseña cómo.</h3>
+        <p>No te da briefings prefabricados. Tú escribes el tema que viste hoy en piso — "se están dejando copas vacías", "nadie ofrece postre", "el equipo llega tarde" — y te arma el comunicado completo con nuestra estructura de 6 puntos. El objetivo es que <strong>aprendas a comunicarlo tú</strong>, no que dependas de la app.</p>
+      </div>
+      <div class="gen-form">
+        <label for="genTema">¿De qué quieres hablar en el briefing? *</label>
+        <textarea id="genTema" placeholder="Ej: Hoy noté que se están dejando copas vacías en las mesas y que nadie está ofreciendo el display de postres. Quiero recordarles la importancia de anticipar y de cerrar vendiendo."></textarea>
+        <div class="gen-row">
+          <div><label for="genTurno">Turno / ocasión</label>
+            <select id="genTurno">
+              <option>Día normal entre semana</option>
+              <option>Viernes / sábado (servicio fuerte)</option>
+              <option>Domingo (el más fuerte de la semana)</option>
+              <option>Día tranquilo / temporada baja</option>
+              <option>Evento o reservación grande</option>
+            </select></div>
+          <div><label for="genTono">Tono</label>
+            <select id="genTono">
+              <option>Inspirador y firme</option>
+              <option>Motivacional / levantar el ánimo</option>
+              <option>Correctivo pero respetuoso</option>
+              <option>Energía alta / antes del rush</option>
+            </select></div>
+        </div>
+        <label for="genContexto">Contexto del día (opcional)</label>
+        <input id="genContexto" type="text" placeholder="Ej: 40 reservaciones, cumpleaños en mesa 12, llegan 2 meseros nuevos">
+        <button class="gen-btn" id="genBtn">Generar briefing</button>
+      </div>
+
+      <div class="gen-loading" id="genLoading"><div class="spin"></div><p>Armando tu briefing con la estructura de La Estancia…</p></div>
+      <div class="gen-err" id="genErr"></div>
+
+      <div class="gen-out" id="genOut">
+        <div class="gen-out-head">
+          <div class="gl">Tu briefing</div>
+          <button class="copy-btn" id="copyBtn">Copiar texto</button>
+        </div>
+        <div class="brief-paper" id="briefPaper"></div>
+      </div>
+    </div>
+  </section>`;
+}
+
+function viewSesion(){
+  const rows = SESION.map(s=>`
+    <div class="ses-row">
+      <div class="ses-time">${s.t}<small>${s.u}</small></div>
+      <div class="ses-txt"><h4>${s.h}</h4><p>${s.p}</p></div>
+    </div>`).join('');
+  return `<section class="view" data-view="sesion">
+    <div class="eyebrow">Módulo 05 · La Sesión</div>
+    <h2 class="display">Quince minutos<br>que <em>afilan</em> al equipo.</h2>
+    <p class="lead">Así se corre una capacitación en los tiempos muertos (de 1 a 6 está tranquilo). <strong>Usa el cronómetro</strong> de la esquina para marcar cada bloque. Corto, enfocado, todos los días.</p>
+    <div class="sesion">${rows}</div>
+    <div class="section-rule"></div>
+    <div class="jp-block" style="margin:0">
+      <h3><span class="jn">★</span>Por qué cronometrado</h3>
+      <p>15 minutos obliga a foco. Sin reloj, la capacitación se diluye en plática y se siente eterna. Con reloj, el equipo sabe que es intenso pero corto — y eso hace que <strong>quieran hacerlo todos los días</strong> en lugar de evitarlo.</p>
+    </div>
+  </section>`;
+}
+
+function viewCalendario(){
+  const cmap={'oro':'var(--oro)','vino':'var(--vino-claro)','oro-fuerte':'var(--oro-claro)'};
+  const days = CALENDARIO.map(c=>{
+    const col=cmap[c.color]||'var(--oro)';
+    return `<div class="cal-day" style="--accent:${col}">
+      <div class="cal-day-head">
+        <div class="cal-dn">${c.dia}</div>
+        <div class="cal-foco">${c.foco}</div>
+      </div>
+      <div class="cal-tema">${c.tema}</div>
+      <div class="cal-meta">
+        <div class="cal-resp"><span class="cl">Responsable</span>${c.responsable}</div>
+      </div>
+      <div class="cal-sect"><span class="cl">Ejecuta</span><ul>${c.ejecuta.map(e=>`<li>${e}</li>`).join('')}</ul></div>
+      <div class="cal-evi"><span class="cl">Evidencia que entrega</span><p>${c.evidencia}</p></div>
+      <label class="cal-check"><input type="checkbox" data-cal="${c.dia}"><span>Capacitación ejecutada y evidencia subida</span></label>
+    </div>`;
+  }).join('');
+  const exp = CAL_EXPECTATIVA.puntos.map(p=>`<div class="exp-item"><h4>${p.h}</h4><p>${p.p}</p></div>`).join('');
+  return `<section class="view" data-view="calendario">
+    <div class="eyebrow">Módulo 06 · Calendario</div>
+    <h2 class="display">La semana que<br>nadie puede <em>saltarse</em>.</h2>
+    <p class="lead">Lunes a jueves, capacitación enfocada de 15 min. Domingo, el grande de la semana. Cada día tiene <strong>responsable, qué se ejecuta y qué evidencia se entrega</strong> — para que nunca más sea "pensé que ya lo hacían".</p>
+    <div class="cal-grid">${days}</div>
+    <div class="section-rule"></div>
+    <div class="eyebrow">${CAL_EXPECTATIVA.titulo}</div>
+    <div class="exp-grid">${exp}</div>
+    <div class="jp-block" style="margin-top:18px">
+      <h3><span class="jn">★</span>Sin evidencia, no pasó</h3>
+      <p>Esta es la regla que nos saca del caos. La capacitación no se mide por intención, se mide por <strong>evidencia subida al grupo cada día</strong>. El jefe de piso que ejecuta y evidencia es el que sostiene la cultura. El que asume que "ya corre solo" es por donde se cae el sistema.</p>
+    </div>
+  </section>`;
+}
+
+const VIEWS = {home:viewHome, induccion:viewInduccion, roleplay:viewRoleplay, jefe:viewJefe, briefing:viewBriefing, sesion:viewSesion, calendario:viewCalendario};
+let current = 'home';
+
+function render(name){
+  main.innerHTML = VIEWS[name]();
+  const v = main.querySelector('.view'); if(v) v.classList.add('on');
+  current = name;
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on', b.dataset.v===name));
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(name==='induccion') wireDays();
+  if(name==='roleplay') wireRP();
+  if(name==='briefing') wireGen();
+}
+
+/* ---------- NAV ---------- */
+document.getElementById('nav').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(b) render(b.dataset.v);
+});
+main.addEventListener('click', e=>{
+  const card = e.target.closest('[data-goto]'); if(card) render(card.dataset.goto);
+});
+
+/* ---------- INDUCCION accordion ---------- */
+function wireDays(){
+  main.querySelectorAll('.day-head').forEach(h=>{
+    h.addEventListener('click', ()=> h.parentElement.classList.toggle('open'));
+  });
+  const first = main.querySelector('.day'); if(first) first.classList.add('open');
+}
+
+/* ---------- ROLE PLAY modal ---------- */
+const modalBg = document.getElementById('modalBg');
+const modal = document.getElementById('modal');
+function wireRP(){
+  main.querySelectorAll('.rp-card').forEach(c=>{
+    c.addEventListener('click', ()=> openRP(+c.dataset.rp));
+  });
+}
+function openRP(n){
+  const r = ROLEPLAYS.find(x=>x.n===n); if(!r) return;
+  const comanda = r.comanda.map(c=>`<div class="ci"><span class="nm">${c.nm}</span><span class="pr">${c.pr}</span></div>`).join('');
+  const mesas = r.mesas ? `<div class="mb-block"><h4>Las cuatro mesas — léelas antes de moverte</h4><div class="mesas-grid">${r.mesas.map(m=>`<div class="mesa-c"><div class="mc-h"><span class="mn">${m.mn}</span><span class="badge ${m.bclass}">${m.badge}</span></div><p>${m.txt}</p></div>`).join('')}</div></div>`:'';
+  modal.innerHTML = `
+    <button class="modal-x" id="modalX">×</button>
+    <div class="modal-head">
+      <div class="mh-tag">${r.master?'Escenario Maestro · Manejo de piso':'Escenario '+String(r.n).padStart(2,'0')+' · '+r.skill}</div>
+      <h3>${r.titulo}</h3>
+      <div class="mh-setup">${r.setup}</div>
+    </div>
+    <div class="modal-body">
+      ${mesas}
+      <div class="mb-block"><h4>Comanda objetivo — lo que debe lograr</h4><div class="comanda">${comanda}</div></div>
+      <div class="mb-block"><h4>Qué debe clavar el mesero</h4><ul class="clavar">${r.clavar.map(c=>`<li>${c}</li>`).join('')}</ul></div>
+      <div class="debrief"><div class="dl">Pregunta de cierre — el jefe la hace al terminar</div><p>${r.debrief}</p></div>
+    </div>`;
+  modalBg.classList.add('on');
+  document.body.style.overflow='hidden';
+  document.getElementById('modalX').addEventListener('click', closeRP);
+}
+function closeRP(){ modalBg.classList.remove('on'); document.body.style.overflow=''; }
+modalBg.addEventListener('click', e=>{ if(e.target===modalBg) closeRP(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeRP(); });
+
+/* ---------- TIMER ---------- */
+const fab = document.getElementById('timerFab');
+const panel = document.getElementById('timerPanel');
+const clock = document.getElementById('timerClock');
+let tMin=15, tLeft=15*60, tRun=false, tInt=null;
+fab.addEventListener('click', ()=> panel.classList.toggle('on'));
+document.getElementById('timerPresets').addEventListener('click', e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  document.querySelectorAll('#timerPresets button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); tMin=+b.dataset.m; resetTimer();
+});
+function fmt(s){const m=Math.floor(s/60),ss=s%60;return `${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;}
+function tick(){
+  if(tLeft<=0){clearInterval(tInt);tRun=false;document.getElementById('timerStart').textContent='Iniciar';clock.classList.add('warn');try{beep()}catch(e){}return;}
+  tLeft--; clock.textContent=fmt(tLeft);
+  clock.classList.toggle('warn', tLeft<=30);
+}
+document.getElementById('timerStart').addEventListener('click', function(){
+  if(tRun){clearInterval(tInt);tRun=false;this.textContent='Continuar';}
+  else{tRun=true;this.textContent='Pausar';tInt=setInterval(tick,1000);}
+});
+document.getElementById('timerReset').addEventListener('click', resetTimer);
+function resetTimer(){clearInterval(tInt);tRun=false;tLeft=tMin*60;clock.textContent=fmt(tLeft);clock.classList.remove('warn');document.getElementById('timerStart').textContent='Iniciar';}
+function beep(){const c=new (window.AudioContext||window.webkitAudioContext)();const o=c.createOscillator();const g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=880;g.gain.value=.15;o.start();setTimeout(()=>{o.frequency.value=660;},200);setTimeout(()=>{o.stop();c.close();},500);}
+
+/* ---------- GENERADOR DE BRIEFINGS (Claude API) ---------- */
+function wireGen(){
+  const btn=document.getElementById('genBtn');
+  btn.addEventListener('click', generarBriefing);
+  document.getElementById('copyBtn').addEventListener('click', ()=>{
+    const txt=document.getElementById('briefPaper').innerText;
+    navigator.clipboard.writeText(txt).then(()=>{
+      const cb=document.getElementById('copyBtn');cb.textContent='¡Copiado!';
+      setTimeout(()=>cb.textContent='Copiar texto',1800);
+    });
+  });
+}
+
+async function generarBriefing(){
+  const tema=document.getElementById('genTema').value.trim();
+  const turno=document.getElementById('genTurno').value;
+  const tono=document.getElementById('genTono').value;
+  const contexto=document.getElementById('genContexto').value.trim();
+  const loading=document.getElementById('genLoading');
+  const out=document.getElementById('genOut');
+  const err=document.getElementById('genErr');
+  const btn=document.getElementById('genBtn');
+
+  err.classList.remove('on'); out.classList.remove('on');
+  if(!tema){ err.textContent='Escribe primero de qué quieres hablar en el briefing.'; err.classList.add('on'); return; }
+
+  loading.classList.add('on'); btn.disabled=true;
+
+  const sys = `Eres el coach de liderazgo de La Estancia Argentina León, un steakhouse premium. Tu trabajo es ayudar a un jefe de piso a redactar el briefing perfecto para su equipo de meseros, ENSEÑÁNDOLE a comunicar como líder.
+
+ESTRUCTURA OBLIGATORIA del briefing (la cultura de la casa). Úsala SIEMPRE, con estos 6 puntos en orden:
+1. EL NÚMERO Y EL CONTEXTO — reservaciones, hora pico, mesas grandes, festejos del día.
+2. LA META EMOCIONAL DEL DÍA — una frase tipo "hoy no se vende comida, hoy se vende ___". La meta del equipo NUNCA es dinero; es sensorial (memoria, hospitalidad, festejar a la mesa).
+3. QUIÉN HACE QUÉ, QUIÉN APOYA A QUIÉN — estaciones y pares de apoyo pre-mapeados.
+4. ANTICIPACIÓN "QUÉ HACER SI..." — mínimo 4 escenarios concretos del tema del día.
+5. LA REGLA DEL 1 — resuelve antes de pedir ayuda.
+6. EL CIERRE QUE ENCIENDE — una frase de propósito que prenda al equipo.
+
+FILOSOFÍA de la casa: tres pilares — Hospitalidad, Disciplina, Profesionalismo. Modelo de confianza y flujo ("fluye fluye fluye"), no supervisión punitiva. Tono directo, firme e inspirador, pero NUNCA regañón ni corporativo.
+
+REGLAS DE ESTILO:
+- Español mexicano casual de restaurante, como habla un gerente real a su equipo.
+- NADA de citas de libros ni referencias académicas. Todo se lee como cultura propia de La Estancia.
+- Usa **negritas** (markdown) para las frases clave que el jefe debe enfatizar.
+- Encabeza cada uno de los 6 puntos con su nombre en negritas y un tiempo sugerido entre paréntesis.
+- Producto real para los ejemplos: cortes (Tomahawk $2,150, Rib-Eye Akaushi $1,350, Arrachera, Filete Estancia), vinos de la casa Julia y Camperos (empujarlos hasta agotar), display de postres, reseñas RateTap.
+- Que sea LEÍBLE EN VOZ ALTA en círculo. Longitud: completo pero no eterno (el jefe lo lee en ~5-8 min).
+- Termina con UNA línea de coaching para el jefe (precedida de "—") sobre cómo darlo mejor: dónde hacer pausa, a quién mirar, cómo bajar el tono para que pegue.`;
+
+  const usr = `Arma el briefing.
+TEMA QUE QUIERE TRATAR EL JEFE: ${tema}
+TURNO/OCASIÓN: ${turno}
+TONO DESEADO: ${tono}
+${contexto?'CONTEXTO DEL DÍA: '+contexto:''}
+
+Devuelve SOLO el briefing redactado y listo para leer, con los 6 puntos. Nada de preámbulos como "aquí está tu briefing".`;
+
+  try{
+    const resp = await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-6",
+        max_tokens:1600,
+        system:sys,
+        messages:[{role:"user",content:usr}]
+      })
+    });
+    if(!resp.ok) throw new Error("status "+resp.status);
+    const data = await resp.json();
+    let text = data.content.filter(b=>b.type==="text").map(b=>b.text).join("\n").trim();
+    // markdown bold -> html
+    let html = text
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+    document.getElementById('briefPaper').innerHTML = html;
+    out.classList.add('on');
+    out.scrollIntoView({behavior:'smooth',block:'start'});
+  }catch(ex){
+    err.textContent="No se pudo generar el briefing en este momento. Revisa tu conexión e inténtalo de nuevo. Si sigue fallando, escribe el tema con más detalle.";
+    err.classList.add('on');
+  }finally{
+    loading.classList.remove('on'); btn.disabled=false;
+  }
+}
+
+/* ---------- INIT ---------- */
+render('jefe');
+
+</script>
+</body>
+</html>
