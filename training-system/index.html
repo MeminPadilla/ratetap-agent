@@ -1204,6 +1204,23 @@ function wireGen(){
   });
 }
 
+/*
+  El briefing se genera en el SERVIDOR (FastAPI, endpoint POST /briefing).
+  Así la ANTHROPIC_API_KEY vive en el backend y nunca se expone en el
+  navegador. La página se sirve desde el mismo servidor (/capacitacion),
+  por eso usamos una ruta relativa y no hay problemas de CORS.
+
+  BRIEFING_ENDPOINT se resuelve automáticamente:
+  - Si la página se abre desde el servidor (http/https) → ruta relativa "/briefing".
+  - Si se abre como archivo local (file://) → usa localhost:8000 por defecto.
+  Puedes forzar otra URL definiendo window.BRIEFING_ENDPOINT antes de este script.
+*/
+const BRIEFING_ENDPOINT = (function(){
+  if (window.BRIEFING_ENDPOINT) return window.BRIEFING_ENDPOINT;
+  if (location.protocol === 'file:') return 'http://localhost:8000/briefing';
+  return '/briefing';
+})();
+
 async function generarBriefing(){
   const tema=document.getElementById('genTema').value.trim();
   const turno=document.getElementById('genTurno').value;
@@ -1219,58 +1236,29 @@ async function generarBriefing(){
 
   loading.classList.add('on'); btn.disabled=true;
 
-  const sys = `Eres el coach de liderazgo de La Estancia Argentina León, un steakhouse premium. Tu trabajo es ayudar a un jefe de piso a redactar el briefing perfecto para su equipo de meseros, ENSEÑÁNDOLE a comunicar como líder.
-
-ESTRUCTURA OBLIGATORIA del briefing (la cultura de la casa). Úsala SIEMPRE, con estos 6 puntos en orden:
-1. EL NÚMERO Y EL CONTEXTO — reservaciones, hora pico, mesas grandes, festejos del día.
-2. LA META EMOCIONAL DEL DÍA — una frase tipo "hoy no se vende comida, hoy se vende ___". La meta del equipo NUNCA es dinero; es sensorial (memoria, hospitalidad, festejar a la mesa).
-3. QUIÉN HACE QUÉ, QUIÉN APOYA A QUIÉN — estaciones y pares de apoyo pre-mapeados.
-4. ANTICIPACIÓN "QUÉ HACER SI..." — mínimo 4 escenarios concretos del tema del día.
-5. LA REGLA DEL 1 — resuelve antes de pedir ayuda.
-6. EL CIERRE QUE ENCIENDE — una frase de propósito que prenda al equipo.
-
-FILOSOFÍA de la casa: tres pilares — Hospitalidad, Disciplina, Profesionalismo. Modelo de confianza y flujo ("fluye fluye fluye"), no supervisión punitiva. Tono directo, firme e inspirador, pero NUNCA regañón ni corporativo.
-
-REGLAS DE ESTILO:
-- Español mexicano casual de restaurante, como habla un gerente real a su equipo.
-- NADA de citas de libros ni referencias académicas. Todo se lee como cultura propia de La Estancia.
-- Usa **negritas** (markdown) para las frases clave que el jefe debe enfatizar.
-- Encabeza cada uno de los 6 puntos con su nombre en negritas y un tiempo sugerido entre paréntesis.
-- Producto real para los ejemplos: cortes (Tomahawk $2,150, Rib-Eye Akaushi $1,350, Arrachera, Filete Estancia), vinos de la casa Julia y Camperos (empujarlos hasta agotar), display de postres, reseñas RateTap.
-- Que sea LEÍBLE EN VOZ ALTA en círculo. Longitud: completo pero no eterno (el jefe lo lee en ~5-8 min).
-- Termina con UNA línea de coaching para el jefe (precedida de "—") sobre cómo darlo mejor: dónde hacer pausa, a quién mirar, cómo bajar el tono para que pegue.`;
-
-  const usr = `Arma el briefing.
-TEMA QUE QUIERE TRATAR EL JEFE: ${tema}
-TURNO/OCASIÓN: ${turno}
-TONO DESEADO: ${tono}
-${contexto?'CONTEXTO DEL DÍA: '+contexto:''}
-
-Devuelve SOLO el briefing redactado y listo para leer, con los 6 puntos. Nada de preámbulos como "aquí está tu briefing".`;
-
   try{
-    const resp = await fetch("https://api.anthropic.com/v1/messages",{
+    const resp = await fetch(BRIEFING_ENDPOINT,{
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        model:"claude-sonnet-4-6",
-        max_tokens:1600,
-        system:sys,
-        messages:[{role:"user",content:usr}]
-      })
+      body:JSON.stringify({ tema, turno, tono, contexto })
     });
-    if(!resp.ok) throw new Error("status "+resp.status);
+    if(!resp.ok){
+      let detalle="";
+      try{ detalle=(await resp.json()).detail||""; }catch(e){}
+      throw new Error(detalle||("status "+resp.status));
+    }
     const data = await resp.json();
-    let text = data.content.filter(b=>b.type==="text").map(b=>b.text).join("\n").trim();
-    // markdown bold -> html
-    let html = text
+    const text = (data.briefing||"").trim();
+    if(!text) throw new Error("respuesta vacía");
+    // markdown bold -> html (escapando primero el HTML)
+    const html = text
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
       .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
     document.getElementById('briefPaper').innerHTML = html;
     out.classList.add('on');
     out.scrollIntoView({behavior:'smooth',block:'start'});
   }catch(ex){
-    err.textContent="No se pudo generar el briefing en este momento. Revisa tu conexión e inténtalo de nuevo. Si sigue fallando, escribe el tema con más detalle.";
+    err.textContent="No se pudo generar el briefing en este momento. Revisa que el servidor esté corriendo e inténtalo de nuevo. ("+ex.message+")";
     err.classList.add('on');
   }finally{
     loading.classList.remove('on'); btn.disabled=false;

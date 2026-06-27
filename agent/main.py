@@ -9,11 +9,15 @@ Funciona con cualquier proveedor (Whapi, Meta, Twilio) gracias a la capa de prov
 import os
 import logging
 from contextlib import asynccontextmanager
+from pathlib import Path
 from fastapi import FastAPI, Request, HTTPException
-from fastapi.responses import PlainTextResponse
+from fastapi.responses import PlainTextResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
 from dotenv import load_dotenv
 
 from agent.brain import generar_respuesta
+from agent.briefing import generar_briefing
 from agent.memory import inicializar_db, guardar_mensaje, obtener_historial
 from agent.providers import obtener_proveedor
 
@@ -51,6 +55,62 @@ app = FastAPI(
 async def health_check():
     """Endpoint de salud para Railway/monitoreo."""
     return {"status": "ok", "service": "agentkit", "agente": "Tap", "negocio": "RateTap"}
+
+
+# ── Sistema de Capacitación La Estancia ──────────────────────────
+# Carpeta con la app web de capacitación (HTML + assets)
+CAPACITACION_DIR = Path(__file__).resolve().parent.parent / "training-system"
+
+
+class BriefingRequest(BaseModel):
+    """Datos del formulario del Generador de Briefings."""
+    tema: str
+    turno: str = "Día normal entre semana"
+    tono: str = "Inspirador y firme"
+    contexto: str = ""
+
+
+@app.post("/briefing")
+async def briefing_handler(payload: BriefingRequest):
+    """
+    Genera un briefing para el equipo de meseros usando Claude.
+    La ANTHROPIC_API_KEY vive en el servidor — nunca se expone al navegador.
+    """
+    try:
+        texto = await generar_briefing(
+            tema=payload.tema,
+            turno=payload.turno,
+            tono=payload.tono,
+            contexto=payload.contexto,
+        )
+        return {"briefing": texto}
+    except ValueError as e:
+        # Falta el tema u otra validación de entrada
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Error generando briefing: {e}")
+        raise HTTPException(
+            status_code=502,
+            detail="No se pudo generar el briefing. Intenta de nuevo en unos minutos.",
+        )
+
+
+@app.get("/capacitacion")
+async def capacitacion_index():
+    """Sirve la app web del Sistema de Capacitación de La Estancia."""
+    index = CAPACITACION_DIR / "index.html"
+    if not index.exists():
+        raise HTTPException(status_code=404, detail="Sistema de capacitación no encontrado")
+    return FileResponse(index)
+
+
+# Servir cualquier asset estático adicional de la carpeta de capacitación
+if CAPACITACION_DIR.exists():
+    app.mount(
+        "/capacitacion-assets",
+        StaticFiles(directory=CAPACITACION_DIR),
+        name="capacitacion-assets",
+    )
 
 
 @app.get("/webhook")
