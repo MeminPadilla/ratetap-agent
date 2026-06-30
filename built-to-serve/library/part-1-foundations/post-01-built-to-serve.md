@@ -13,30 +13,32 @@ CONCEPTO GRÁFICO (imagen 1:1 o 4:5):
   Abajo, pequeño: BUILT TO SERVE
 -->
 
-# Post 1 — Built to Serve (ES, corto)
+# Post 1 — Built to Serve / Manifiesto (ES, corto)
+
+> Voz The Philosopher: abrir con una verdad universal sobre el lector.
+> La historia personal va después, nunca al inicio.
 
 ![Gráfico](../assets/post-01-built-to-serve.png)
 
 
-No construimos restaurantes.
+La mayoría de los líderes intenta arreglar el negocio.
 
-Construimos personas.
+Pocos entienden que un negocio nunca se arregla directamente.
+Se transforma a través de las personas.
 
-Las personas construyen cultura.
-La cultura construye negocios extraordinarios.
-
-Durante años lo hice al revés.
-
-Quería arreglar el negocio.
-El negocio no cambió hasta que cambié yo.
+Los negocios no crean cultura.
+Las personas sí.
 
 Un negocio no es un edificio ni un menú.
 Es un grupo de personas haciendo lo mismo, una y otra vez.
 
-Cambia lo que hacen y lo cambias todo.
+Cambia a quién desarrollas y lo cambias todo.
 
 Si quieres un mejor negocio, no empieces por el negocio.
 Empieza por la gente que lo carga.
+
+(Yo tardé años en entenderlo. Quise arreglar el negocio antes que a mí mismo.
+No cambió hasta que cambié yo.)
 
 Los números siguen a las personas. Nunca al revés.
 
@@ -47,8 +49,8 @@ El primero de muchos. Sígueme si esto también es tu trabajo.
 #Hospitalidad #Liderazgo #Cultura #BuiltToServe
 
 <!--
-VARIANTES DE HOOK (primeras líneas, para A/B):
-  A) "Durante años traté de arreglar el negocio. No cambió hasta que cambié yo."
-  B) "Un negocio no es un edificio ni un menú. Es lo que tu gente repite cada día."
+VARIANTES DE HOOK (verdad universal primero, nunca "yo"):
+  A) "La mayoría de los líderes intenta arreglar el negocio. Casi nadie lo logra directamente."
+  B) "Los negocios no crean cultura. Las personas sí."
   C) "Los números siguen a las personas. Nunca al revés."
 -->

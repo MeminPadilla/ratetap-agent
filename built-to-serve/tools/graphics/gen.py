@@ -187,77 +187,43 @@ post3 = """
 </div>
 """
 
-# ---------- SERIE : Diagramas mentales (cadenas causa → efecto) ----------
-def diagrama(kicker, n1, n2, n3, cierre):
-    """Tres nodos a mano conectados por flechas. El resultado (n3) en rojo."""
+# ---------- CANON : Principios (el whiteboard ES la representación del Principio) ----------
+def principle(num, n1, n2, n3, summary):
+    """Principio canónico: número de catálogo + flujo causa→efecto + resumen en una frase."""
     return f"""
-<div class="cav" style="text-align:center;font-size:34px;color:#8a93a0;letter-spacing:1px">{kicker}</div>
+<div style="text-align:center;margin-top:6px">
+  <div class="cav" style="font-size:40px;letter-spacing:7px;color:#9aa2ad">PRINCIPLE {num}</div>
+</div>
 
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:0">
-  <div class="ink-box t" style="font-size:52px;padding:18px 70px">{n1}</div>
-  <div class="ink-arrow" style="width:130px;height:78px"></div>
-  <div class="ink-box t" style="font-size:52px;padding:18px 70px">{n2}</div>
-  <div class="ink-arrow" data-c="red" style="width:130px;height:78px"></div>
-  <div class="ink-box t" data-c="red" style="font-size:52px;padding:18px 70px">{n3}</div>
+  <div class="ink-box t" style="font-size:50px;padding:18px 64px">{n1}</div>
+  <div class="ink-arrow" style="width:130px;height:76px"></div>
+  <div class="ink-box t" style="font-size:50px;padding:18px 64px">{n2}</div>
+  <div class="ink-arrow" data-c="red" style="width:130px;height:76px"></div>
+  <div class="ink-box t" data-c="red" style="font-size:50px;padding:18px 64px">{n3}</div>
 </div>
 
-<div style="text-align:center;padding-bottom:108px">
-  <div class="cav" style="font-size:50px;color:var(--ink)">{cierre}</div>
-</div>
-"""
-
-SERIE = [
-    ("diag1.html", diagrama("La cadena #1",
-        "PERSONAS", "CULTURA", "RESULTADOS",
-        "Todo empieza por la gente.")),
-    ("diag2.html", diagrama("La cadena #2",
-        "SERVIR", "CONFIANZA", "LIDERAZGO",
-        "Sirve primero. El liderazgo se gana.")),
-    ("diag3.html", diagrama("La cadena #3",
-        "DISCIPLINA", "CONSTANCIA", "EXCELENCIA",
-        "La excelencia es un hábito, no un golpe de suerte.")),
-    ("diag4.html", diagrama("La cadena #4",
-        "HOSPITALIDAD", "EXPERIENCIA", "LEALTAD",
-        "La lealtad se gana en cada detalle.")),
-]
-
-# ---------- CANON : Principios numerados (entran a la Biblia) ----------
-def principio(num, statement, gloss):
-    """Tarjeta de Principio canónico: número de catálogo + verdad como héroe."""
-    return f"""
-<div style="text-align:center;margin-top:10px">
-  <div class="cav" style="font-size:40px;letter-spacing:8px;color:#9aa2ad">PRINCIPLE {num}</div>
-  <div class="ink-u" data-c="blue" style="display:inline-block;width:120px;height:2px"></div>
-</div>
-
-<div style="flex:1;display:flex;align-items:center;justify-content:center">
-  <div class="t" style="font-size:84px;line-height:1.1;text-align:center">{statement}</div>
-</div>
-
-<div style="text-align:center;padding-bottom:104px">
-  <div class="cav" style="font-size:46px;color:var(--ink)">{gloss}</div>
+<div style="text-align:center;padding-bottom:106px">
+  <div class="cav" style="font-size:46px;color:var(--ink)">{summary}</div>
 </div>
 """
 
-CANON = [
-    ("principle-001.html", principio("001",
-        'People Build <span class="ink-u" data-c="red">Culture</span>',
-        "La cultura no se decreta. La construye la gente que eliges.")),
-    ("principle-002.html", principio("002",
-        'Culture Builds <span class="ink-u" data-c="red">Results</span>',
-        "Los resultados son la sombra de la cultura.")),
-    ("principle-003.html", principio("003",
-        'Hospitality Starts <span class="ink-u" data-c="red">Inside</span>',
-        "Cuida a tu equipo y ellos cuidarán al cliente.")),
-    ("principle-004.html", principio("004",
-        '<span class="ink-u" data-c="red">Serve</span> Before You Lead',
-        "Nadie te sigue por el cargo. Te siguen por servir.")),
-    ("principle-005.html", principio("005",
-        'Discipline Creates <span class="ink-u" data-c="red">Freedom</span>',
-        "La estructura no te limita. Te libera.")),
+PRINCIPLES = [
+    ("principle-001.html", principle("001",
+        "PEOPLE", "CULTURE", "BUSINESS",
+        "People build culture. Culture builds the business.")),
+    ("principle-002.html", principle("002",
+        "DISCIPLINE", "CONSISTENCY", "EXCELLENCE",
+        "Excellence is a habit, not a stroke of luck.")),
+    ("principle-003.html", principle("003",
+        "HOSPITALITY", "EXPERIENCE", "LOYALTY",
+        "Loyalty is earned in the details.")),
+    ("principle-004.html", principle("004",
+        "SERVE", "TRUST", "LEADERSHIP",
+        "Serve first. Leadership is earned.")),
 ]
 
-salidas = [("post1.html", post1), ("post2.html", post2), ("post3.html", post3)] + SERIE + CANON
+salidas = [("post1.html", post1), ("post2.html", post2), ("post3.html", post3)] + PRINCIPLES
 for name, body in salidas:
     open(os.path.join(BASE, name), "w").write(HEAD + body + FOOT)
     print("wrote", name)

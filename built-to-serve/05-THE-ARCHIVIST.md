@@ -37,20 +37,23 @@ Protect the philosophy above everything else.
 
 ---
 
-## The standards — the seven gates
+## The Principle Test — the official gate of the Bible
 
-A piece does not publish unless every answer is yes.
+Before anything enters the Bible, it must pass these seven questions. If it
+fails even one, it does not enter. We improve it, or we reject it.
 
-1. Is this **timeless**?
-2. Is this **practical**?
-3. Is this **teachable**?
-4. Is this **consistent** with Built to Serve?
-5. Does this **develop better leaders**?
-6. Does this help people become **better professionals**?
-7. Will this **still matter ten years from now**?
+1. ¿Es **atemporal**? — Will it still be true in ten years?
+2. ¿Nace de una **experiencia real**? — Not theory. Lived.
+3. ¿Puede **enseñarse**? — Someone else can take it and use it.
+4. ¿Puede **dibujarse en una pizarra**? — Simple enough to draw.
+5. ¿Puede **resumirse en una frase**? — One quotable line.
+6. ¿Forma **mejores profesionales**? — It develops people.
+7. ¿Fortalece la **filosofía Built to Serve**? — It reinforces the worldview.
 
-If the answer to any is no, we do not publish it. We improve it, or we
-reject it.
+> This is the canonical test. It supersedes any earlier checklist. A Principle
+> earns its number only after passing all seven. The whiteboard is the
+> *representation* of the Principle — never the source. The Principle comes
+> first; the drawing comes after.
 
 ---
 
