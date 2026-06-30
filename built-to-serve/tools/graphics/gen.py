@@ -245,31 +245,29 @@ PRINCIPLES = [
         "Primero sirves. El liderazgo se gana.")),
 ]
 
-# ---------- CANON : First Principles (axiomas — no se enseñan, se asumen) ----------
-def first_principle(num, statement):
+# ---------- CANON : Axioms (verdades fundacionales — no se enseñan, se asumen) ----------
+def axiom(num, statement):
     """Axioma irreductible: etiqueta de catálogo + la verdad como héroe."""
     return f"""
 <div style="text-align:center;margin-top:8px">
-  <div class="cav" style="font-size:38px;letter-spacing:6px;color:#9aa2ad">FIRST PRINCIPLE · FP-{num}</div>
+  <div class="cav" style="font-size:42px;letter-spacing:8px;color:#9aa2ad">AXIOM {num}</div>
 </div>
 
 <div style="flex:1;display:flex;align-items:center;justify-content:center">
   <div class="t" style="font-size:82px;line-height:1.12;text-align:center">{statement}</div>
 </div>
 
-<div style="text-align:center;padding-bottom:108px">
-  <div class="cav" style="font-size:38px;color:#9aa2ad;letter-spacing:2px">axioma</div>
-</div>
+<div style="padding-bottom:108px"></div>
 """
 
-FIRST_PRINCIPLES = [
-    ("fp-001.html", first_principle("001",
+AXIOMS = [
+    ("axiom-001.html", axiom("001",
         'Las personas son la <span class="ink-u" data-c="red">estrategia</span>.')),
-    ("fp-002.html", first_principle("002",
+    ("axiom-002.html", axiom("002",
         'El liderazgo es <span class="ink-u" data-c="red">servicio</span>.')),
-    ("fp-003.html", first_principle("003",
+    ("axiom-003.html", axiom("003",
         'La cultura se construye <span class="ink-u" data-c="red">a diario</span>.')),
-    ("fp-004.html", first_principle("004",
+    ("axiom-004.html", axiom("004",
         'La excelencia es conducta <span class="ink-u" data-c="red">disciplinada</span>.')),
 ]
 
@@ -389,8 +387,45 @@ FRAMEWORKS = [
     ("framework-003.html", fw_daily_briefing),
 ]
 
+# ---------- KNOWLEDGE GRAPH : un hilo real a través del canon ----------
+def _gnode(tipo, titulo, c="ink"):
+    return f"""
+  <div class="ink-box" data-c="{c}" style="width:700px;padding:14px 26px;text-align:center">
+    <div class="cav" style="font-size:26px;letter-spacing:3px;color:#9aa2ad">{tipo}</div>
+    <div class="t" style="font-size:33px">{titulo}</div>
+  </div>"""
+
+def _gedge(rel):
+    return f"""
+  <div style="display:flex;align-items:center;justify-content:center;gap:16px;height:60px">
+    <div class="ink-arrow" style="width:54px;height:60px"></div>
+    <div class="cav" style="font-size:32px;color:#9aa2ad">{rel}</div>
+  </div>"""
+
+thread = f"""
+<div style="text-align:center;margin-top:4px">
+  <div class="cav" style="font-size:40px;letter-spacing:6px;color:#9aa2ad">KNOWLEDGE GRAPH</div>
+  <div class="t" style="font-size:46px;margin-top:2px">Todo se conecta</div>
+</div>
+
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:0">
+  {_gnode("AXIOM 002","El liderazgo es servicio.")}
+  {_gedge("inspira")}
+  {_gnode("PRINCIPLE 004","Servir → Confianza → Liderazgo")}
+  {_gedge("explicado por")}
+  {_gnode("MENTAL MODEL 002","The Leadership Loop")}
+  {_gedge("ejecutado mediante")}
+  {_gnode("FRAMEWORK 001","The Daily Briefing","red")}
+</div>
+
+<div style="text-align:center;padding-bottom:100px">
+  <div class="cav" style="font-size:44px;color:var(--ink)">Cada idea nace de otra. Nada existe solo.</div>
+</div>
+"""
+
 salidas = ([("post1.html", post1), ("post2.html", post2), ("post3.html", post3)]
-           + FIRST_PRINCIPLES + PRINCIPLES + DEFINITIONS + FRAMEWORKS)
+           + AXIOMS + PRINCIPLES + DEFINITIONS + FRAMEWORKS
+           + [("thread-leadership.html", thread)])
 for name, body in salidas:
     open(os.path.join(BASE, name), "w").write(HEAD + body + FOOT)
     print("wrote", name)

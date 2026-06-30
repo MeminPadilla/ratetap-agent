@@ -3,7 +3,7 @@
 > La excelencia es un hábito, no un golpe de suerte.
 
 - **Canon:** Principle 002
-- **Nace de:** FP-004 (La excelencia es conducta disciplinada)
+- **Nace de:** AXIOM 004 (La excelencia es conducta disciplinada)
 - **Pilar:** Disciplina
 - **Parte:** V Crecimiento Personal
 - **Representación visual:** whiteboard del mismo número (nodos en inglés, resumen en español)

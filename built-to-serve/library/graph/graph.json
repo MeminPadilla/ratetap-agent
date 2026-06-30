@@ -1,0 +1,51 @@
+{
+  "version": "1.0",
+  "about": "Built to Serve Knowledge Graph. Nodes are canon elements; edges are typed relationships. Titles in Spanish (prose); type/labels in English.",
+  "nodeTypes": ["AXIOM", "PRINCIPLE", "MENTAL_MODEL", "FRAMEWORK", "DEFINITION", "FIELD_NOTE", "WHITEBOARD"],
+  "edgeTypes": [
+    { "rel": "inspira",            "from": "AXIOM",        "to": "PRINCIPLE" },
+    { "rel": "explicado_por",      "from": "PRINCIPLE",    "to": "MENTAL_MODEL" },
+    { "rel": "ejecutado_mediante", "from": "MENTAL_MODEL", "to": "FRAMEWORK" },
+    { "rel": "demostrado_en",      "from": "FRAMEWORK",    "to": "FIELD_NOTE" },
+    { "rel": "convertido_en",      "from": "FIELD_NOTE",   "to": "WHITEBOARD" },
+    { "rel": "define",             "from": "DEFINITION",   "to": "*" }
+  ],
+  "nodes": [
+    { "id": "AXIOM-001", "type": "AXIOM", "title": "Las personas son la estrategia.", "en": "People are the strategy" },
+    { "id": "AXIOM-002", "type": "AXIOM", "title": "El liderazgo es servicio.", "en": "Leadership is service" },
+    { "id": "AXIOM-003", "type": "AXIOM", "title": "La cultura se construye a diario.", "en": "Culture is built daily" },
+    { "id": "AXIOM-004", "type": "AXIOM", "title": "La excelencia es conducta disciplinada.", "en": "Excellence is disciplined behavior" },
+
+    { "id": "PRINCIPLE-001", "type": "PRINCIPLE", "title": "Personas → Cultura → Negocio" },
+    { "id": "PRINCIPLE-002", "type": "PRINCIPLE", "title": "Disciplina → Constancia → Excelencia" },
+    { "id": "PRINCIPLE-003", "type": "PRINCIPLE", "title": "Hospitalidad → Experiencia → Lealtad" },
+    { "id": "PRINCIPLE-004", "type": "PRINCIPLE", "title": "Servir → Confianza → Liderazgo" },
+
+    { "id": "MM-001", "type": "MENTAL_MODEL", "title": "The Four Pillars" },
+    { "id": "MM-002", "type": "MENTAL_MODEL", "title": "The Leadership Loop" },
+
+    { "id": "FW-001", "type": "FRAMEWORK", "title": "The Daily Briefing" },
+
+    { "id": "D-001", "type": "DEFINITION", "title": "Hospitalidad" },
+    { "id": "D-002", "type": "DEFINITION", "title": "Profesionalismo" },
+    { "id": "D-003", "type": "DEFINITION", "title": "Cultura" },
+    { "id": "D-004", "type": "DEFINITION", "title": "Liderazgo" }
+  ],
+  "edges": [
+    { "from": "AXIOM-001", "rel": "inspira", "to": "PRINCIPLE-001" },
+    { "from": "AXIOM-003", "rel": "inspira", "to": "PRINCIPLE-001" },
+    { "from": "AXIOM-004", "rel": "inspira", "to": "PRINCIPLE-002" },
+    { "from": "AXIOM-003", "rel": "inspira", "to": "PRINCIPLE-003" },
+    { "from": "AXIOM-002", "rel": "inspira", "to": "PRINCIPLE-004" },
+
+    { "from": "PRINCIPLE-002", "rel": "explicado_por", "to": "MM-001" },
+    { "from": "PRINCIPLE-004", "rel": "explicado_por", "to": "MM-002" },
+
+    { "from": "MM-002", "rel": "ejecutado_mediante", "to": "FW-001" },
+
+    { "from": "D-001", "rel": "define", "to": "PRINCIPLE-003" },
+    { "from": "D-003", "rel": "define", "to": "AXIOM-003" },
+    { "from": "D-004", "rel": "define", "to": "AXIOM-002" },
+    { "from": "D-002", "rel": "define", "to": "MM-001" }
+  ]
+}
