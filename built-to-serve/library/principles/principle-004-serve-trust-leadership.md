@@ -1,4 +1,4 @@
-# PRINCIPLE 004 — Serve → Trust → Leadership
+# PRINCIPLE 004 — Servir → Confianza → Liderazgo
 
 > Primero sirves. El liderazgo se gana.
 

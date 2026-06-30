@@ -37,12 +37,12 @@ después su representación.
 Cada Principio se expresa como un flujo causa → efecto y se resume en una sola
 frase. Su representación canónica es el whiteboard del mismo número.
 
-| # | Principle (canon, EN) | Resumen en una frase (ES) | Pilar | Estado |
+| # | Principle (nodos) | Resumen en una frase | Pilar | Estado |
 |---|-----------|----------------------|-------|--------|
-| 001 | People → Culture → Business | Las personas construyen cultura. La cultura construye el negocio. | Hospitalidad | ✅ |
-| 002 | Discipline → Consistency → Excellence | La excelencia es un hábito, no un golpe de suerte. | Disciplina | ✅ |
-| 003 | Hospitality → Experience → Loyalty | La lealtad se gana en los detalles. | Hospitalidad | ✅ |
-| 004 | Serve → Trust → Leadership | Primero sirves. El liderazgo se gana. | Hospitalidad | ✅ |
+| 001 | Personas → Cultura → Negocio | Las personas construyen cultura. La cultura construye el negocio. | Hospitalidad | ✅ |
+| 002 | Disciplina → Constancia → Excelencia | La excelencia es un hábito, no un golpe de suerte. | Disciplina | ✅ |
+| 003 | Hospitalidad → Experiencia → Lealtad | La lealtad se gana en los detalles. | Hospitalidad | ✅ |
+| 004 | Servir → Confianza → Liderazgo | Primero sirves. El liderazgo se gana. | Hospitalidad | ✅ |
 
 Fichas: [`principles/`](principles/)
 
@@ -76,18 +76,22 @@ sola, no entra. (Definición completa en
 
 ## La regla bilingüe (oficial)
 
-Built to Serve vive en dos capas, y cada idioma hace un trabajo distinto.
-Ninguno diluye al otro. La regla es por **tipo de texto**, no por pieza:
+Built to Serve vive en dos capas. La regla es simple: **solo los títulos en
+inglés; todo lo que la gente lee, en español.**
 
-- **Etiquetas canónicas → inglés.** Los nodos del Principle (PEOPLE, CULTURE,
-  SERVE…) y los nombres de Framework (The Four Pillars, The Leadership Loop).
-  Son la marca global: atemporal, exportable, "biblia".
-- **Toda la prosa → español.** Resúmenes, subtítulos, preguntas, descripciones
-  y el contenido interno de los Frameworks. Es la cercanía con la comunidad.
+- **Títulos → inglés.** Los nombres de Framework (The Four Pillars, The
+  Leadership Loop, The Daily Briefing), las etiquetas de catálogo (PRINCIPLE
+  001, FRAMEWORK 001) y el wordmark BUILT TO SERVE. Son la marca global.
+- **Todo lo que se lee → español.** Los nodos de los diagramas (PERSONAS,
+  CULTURA, NEGOCIO…), resúmenes, subtítulos, preguntas y descripciones. Es la
+  prosa, la cercanía con la comunidad.
 - **Caption → español.** Donde enseñas y conectas.
 
-El inglés carga el peso de la marca global; el español carga la cercanía.
-Así, cada whiteboard ya habla a la comunidad latina sin perder el canon.
+El inglés es solo el rótulo de marca; el español es el mensaje. Así cada
+whiteboard le habla directo a la comunidad latina.
+
+> Nota: los archivos conservan su slug en inglés (`principle-001-people-culture-
+> business.png`) como ID estable interno; lo que cambia es lo que se ve.
 
 ## Numeración
 

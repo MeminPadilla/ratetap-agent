@@ -1,4 +1,4 @@
-# PRINCIPLE 001 — People → Culture → Business
+# PRINCIPLE 001 — Personas → Cultura → Negocio
 
 > Las personas construyen cultura. La cultura construye el negocio.
 

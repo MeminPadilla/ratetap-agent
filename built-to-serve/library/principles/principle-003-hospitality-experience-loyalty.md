@@ -1,4 +1,4 @@
-# PRINCIPLE 003 — Hospitality → Experience → Loyalty
+# PRINCIPLE 003 — Hospitalidad → Experiencia → Lealtad
 
 > La lealtad se gana en los detalles.
 

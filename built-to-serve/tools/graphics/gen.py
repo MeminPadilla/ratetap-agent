@@ -232,16 +232,16 @@ def principle(num, n1, n2, n3, summary):
 
 PRINCIPLES = [
     ("principle-001.html", principle("001",
-        "PEOPLE", "CULTURE", "BUSINESS",
+        "PERSONAS", "CULTURA", "NEGOCIO",
         "Las personas construyen cultura. La cultura construye el negocio.")),
     ("principle-002.html", principle("002",
-        "DISCIPLINE", "CONSISTENCY", "EXCELLENCE",
+        "DISCIPLINA", "CONSTANCIA", "EXCELENCIA",
         "La excelencia es un hábito, no un golpe de suerte.")),
     ("principle-003.html", principle("003",
-        "HOSPITALITY", "EXPERIENCE", "LOYALTY",
+        "HOSPITALIDAD", "EXPERIENCIA", "LEALTAD",
         "La lealtad se gana en los detalles.")),
     ("principle-004.html", principle("004",
-        "SERVE", "TRUST", "LEADERSHIP",
+        "SERVIR", "CONFIANZA", "LIDERAZGO",
         "Primero sirves. El liderazgo se gana.")),
 ]
 

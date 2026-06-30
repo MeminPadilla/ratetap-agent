@@ -1,4 +1,4 @@
-# PRINCIPLE 002 — Discipline → Consistency → Excellence
+# PRINCIPLE 002 — Disciplina → Constancia → Excelencia
 
 > La excelencia es un hábito, no un golpe de suerte.
 
