@@ -1,75 +1,48 @@
 <!--
-LinkedIn Post 2 of 3 — The Four Pillars
-Part II The Four Pillars / Chapter: overview / Pillar: all four
-Principle: Extraordinary people stand on four things, not on talent or motivation.
+LinkedIn Post 2 de 3 — Los Cuatro Pilares  (versión corta, español)
+Parte II Los Cuatro Pilares / Pilar: los cuatro
+Principio: La gente extraordinaria se para sobre cuatro decisiones, no sobre talento.
+
+CONCEPTO GRÁFICO (carrusel de 5 tarjetas, o 1 imagen con los 4 pilares):
+  Tarjeta portada: "LOS 4 PILARES" + BUILT TO SERVE
+  Tarjeta 1: HOSPITALIDAD — Servir antes de esperar
+  Tarjeta 2: MENTALIDAD — La actitud se elige
+  Tarjeta 3: PROFESIONALISMO — Representas algo más grande que tú
+  Tarjeta 4: DISCIPLINA — Hazlo aunque la motivación ya no esté
+  Mismo color de fondo, un ícono simple por pilar.
 -->
 
-# Post 2 — The Four Pillars
+# Post 2 — Los Cuatro Pilares (ES, corto)
 
-Talent is overrated.
+El talento está sobrevalorado.
+La motivación se acaba el martes.
 
-Motivation runs out by Tuesday.
+La gente en la que más confío se para sobre cuatro cosas:
 
-The people I trust most stand on four things instead.
+**1. Hospitalidad** — Servir antes de esperar. A tu equipo antes que al cliente.
 
-I call them the Four Pillars. Every great teammate I have ever had was strong
-in all four.
+**2. Mentalidad** — La actitud se elige. Nunca te quejes sin proponer.
 
----
+**3. Profesionalismo** — Integridad, preparación, detalle. Representas algo más grande que tú.
 
-**1. Hospitality**
+**4. Disciplina** — Haz el trabajo aunque la motivación ya no esté.
 
-Serve before expecting.
+No son talentos.
+Son decisiones que vuelves a tomar mañana.
 
-Care genuinely. Lead with empathy.
+No tienes que ser el más talentoso.
+Tienes que ser el más constante.
 
-And serve your teammates before you serve the guest — because hospitality
-starts inside the team.
+—
 
-**2. Mentality**
+¿Cuál pilar es tu más fuerte? ¿Cuál has estado evitando?
+Ese segundo es tu próximo paso.
 
-Attitude is a choice. Make the right one.
+#Liderazgo #Hospitalidad #Profesionalismo #Disciplina #BuiltToServe
 
-Own your mistakes. Stay coachable.
-
-Never bring a complaint without bringing a solution.
-
-**3. Professionalism**
-
-Integrity. Preparation. Excellence. Respect.
-
-Attention to detail.
-
-You represent something bigger than yourself. Act like it.
-
-**4. Discipline**
-
-Consistency over intensity.
-
-Standards. Habits. Execution.
-
-Do the work even when the motivation is gone — especially then.
-
----
-
-Here is what most people miss.
-
-These are not talents. They are not gifts you are born with.
-
-Every one of them is a decision you make again tomorrow.
-
-That is the good news.
-
-You do not have to be the most talented person in the room.
-
-You have to be the most consistent.
-
----
-
-Quick check: which pillar is your strongest right now?
-
-And which one have you been avoiding?
-
-Be honest. That second one is your next move.
-
-#Leadership #Hospitality #Professionalism #Discipline #BuiltToServe
+<!--
+VARIANTES DE HOOK:
+  A) "El talento está sobrevalorado. La constancia gana."
+  B) "La motivación se acaba el martes. Esto no."
+  C) "No tienes que ser el más talentoso del lugar. El más constante, sí."
+-->

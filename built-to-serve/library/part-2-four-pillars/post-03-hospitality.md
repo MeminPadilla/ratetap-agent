@@ -1,68 +1,50 @@
 <!--
-LinkedIn Post 3 of 3 — Hospitality (deep focus)
-Part II The Four Pillars / Chapter: Hospitality / Pillar: Hospitality
-Principle: Hospitality starts inside the team. The guest feels how the team is treated.
+LinkedIn Post 3 de 3 — Hospitalidad (enfoque profundo, versión corta, español)
+Parte II Los Cuatro Pilares / Capítulo: Hospitalidad / Pilar: Hospitalidad
+Principio: La hospitalidad empieza dentro del equipo. El cliente siente cómo tratas a tu gente.
+
+CONCEPTO GRÁFICO (quote card 1:1 o 4:5):
+  Fondo oscuro, una sola frase grande, centrada:
+    "El cuidado viaja en una sola dirección:
+     de adentro hacia afuera."
+  Abajo, pequeño: BUILT TO SERVE
 -->
 
-# Post 3 — Hospitality Starts Inside
+# Post 3 — La hospitalidad empieza dentro (ES, corto)
 
-Every restaurant says the guest comes first.
+Todo restaurante dice que el cliente es primero.
 
-I used to say it too.
+Yo también lo decía. Estaba equivocado.
 
-I was wrong.
+El cliente no es primero. El equipo lo es.
 
-The guest does not come first. The team does.
+Un cliente está contigo una hora.
+Tu equipo está contigo cada turno.
 
----
+Como tratas a tu mesero a las 4pm
+es como él trata al cliente a las 9pm.
 
-Think about the math.
+El cuidado viaja en una sola dirección: de adentro hacia afuera.
 
-A guest is with you for one hour.
+Tres preguntas sobre tu equipo, antes de pensar en un solo cliente:
 
-Your team is with you every single shift.
+→ ¿Están preparados?
+→ ¿Se sienten vistos?
+→ ¿Los serví hoy?
 
-The way a server treats a guest at 9pm is shaped by how that server was
-treated at 4pm.
+La hospitalidad no es la actuación que le das al cliente.
+Es el desborde de cómo tratas a tu gente.
 
-Care only travels one direction. From the inside out.
+—
 
-You cannot fake it at the table if it was missing in the kitchen.
+Hoy, antes de pensar en un cliente, haz algo concreto por tu equipo.
+Luego observa lo que pasa en la mesa.
 
----
+#Hospitalidad #Liderazgo #Cultura #BuiltToServe
 
-So before I think about a single guest, I ask three questions about my team:
-
-→ **Are they prepared?** Did I set them up to win, or to scramble?
-
-→ **Are they seen?** Do they know I notice what they do right — not only what
-they do wrong?
-
-→ **Are they served?** What did I do today to make their job easier, clearer,
-more human?
-
-When the answer to all three is yes, the guest experience takes care of
-itself.
-
-When the answer is no, no script, no smile, no standard will save the night.
-
----
-
-Hospitality is not the performance you give the guest.
-
-It is the overflow of how you treat your people.
-
-Take care of the ones who take care of everyone else.
-
-Start there. Always.
-
----
-
-Today, before you think about a customer, do one concrete thing for your team.
-
-Clear an obstacle. Name a win out loud. Prepare the thing they always have to
-fight for.
-
-Then watch what happens at the table.
-
-#Hospitality #Leadership #Culture #BuiltToServe
+<!--
+VARIANTES DE HOOK:
+  A) "El cliente no es primero. Tu equipo lo es."
+  B) "Como tratas a tu equipo a las 4pm es como trata al cliente a las 9pm."
+  C) "La hospitalidad no empieza en la mesa. Empieza en la cocina."
+-->

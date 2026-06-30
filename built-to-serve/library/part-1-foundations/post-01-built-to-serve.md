@@ -1,64 +1,51 @@
 <!--
-LinkedIn Post 1 of 3 — The Philosophy
-Part I Foundations / Chapter: Purpose / Pillar: Hospitality
-Principle: We don't build restaurants. We build people.
+LinkedIn Post 1 de 3 — La Filosofía  (versión corta, español)
+Parte I Fundamentos / Capítulo: Propósito / Pilar: Hospitalidad
+Principio: No construimos restaurantes. Construimos personas.
+
+CONCEPTO GRÁFICO (imagen 1:1 o 4:5):
+  Fondo oscuro, tipografía blanca grande, mucho espacio.
+  Solo 4 líneas centradas:
+    "No construimos restaurantes.
+     Construimos personas.
+     Las personas construyen cultura.
+     La cultura construye negocios extraordinarios."
+  Abajo, pequeño: BUILT TO SERVE
 -->
 
-# Post 1 — Built to Serve
+# Post 1 — Built to Serve (ES, corto)
 
-We don't build restaurants.
+No construimos restaurantes.
 
-We build people.
+Construimos personas.
 
-People build culture.
+Las personas construyen cultura.
+La cultura construye negocios extraordinarios.
 
-Culture builds extraordinary businesses.
+Durante años lo hice al revés.
 
----
+Quería arreglar el negocio.
+El negocio no cambió hasta que cambié yo.
 
-For years I had it backwards.
+Un negocio no es un edificio ni un menú.
+Es un grupo de personas haciendo lo mismo, una y otra vez.
 
-I thought my job was to fix the business.
+Cambia lo que hacen y lo cambias todo.
 
-Tighten the service. Raise the standards. Chase the numbers.
+Si quieres un mejor negocio, no empieces por el negocio.
+Empieza por la gente que lo carga.
 
-The business never changed until I did.
+Los números siguen a las personas. Nunca al revés.
 
-Because a business is not a building. It is not a menu. It is not a logo.
+—
 
-A business is a group of people doing the same things, over and over.
+El primero de muchos. Sígueme si esto también es tu trabajo.
 
-Change what they do, and you change everything.
+#Hospitalidad #Liderazgo #Cultura #BuiltToServe
 
-That is the whole idea behind Built to Serve.
-
-Three sentences I keep coming back to:
-
-→ Hospitality is not an industry. It is a way of living.
-
-→ Leadership is not authority. It is service.
-
-→ Culture is not what is written on a wall. It is what people repeatedly do.
-
-If you want a better business, do not start with the business.
-
-Start with the people who carry it.
-
-Develop them. Serve them. Hold them to something higher.
-
-The numbers follow the people. Never the other way around.
-
----
-
-This is the first of many.
-
-I am writing down everything I believe about leadership, hospitality, and
-building people who build culture.
-
-Not to inspire you. To be useful to you.
-
-If that is your work too — follow along.
-
-We are just getting started.
-
-#Hospitality #Leadership #Culture #BuiltToServe
+<!--
+VARIANTES DE HOOK (primeras líneas, para A/B):
+  A) "Durante años traté de arreglar el negocio. No cambió hasta que cambié yo."
+  B) "Un negocio no es un edificio ni un menú. Es lo que tu gente repite cada día."
+  C) "Los números siguen a las personas. Nunca al revés."
+-->
