@@ -1,11 +1,11 @@
 # PRINCIPLE 003 — Hospitality → Experience → Loyalty
 
-> Loyalty is earned in the details.
+> La lealtad se gana en los detalles.
 
 - **Canon:** Principle 003
 - **Pilar:** Hospitalidad
 - **Parte:** IV Operaciones (Experiencia del cliente)
-- **Representación visual:** whiteboard del mismo número
+- **Representación visual:** whiteboard del mismo número (nodos en inglés, resumen en español)
 
 ![Principle 003](../assets/principle-003-hospitality-experience-loyalty.png)
 

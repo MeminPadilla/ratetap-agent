@@ -1,11 +1,11 @@
 # PRINCIPLE 002 — Discipline → Consistency → Excellence
 
-> Excellence is a habit, not a stroke of luck.
+> La excelencia es un hábito, no un golpe de suerte.
 
 - **Canon:** Principle 002
 - **Pilar:** Disciplina
 - **Parte:** V Crecimiento Personal
-- **Representación visual:** whiteboard del mismo número
+- **Representación visual:** whiteboard del mismo número (nodos en inglés, resumen en español)
 
 ![Principle 002](../assets/principle-002-discipline-consistency-excellence.png)
 

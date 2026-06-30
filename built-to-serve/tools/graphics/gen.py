@@ -233,19 +233,50 @@ def principle(num, n1, n2, n3, summary):
 PRINCIPLES = [
     ("principle-001.html", principle("001",
         "PEOPLE", "CULTURE", "BUSINESS",
-        "People build culture. Culture builds the business.")),
+        "Las personas construyen cultura. La cultura construye el negocio.")),
     ("principle-002.html", principle("002",
         "DISCIPLINE", "CONSISTENCY", "EXCELLENCE",
-        "Excellence is a habit, not a stroke of luck.")),
+        "La excelencia es un hábito, no un golpe de suerte.")),
     ("principle-003.html", principle("003",
         "HOSPITALITY", "EXPERIENCE", "LOYALTY",
-        "Loyalty is earned in the details.")),
+        "La lealtad se gana en los detalles.")),
     ("principle-004.html", principle("004",
         "SERVE", "TRUST", "LEADERSHIP",
-        "Serve first. Leadership is earned.")),
+        "Primero sirves. El liderazgo se gana.")),
 ]
 
 # ---------- FRAMEWORKS (herramientas) ----------
+# Framework 001 — The Four Pillars (contenido en español; nombre canónico en inglés)
+def _pilar(num, nombre, linea, c="ink"):
+    return f"""
+    <div class="ink-box" data-c="{c}" style="padding:22px 26px">
+      <div style="display:flex;align-items:baseline;gap:12px">
+        <span class="t" style="font-size:40px;color:var(--{c})">{num}.</span>
+        <span class="t" style="font-size:36px">{nombre}</span>
+      </div>
+      <div class="hand" style="font-size:31px;color:#41506a;margin-top:6px">{linea}</div>
+    </div>"""
+
+fw_four_pillars = f"""
+<div style="text-align:center;margin-top:6px">
+  <div class="cav" style="font-size:40px;letter-spacing:7px;color:#9aa2ad">FRAMEWORK 001</div>
+  <div class="t" style="font-size:56px;margin-top:6px">The Four Pillars</div>
+</div>
+
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:38px 46px">
+    {_pilar("1","HOSPITALIDAD","Servir antes de esperar.")}
+    {_pilar("2","MENTALIDAD","La actitud se elige.")}
+    {_pilar("3","PROFESIONALISMO","Algo más grande que tú.")}
+    {_pilar("4","DISCIPLINA","Aunque la motivación se vaya.","red")}
+  </div>
+</div>
+
+<div style="text-align:center;padding-bottom:104px">
+  <div class="cav" style="font-size:46px;color:var(--ink)">No son talentos. <b>Son decisiones.</b></div>
+</div>
+"""
+
 # Framework 002 — The Leadership Loop (ciclo de 3 nodos con flechas curvas)
 fw_leadership_loop = """
 <div style="text-align:center;margin-top:6px">
@@ -255,15 +286,15 @@ fw_leadership_loop = """
 
 <div style="flex:1;display:flex;align-items:center;justify-content:center">
   <div style="position:relative;width:680px;height:560px">
-    <div class="lnode ink-box t" data-i="0" style="position:absolute;left:340px;top:70px;transform:translate(-50%,-50%);font-size:46px;padding:14px 44px">SERVE</div>
-    <div class="lnode ink-box t" data-i="1" style="position:absolute;left:520px;top:400px;transform:translate(-50%,-50%);font-size:46px;padding:14px 44px">TRUST</div>
-    <div class="lnode ink-box t" data-i="2" data-c="red" style="position:absolute;left:160px;top:400px;transform:translate(-50%,-50%);font-size:42px;padding:14px 38px">INFLUENCE</div>
-    <div class="cav" style="position:absolute;left:340px;top:250px;transform:translate(-50%,-50%);font-size:34px;color:#9aa2ad;text-align:center">earned<br>daily</div>
+    <div class="lnode ink-box t" data-i="0" style="position:absolute;left:340px;top:70px;transform:translate(-50%,-50%);font-size:44px;padding:14px 40px">SERVIR</div>
+    <div class="lnode ink-box t" data-i="1" style="position:absolute;left:520px;top:400px;transform:translate(-50%,-50%);font-size:40px;padding:14px 36px">CONFIANZA</div>
+    <div class="lnode ink-box t" data-i="2" data-c="red" style="position:absolute;left:160px;top:400px;transform:translate(-50%,-50%);font-size:40px;padding:14px 34px">INFLUENCIA</div>
+    <div class="cav" style="position:absolute;left:340px;top:250px;transform:translate(-50%,-50%);font-size:34px;color:#9aa2ad;text-align:center">se gana<br>cada día</div>
   </div>
 </div>
 
 <div style="text-align:center;padding-bottom:104px">
-  <div class="cav" style="font-size:44px;color:var(--ink)">Serve, earn trust, influence — then serve again.</div>
+  <div class="cav" style="font-size:44px;color:var(--ink)">Sirves, ganas confianza, influyes — y vuelves a servir.</div>
 </div>
 """
 
@@ -272,32 +303,33 @@ fw_daily_briefing = """
 <div style="text-align:center;margin-top:6px">
   <div class="cav" style="font-size:40px;letter-spacing:7px;color:#9aa2ad">FRAMEWORK 003</div>
   <div class="t" style="font-size:56px;margin-top:6px">The Daily Briefing</div>
-  <div class="cav" style="font-size:34px;color:#8a93a0;margin-top:2px">5 minutes before the shift</div>
+  <div class="cav" style="font-size:34px;color:#8a93a0;margin-top:2px">5 minutos antes del turno</div>
 </div>
 
 <div style="flex:1;display:flex;align-items:center;justify-content:center">
-  <div class="ink-box" style="width:740px;padding:48px 54px">
+  <div class="ink-box" style="width:760px;padding:48px 52px">
     <div style="display:flex;align-items:center;gap:30px;margin:6px 0">
       <span class="ink-box" style="display:inline-block;width:26px;height:24px"></span>
-      <span class="hand" style="font-size:40px">What's the <b>win</b> today?</span>
+      <span class="hand" style="font-size:38px">¿Cuál es la <b>victoria</b> de hoy?</span>
     </div>
     <div style="display:flex;align-items:center;gap:30px;margin:34px 0">
       <span class="ink-box" style="display:inline-block;width:26px;height:24px"></span>
-      <span class="hand" style="font-size:40px">What <b>detail</b> will we protect?</span>
+      <span class="hand" style="font-size:38px">¿Qué <b>detalle</b> vamos a cuidar?</span>
     </div>
     <div style="display:flex;align-items:center;gap:30px;margin:34px 0 6px">
       <span class="ink-box" data-c="red" style="display:inline-block;width:26px;height:24px"></span>
-      <span class="hand" style="font-size:40px">Who do we <b>serve</b> first?</span>
+      <span class="hand" style="font-size:38px">¿A quién <b>servimos</b> primero?</span>
     </div>
   </div>
 </div>
 
 <div style="text-align:center;padding-bottom:104px">
-  <div class="cav" style="font-size:44px;color:var(--ink)">Align before. Win during.</div>
+  <div class="cav" style="font-size:44px;color:var(--ink)">Alinea antes. Gana durante.</div>
 </div>
 """
 
 FRAMEWORKS = [
+    ("framework-001.html", fw_four_pillars),
     ("framework-002.html", fw_leadership_loop),
     ("framework-003.html", fw_daily_briefing),
 ]

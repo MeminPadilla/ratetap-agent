@@ -1,11 +1,11 @@
 # PRINCIPLE 001 — People → Culture → Business
 
-> People build culture. Culture builds the business.
+> Las personas construyen cultura. La cultura construye el negocio.
 
 - **Canon:** Principle 001
 - **Pilar:** Hospitalidad
 - **Parte:** I Fundamentos (Cultura)
-- **Representación visual:** whiteboard del mismo número
+- **Representación visual:** whiteboard del mismo número (nodos en inglés, resumen en español)
 
 ![Principle 001](../assets/principle-001-people-culture-business.png)
 

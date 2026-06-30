@@ -1,11 +1,11 @@
 # PRINCIPLE 004 — Serve → Trust → Leadership
 
-> Serve first. Leadership is earned.
+> Primero sirves. El liderazgo se gana.
 
 - **Canon:** Principle 004
 - **Pilar:** Hospitalidad
 - **Parte:** III Liderazgo
-- **Representación visual:** whiteboard del mismo número
+- **Representación visual:** whiteboard del mismo número (nodos en inglés, resumen en español)
 
 ![Principle 004](../assets/principle-004-serve-trust-leadership.png)
 

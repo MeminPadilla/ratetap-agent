@@ -37,12 +37,12 @@ después su representación.
 Cada Principio se expresa como un flujo causa → efecto y se resume en una sola
 frase. Su representación canónica es el whiteboard del mismo número.
 
-| # | Principle | Resumen en una frase | Pilar | Estado |
+| # | Principle (canon, EN) | Resumen en una frase (ES) | Pilar | Estado |
 |---|-----------|----------------------|-------|--------|
-| 001 | People → Culture → Business | People build culture. Culture builds the business. | Hospitalidad | ✅ |
-| 002 | Discipline → Consistency → Excellence | Excellence is a habit, not a stroke of luck. | Disciplina | ✅ |
-| 003 | Hospitality → Experience → Loyalty | Loyalty is earned in the details. | Hospitalidad | ✅ |
-| 004 | Serve → Trust → Leadership | Serve first. Leadership is earned. | Hospitalidad | ✅ |
+| 001 | People → Culture → Business | Las personas construyen cultura. La cultura construye el negocio. | Hospitalidad | ✅ |
+| 002 | Discipline → Consistency → Excellence | La excelencia es un hábito, no un golpe de suerte. | Disciplina | ✅ |
+| 003 | Hospitality → Experience → Loyalty | La lealtad se gana en los detalles. | Hospitalidad | ✅ |
+| 004 | Serve → Trust → Leadership | Primero sirves. El liderazgo se gana. | Hospitalidad | ✅ |
 
 Fichas: [`principles/`](principles/)
 
@@ -77,15 +77,17 @@ sola, no entra. (Definición completa en
 ## La regla bilingüe (oficial)
 
 Built to Serve vive en dos capas, y cada idioma hace un trabajo distinto.
-Ninguno diluye al otro.
+Ninguno diluye al otro. La regla es por **tipo de texto**, no por pieza:
 
-- **El Principle (el whiteboard) va en inglés.** Es el canon: atemporal,
-  exportable, "biblia". Es el activo que trasciende y viaja al mundo.
-- **El caption va en español.** Es la comunidad: donde enseñas, conectas y
-  construyes audiencia latina. Todo en inglés no llegaría a la comunidad que
-  hoy te lee.
+- **Etiquetas canónicas → inglés.** Los nodos del Principle (PEOPLE, CULTURE,
+  SERVE…) y los nombres de Framework (The Four Pillars, The Leadership Loop).
+  Son la marca global: atemporal, exportable, "biblia".
+- **Toda la prosa → español.** Resúmenes, subtítulos, preguntas, descripciones
+  y el contenido interno de los Frameworks. Es la cercanía con la comunidad.
+- **Caption → español.** Donde enseñas y conectas.
 
 El inglés carga el peso de la marca global; el español carga la cercanía.
+Así, cada whiteboard ya habla a la comunidad latina sin perder el canon.
 
 ## Numeración
 
