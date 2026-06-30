@@ -423,9 +423,53 @@ thread = f"""
 </div>
 """
 
+# ---------- KNOWLEDGE GRAPH : el mapa completo del canon ----------
+def _mnode(cat, tag, c="ink", w=190):
+    return f"""<div class="ink-box" data-c="{c}" style="width:{w}px;padding:9px 6px;text-align:center">
+      <div class="cav" style="font-size:20px;letter-spacing:1px;color:#9aa2ad">{cat}</div>
+      <div class="t" style="font-size:26px">{tag}</div></div>"""
+
+def _medge(rel):
+    return f"""<div style="display:flex;flex-direction:column;align-items:center;margin:14px 0 10px">
+      <div class="ink-arrow" style="width:40px;height:40px"></div>
+      <div class="cav" style="font-size:26px;color:#9aa2ad;margin-top:6px">{rel}</div></div>"""
+
+graph_map = f"""
+<div style="text-align:center;margin-top:2px">
+  <div class="cav" style="font-size:34px;letter-spacing:5px;color:#9aa2ad">KNOWLEDGE GRAPH</div>
+  <div class="t" style="font-size:42px">El mapa del canon</div>
+</div>
+
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:0">
+  <div style="display:flex;justify-content:center;gap:40px">
+    {_mnode("AXIOM 001","Personas",w=178)}{_mnode("AXIOM 002","Liderazgo",w=178)}{_mnode("AXIOM 003","Cultura",w=178)}{_mnode("AXIOM 004","Excelencia",w=178)}
+  </div>
+  {_medge("inspira")}
+  <div style="display:flex;justify-content:center;gap:40px">
+    {_mnode("PRINCIPLE 001","Negocio",w=178)}{_mnode("PRINCIPLE 002","Excelencia",w=178)}{_mnode("PRINCIPLE 003","Lealtad",w=178)}{_mnode("PRINCIPLE 004","Liderazgo",w=178)}
+  </div>
+  {_medge("explicado por")}
+  <div style="display:flex;justify-content:center;gap:54px">
+    {_mnode("MENTAL MODEL 001","Four Pillars",w=240)}{_mnode("MENTAL MODEL 002","Leadership Loop",w=240)}
+  </div>
+  {_medge("ejecutado mediante")}
+  <div style="display:flex;justify-content:center">
+    {_mnode("FRAMEWORK 001","Daily Briefing","red",w=300)}
+  </div>
+</div>
+
+<div style="text-align:center;padding-bottom:90px">
+  <div class="cav" style="font-size:26px;letter-spacing:3px;color:#9aa2ad">DEFINITIONS · el lenguaje</div>
+  <div style="display:flex;justify-content:center;gap:42px;margin-top:14px">
+    {_mnode("D-001","Hospitalidad",w=196)}{_mnode("D-002","Profesionalismo",w=224)}{_mnode("D-003","Cultura",w=150)}{_mnode("D-004","Liderazgo",w=176)}
+  </div>
+  <div class="cav" style="font-size:38px;color:var(--ink);margin-top:24px">Todo nace de un axioma.</div>
+</div>
+"""
+
 salidas = ([("post1.html", post1), ("post2.html", post2), ("post3.html", post3)]
            + AXIOMS + PRINCIPLES + DEFINITIONS + FRAMEWORKS
-           + [("thread-leadership.html", thread)])
+           + [("thread-leadership.html", thread), ("graph-map.html", graph_map)])
 for name, body in salidas:
     open(os.path.join(BASE, name), "w").write(HEAD + body + FOOT)
     print("wrote", name)
