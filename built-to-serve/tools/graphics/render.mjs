@@ -19,7 +19,8 @@ const page = await browser.newPage({ viewport: { width: 1080, height: 1350 }, de
 for (const n of ['post1', 'post2', 'post3']) {
   await page.goto('file://' + path.join(BASE, n + '.html'));
   await page.evaluate(() => document.fonts.ready);
-  await page.waitForTimeout(300);
+  await page.waitForSelector('body[data-drawn="1"]', { timeout: 5000 });
+  await page.waitForTimeout(150);
   const el = await page.$('.board');
   await el.screenshot({ path: path.join(BASE, n + '.png') });
   console.log('rendered', n);
