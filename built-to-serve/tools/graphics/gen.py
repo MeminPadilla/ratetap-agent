@@ -27,6 +27,27 @@ function arrow(svg,cx,y1,y2,color,sw){
   add(svg,'M '+(cx-9)+' '+(y2-12)+' L '+cx+' '+y2+' L '+(cx+9)+' '+(y2-12),color,sw);
 }
 var COL={ink:'#1d2b3c',red:'#cf3a2c',blue:'#1f6fb2'};
+function loopArrows(svg,sb){
+  var ns=document.querySelectorAll('.lnode'); if(!ns.length) return;
+  var arr=[].slice.call(ns).sort(function(a,b){return (a.dataset.i|0)-(b.dataset.i|0)});
+  var pts=arr.map(function(e){var r=e.getBoundingClientRect();
+    return {x:r.left+r.width/2-sb.left, y:r.top+r.height/2-sb.top, rw:r.width/2+22, rh:r.height/2+18};});
+  var cx=0,cy=0; pts.forEach(function(p){cx+=p.x;cy+=p.y;}); cx/=pts.length; cy/=pts.length;
+  var R=0; pts.forEach(function(p){R+=Math.hypot(p.x-cx,p.y-cy);}); R/=pts.length;
+  var n=pts.length, gap=0.62, rr=R*1.06;
+  for(var i=0;i<n;i++){
+    var a=pts[i], b=pts[(i+1)%n];
+    var aa=Math.atan2(a.y-cy,a.x-cx), ab=Math.atan2(b.y-cy,b.x-cx);
+    while(ab<=aa) ab+=2*Math.PI;
+    var a1=aa+gap, a2=ab-gap, d='', K=18;
+    for(var k=0;k<=K;k++){var t=a1+(a2-a1)*k/K;
+      d+=(k?'L ':'M ')+(cx+rr*Math.cos(t)+j(1.4))+' '+(cy+rr*Math.sin(t)+j(1.4))+' ';}
+    add(svg,d,COL.ink,3.2);
+    var ex=cx+rr*Math.cos(a2), ey=cy+rr*Math.sin(a2), h=a2+Math.PI/2, L=20;
+    add(svg,'M '+ex+' '+ey+' L '+(ex+L*Math.cos(h+Math.PI+0.45))+' '+(ey+L*Math.sin(h+Math.PI+0.45)),COL.ink,3.2);
+    add(svg,'M '+ex+' '+ey+' L '+(ex+L*Math.cos(h+Math.PI-0.45))+' '+(ey+L*Math.sin(h+Math.PI-0.45)),COL.ink,3.2);
+  }
+}
 function draw(){
   var surf=document.querySelector('.surface');
   var svg=document.querySelector('#ink');
@@ -38,6 +59,7 @@ function draw(){
     uline(svg,r.left-sb.left-6,r.bottom-sb.top+8,r.width+12,COL[e.dataset.c||'blue'],5);});
   document.querySelectorAll('.ink-arrow').forEach(function(e){var r=e.getBoundingClientRect();
     arrow(svg,r.left-sb.left+r.width/2,r.top-sb.top+6,r.bottom-sb.top-6,COL[e.dataset.c||'ink'],3.2);});
+  loopArrows(svg,sb);
   document.body.setAttribute('data-drawn','1');
 }
 if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){setTimeout(draw,60)});}
@@ -223,7 +245,64 @@ PRINCIPLES = [
         "Serve first. Leadership is earned.")),
 ]
 
-salidas = [("post1.html", post1), ("post2.html", post2), ("post3.html", post3)] + PRINCIPLES
+# ---------- FRAMEWORKS (herramientas) ----------
+# Framework 002 — The Leadership Loop (ciclo de 3 nodos con flechas curvas)
+fw_leadership_loop = """
+<div style="text-align:center;margin-top:6px">
+  <div class="cav" style="font-size:40px;letter-spacing:7px;color:#9aa2ad">FRAMEWORK 002</div>
+  <div class="t" style="font-size:56px;margin-top:6px">The Leadership Loop</div>
+</div>
+
+<div style="flex:1;display:flex;align-items:center;justify-content:center">
+  <div style="position:relative;width:680px;height:560px">
+    <div class="lnode ink-box t" data-i="0" style="position:absolute;left:340px;top:70px;transform:translate(-50%,-50%);font-size:46px;padding:14px 44px">SERVE</div>
+    <div class="lnode ink-box t" data-i="1" style="position:absolute;left:520px;top:400px;transform:translate(-50%,-50%);font-size:46px;padding:14px 44px">TRUST</div>
+    <div class="lnode ink-box t" data-i="2" data-c="red" style="position:absolute;left:160px;top:400px;transform:translate(-50%,-50%);font-size:42px;padding:14px 38px">INFLUENCE</div>
+    <div class="cav" style="position:absolute;left:340px;top:250px;transform:translate(-50%,-50%);font-size:34px;color:#9aa2ad;text-align:center">earned<br>daily</div>
+  </div>
+</div>
+
+<div style="text-align:center;padding-bottom:104px">
+  <div class="cav" style="font-size:44px;color:var(--ink)">Serve, earn trust, influence — then serve again.</div>
+</div>
+"""
+
+# Framework 003 — The Daily Briefing (tarjeta-checklist)
+fw_daily_briefing = """
+<div style="text-align:center;margin-top:6px">
+  <div class="cav" style="font-size:40px;letter-spacing:7px;color:#9aa2ad">FRAMEWORK 003</div>
+  <div class="t" style="font-size:56px;margin-top:6px">The Daily Briefing</div>
+  <div class="cav" style="font-size:34px;color:#8a93a0;margin-top:2px">5 minutes before the shift</div>
+</div>
+
+<div style="flex:1;display:flex;align-items:center;justify-content:center">
+  <div class="ink-box" style="width:740px;padding:48px 54px">
+    <div style="display:flex;align-items:center;gap:30px;margin:6px 0">
+      <span class="ink-box" style="display:inline-block;width:26px;height:24px"></span>
+      <span class="hand" style="font-size:40px">What's the <b>win</b> today?</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:30px;margin:34px 0">
+      <span class="ink-box" style="display:inline-block;width:26px;height:24px"></span>
+      <span class="hand" style="font-size:40px">What <b>detail</b> will we protect?</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:30px;margin:34px 0 6px">
+      <span class="ink-box" data-c="red" style="display:inline-block;width:26px;height:24px"></span>
+      <span class="hand" style="font-size:40px">Who do we <b>serve</b> first?</span>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center;padding-bottom:104px">
+  <div class="cav" style="font-size:44px;color:var(--ink)">Align before. Win during.</div>
+</div>
+"""
+
+FRAMEWORKS = [
+    ("framework-002.html", fw_leadership_loop),
+    ("framework-003.html", fw_daily_briefing),
+]
+
+salidas = [("post1.html", post1), ("post2.html", post2), ("post3.html", post3)] + PRINCIPLES + FRAMEWORKS
 for name, body in salidas:
     open(os.path.join(BASE, name), "w").write(HEAD + body + FOOT)
     print("wrote", name)

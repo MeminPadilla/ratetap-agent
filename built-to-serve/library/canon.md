@@ -51,8 +51,8 @@ Fichas: [`principles/`](principles/)
 | # | Framework | Qué es | Estado |
 |---|-----------|--------|--------|
 | 001 | The Four Pillars | Hospitalidad · Mentalidad · Profesionalismo · Disciplina | ✅ Gráfico hecho |
-| 002 | The Leadership Loop | Ciclo Serve → Trust → Influence → Serve | 🟡 Por diseñar |
-| 003 | The Daily Briefing | Rutina de 5 min antes del turno | 🟡 Por diseñar |
+| 002 | The Leadership Loop | Ciclo Serve → Trust → Influence → Serve | ✅ Gráfico hecho |
+| 003 | The Daily Briefing | Rutina de 5 min antes del turno | ✅ Gráfico hecho |
 
 Fichas: [`frameworks/`](frameworks/)
 
