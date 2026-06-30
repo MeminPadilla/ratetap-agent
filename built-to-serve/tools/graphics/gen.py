@@ -221,7 +221,43 @@ SERIE = [
         "La lealtad se gana en cada detalle.")),
 ]
 
-salidas = [("post1.html", post1), ("post2.html", post2), ("post3.html", post3)] + SERIE
+# ---------- CANON : Principios numerados (entran a la Biblia) ----------
+def principio(num, statement, gloss):
+    """Tarjeta de Principio canónico: número de catálogo + verdad como héroe."""
+    return f"""
+<div style="text-align:center;margin-top:10px">
+  <div class="cav" style="font-size:40px;letter-spacing:8px;color:#9aa2ad">PRINCIPLE {num}</div>
+  <div class="ink-u" data-c="blue" style="display:inline-block;width:120px;height:2px"></div>
+</div>
+
+<div style="flex:1;display:flex;align-items:center;justify-content:center">
+  <div class="t" style="font-size:84px;line-height:1.1;text-align:center">{statement}</div>
+</div>
+
+<div style="text-align:center;padding-bottom:104px">
+  <div class="cav" style="font-size:46px;color:var(--ink)">{gloss}</div>
+</div>
+"""
+
+CANON = [
+    ("principle-001.html", principio("001",
+        'People Build <span class="ink-u" data-c="red">Culture</span>',
+        "La cultura no se decreta. La construye la gente que eliges.")),
+    ("principle-002.html", principio("002",
+        'Culture Builds <span class="ink-u" data-c="red">Results</span>',
+        "Los resultados son la sombra de la cultura.")),
+    ("principle-003.html", principio("003",
+        'Hospitality Starts <span class="ink-u" data-c="red">Inside</span>',
+        "Cuida a tu equipo y ellos cuidarán al cliente.")),
+    ("principle-004.html", principio("004",
+        '<span class="ink-u" data-c="red">Serve</span> Before You Lead',
+        "Nadie te sigue por el cargo. Te siguen por servir.")),
+    ("principle-005.html", principio("005",
+        'Discipline Creates <span class="ink-u" data-c="red">Freedom</span>',
+        "La estructura no te limita. Te libera.")),
+]
+
+salidas = [("post1.html", post1), ("post2.html", post2), ("post3.html", post3)] + SERIE + CANON
 for name, body in salidas:
     open(os.path.join(BASE, name), "w").write(HEAD + body + FOOT)
     print("wrote", name)
