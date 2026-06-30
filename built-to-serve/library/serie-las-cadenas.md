@@ -17,11 +17,40 @@ lógica de tres nodos, misma firma. Reconocible a primera vista.
 
 ![Cadena 1](assets/serie-01-personas-cultura-resultados.png)
 
+**Caption LinkedIn:**
+
+> Queremos mejores resultados.
+> Así que apretamos los resultados.
+> Y nada cambia.
+>
+> Los resultados no se arreglan. Se heredan.
+> De la cultura. Y la cultura nace de la gente.
+>
+> Cuida a tu gente y el resto cae por su propio peso.
+>
+> ¿Por dónde empiezas tú: por los números o por las personas?
+>
+> #Liderazgo #Cultura #BuiltToServe
+
 ## Cadena #2 — Servir → Confianza → Liderazgo
 **Pilar:** Hospitalidad · **Parte:** III Liderazgo
 **Cierre:** *Sirve primero. El liderazgo se gana.*
 
 ![Cadena 2](assets/serie-02-servir-confianza-liderazgo.png)
+
+**Caption LinkedIn:**
+
+> El liderazgo no se nombra. Se gana.
+>
+> Primero sirves.
+> Servir construye confianza.
+> Y la confianza es lo único que hace que te sigan.
+>
+> Nadie sigue un cargo. Siguen a alguien en quien confían.
+>
+> ¿A quién serviste hoy, antes de pedir algo a cambio?
+>
+> #Liderazgo #Servicio #BuiltToServe
 
 ## Cadena #3 — Disciplina → Constancia → Excelencia
 **Pilar:** Disciplina · **Parte:** V Crecimiento Personal
@@ -29,11 +58,41 @@ lógica de tres nodos, misma firma. Reconocible a primera vista.
 
 ![Cadena 3](assets/serie-03-disciplina-constancia-excelencia.png)
 
+**Caption LinkedIn:**
+
+> La excelencia no es un golpe de suerte.
+> Es lo que queda después de mil repeticiones.
+>
+> Disciplina cuando nadie te ve.
+> Constancia cuando no hay ganas.
+> Excelencia como consecuencia, no como meta.
+>
+> No persigas la excelencia. Construye el hábito.
+>
+> ¿Qué harías hoy aunque no tuvieras ganas?
+>
+> #Disciplina #Hábitos #BuiltToServe
+
 ## Cadena #4 — Hospitalidad → Experiencia → Lealtad
 **Pilar:** Hospitalidad · **Parte:** IV Operaciones (Experiencia del cliente)
 **Cierre:** *La lealtad se gana en cada detalle.*
 
 ![Cadena 4](assets/serie-04-hospitalidad-experiencia-lealtad.png)
+
+**Caption LinkedIn:**
+
+> La lealtad no se compra con descuentos.
+> Se gana en los detalles que nadie te exige.
+>
+> Hospitalidad genuina → una experiencia que se siente.
+> Una experiencia que se siente → un cliente que vuelve.
+>
+> La gente olvida lo que le vendiste.
+> Recuerda cómo la hiciste sentir.
+>
+> ¿Cuál fue el último detalle que sorprendió a tu cliente?
+>
+> #Hospitalidad #Experiencia #BuiltToServe
 
 ---
 
