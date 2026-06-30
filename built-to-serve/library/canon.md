@@ -74,11 +74,24 @@ sola, no entra. (Definición completa en
 
 ---
 
+## La regla bilingüe (oficial)
+
+Built to Serve vive en dos capas, y cada idioma hace un trabajo distinto.
+Ninguno diluye al otro.
+
+- **El Principle (el whiteboard) va en inglés.** Es el canon: atemporal,
+  exportable, "biblia". Es el activo que trasciende y viaja al mundo.
+- **El caption va en español.** Es la comunidad: donde enseñas, conectas y
+  construyes audiencia latina. Todo en inglés no llegaría a la comunidad que
+  hoy te lee.
+
+El inglés carga el peso de la marca global; el español carga la cercanía.
+
 ## Numeración
 
 - `PRINCIPLE 0XX` y `FRAMEWORK 0XX` — tres dígitos, secuencial, permanente.
 - El número se asigna al canonizar y no se reutiliza nunca.
-- El título del Principio va en inglés (canon, exportable). El caption va en
-  español (audiencia actual).
+- **Una vez publicado, un número es permanente.** El re-baseline solo es
+  legítimo mientras nada se ha publicado.
 - Ritmo sugerido: **máximo 1 Principio nuevo por semana**. El canon vale por
   lo que rechaza, no por lo que acumula.
