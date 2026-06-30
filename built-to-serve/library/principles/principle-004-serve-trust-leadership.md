@@ -3,6 +3,7 @@
 > Primero sirves. El liderazgo se gana.
 
 - **Canon:** Principle 004
+- **Nace de:** FP-002 (El liderazgo es servicio)
 - **Pilar:** Hospitalidad
 - **Parte:** III Liderazgo
 - **Representación visual:** whiteboard del mismo número (nodos en inglés, resumen en español)

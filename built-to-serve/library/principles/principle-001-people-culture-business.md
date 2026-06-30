@@ -3,6 +3,7 @@
 > Las personas construyen cultura. La cultura construye el negocio.
 
 - **Canon:** Principle 001
+- **Nace de:** FP-001 (Las personas son la estrategia)
 - **Pilar:** Hospitalidad
 - **Parte:** I Fundamentos (Cultura)
 - **Representación visual:** whiteboard del mismo número (nodos en inglés, resumen en español)

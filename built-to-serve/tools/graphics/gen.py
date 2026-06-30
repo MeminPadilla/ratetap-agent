@@ -245,6 +245,61 @@ PRINCIPLES = [
         "Primero sirves. El liderazgo se gana.")),
 ]
 
+# ---------- CANON : First Principles (axiomas — no se enseñan, se asumen) ----------
+def first_principle(num, statement):
+    """Axioma irreductible: etiqueta de catálogo + la verdad como héroe."""
+    return f"""
+<div style="text-align:center;margin-top:8px">
+  <div class="cav" style="font-size:38px;letter-spacing:6px;color:#9aa2ad">FIRST PRINCIPLE · FP-{num}</div>
+</div>
+
+<div style="flex:1;display:flex;align-items:center;justify-content:center">
+  <div class="t" style="font-size:82px;line-height:1.12;text-align:center">{statement}</div>
+</div>
+
+<div style="text-align:center;padding-bottom:108px">
+  <div class="cav" style="font-size:38px;color:#9aa2ad;letter-spacing:2px">axioma</div>
+</div>
+"""
+
+FIRST_PRINCIPLES = [
+    ("fp-001.html", first_principle("001",
+        'Las personas son la <span class="ink-u" data-c="red">estrategia</span>.')),
+    ("fp-002.html", first_principle("002",
+        'El liderazgo es <span class="ink-u" data-c="red">servicio</span>.')),
+    ("fp-003.html", first_principle("003",
+        'La cultura se construye <span class="ink-u" data-c="red">a diario</span>.')),
+    ("fp-004.html", first_principle("004",
+        'La excelencia es conducta <span class="ink-u" data-c="red">disciplinada</span>.')),
+]
+
+# ---------- CANON : Definitions (el lenguaje oficial) ----------
+def definition(num, word, deftext):
+    """Definición canónica: la palabra como héroe + su significado oficial."""
+    return f"""
+<div style="text-align:center;margin-top:8px">
+  <div class="cav" style="font-size:38px;letter-spacing:6px;color:#9aa2ad">DEFINITION · D-{num}</div>
+</div>
+
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center">
+  <div class="t" style="font-size:78px"><span class="ink-u" data-c="red">{word}</span></div>
+  <div class="hand" style="font-size:44px;color:var(--ink);text-align:center;margin-top:56px;max-width:780px;line-height:1.4">{deftext}</div>
+</div>
+
+<div style="padding-bottom:106px"></div>
+"""
+
+DEFINITIONS = [
+    ("def-001.html", definition("001", "Hospitalidad",
+        "No es servicio.<br><b>Es hacer que alguien se sienta visto.</b>")),
+    ("def-002.html", definition("002", "Profesionalismo",
+        "<b>Cumplir el estándar incluso cuando nadie observa.</b>")),
+    ("def-003.html", definition("003", "Cultura",
+        "<b>Los comportamientos que un equipo repite.</b>")),
+    ("def-004.html", definition("004", "Liderazgo",
+        "<b>Servir de una manera que otros quieran seguirte.</b>")),
+]
+
 # ---------- FRAMEWORKS (herramientas) ----------
 # Framework 001 — The Four Pillars (contenido en español; nombre canónico en inglés)
 def _pilar(num, nombre, linea, c="ink"):
@@ -259,7 +314,7 @@ def _pilar(num, nombre, linea, c="ink"):
 
 fw_four_pillars = f"""
 <div style="text-align:center;margin-top:6px">
-  <div class="cav" style="font-size:40px;letter-spacing:7px;color:#9aa2ad">FRAMEWORK 001</div>
+  <div class="cav" style="font-size:40px;letter-spacing:7px;color:#9aa2ad">MENTAL MODEL 001</div>
   <div class="t" style="font-size:56px;margin-top:6px">The Four Pillars</div>
 </div>
 
@@ -280,7 +335,7 @@ fw_four_pillars = f"""
 # Framework 002 — The Leadership Loop (ciclo de 3 nodos con flechas curvas)
 fw_leadership_loop = """
 <div style="text-align:center;margin-top:6px">
-  <div class="cav" style="font-size:40px;letter-spacing:7px;color:#9aa2ad">FRAMEWORK 002</div>
+  <div class="cav" style="font-size:40px;letter-spacing:7px;color:#9aa2ad">MENTAL MODEL 002</div>
   <div class="t" style="font-size:56px;margin-top:6px">The Leadership Loop</div>
 </div>
 
@@ -301,7 +356,7 @@ fw_leadership_loop = """
 # Framework 003 — The Daily Briefing (tarjeta-checklist)
 fw_daily_briefing = """
 <div style="text-align:center;margin-top:6px">
-  <div class="cav" style="font-size:40px;letter-spacing:7px;color:#9aa2ad">FRAMEWORK 003</div>
+  <div class="cav" style="font-size:40px;letter-spacing:7px;color:#9aa2ad">FRAMEWORK 001</div>
   <div class="t" style="font-size:56px;margin-top:6px">The Daily Briefing</div>
   <div class="cav" style="font-size:34px;color:#8a93a0;margin-top:2px">5 minutos antes del turno</div>
 </div>
@@ -334,7 +389,8 @@ FRAMEWORKS = [
     ("framework-003.html", fw_daily_briefing),
 ]
 
-salidas = [("post1.html", post1), ("post2.html", post2), ("post3.html", post3)] + PRINCIPLES + FRAMEWORKS
+salidas = ([("post1.html", post1), ("post2.html", post2), ("post3.html", post3)]
+           + FIRST_PRINCIPLES + PRINCIPLES + DEFINITIONS + FRAMEWORKS)
 for name, body in salidas:
     open(os.path.join(BASE, name), "w").write(HEAD + body + FOOT)
     print("wrote", name)

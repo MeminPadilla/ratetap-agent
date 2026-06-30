@@ -6,63 +6,92 @@
 
 ---
 
-## La jerarquía
+## La jerarquía (de dónde viene la verdad)
 
-Todo cuelga de la filosofía. El whiteboard no es el contenido — es la
-**representación visual de un Principio**.
+No es una lista de contenido. Es una epistemología: cómo se origina, se
+observa, se piensa, se ejecuta y se nombra la filosofía.
 
 ```
-BUILT TO SERVE        ← la filosofía
+BUILT TO SERVE            ← la filosofía
         ↓
-Constitution          ← los documentos fundacionales (00–05)
+Constitution              ← los documentos fundacionales (00–05)
         ↓
-Principles            ← las verdades. Lo que creemos.
+First Principles          ← los axiomas. No se enseñan, se asumen.
         ↓
-Frameworks            ← las herramientas. Cómo se aplica una verdad.
+Principles                ← la aplicación observable de un axioma.
         ↓
-Stories               ← la experiencia real que dio origen al principio
+Mental Models             ← una forma de pensar. Cambian cómo ves.
         ↓
-Whiteboards           ← la representación visual de un principio
+Frameworks                ← un proceso repetible. Cómo se ejecuta.
         ↓
-Articles · Podcast · Keynotes · Book   ← formas de difundirlo
+Stories  ·  Whiteboards   ← cómo se cuenta y se representa
 ```
 
-Se construye de arriba hacia abajo. Nunca al revés. Primero el Principio;
-después su representación.
+Transversal a todo: **Definitions** — el lenguaje oficial. Quien controla el
+lenguaje, controla la filosofía.
+
+> First Principle = filosofía (axioma). Principle = aplicación observable.
+> Ejemplo: PRINCIPLE 001 (Personas → Cultura → Negocio) existe **porque**
+> FP-001 (Las personas son la estrategia) ya es verdad.
 
 ---
 
-## Principles
+## First Principles (axiomas)
 
-Cada Principio se expresa como un flujo causa → efecto y se resume en una sola
-frase. Su representación canónica es el whiteboard del mismo número.
+| # | First Principle | Afirmación | De aquí deriva |
+|---|-----------------|------------|----------------|
+| FP-001 | People are the strategy | Las personas son la estrategia. | Principle 001 |
+| FP-002 | Leadership is service | El liderazgo es servicio. | Principle 004 · MM-002 |
+| FP-003 | Culture is built daily | La cultura se construye a diario. | Principle 001 · 003 |
+| FP-004 | Excellence is disciplined behavior | La excelencia es conducta disciplinada. | Principle 002 |
 
-| # | Principle (nodos) | Resumen en una frase | Pilar | Estado |
-|---|-----------|----------------------|-------|--------|
-| 001 | Personas → Cultura → Negocio | Las personas construyen cultura. La cultura construye el negocio. | Hospitalidad | ✅ |
-| 002 | Disciplina → Constancia → Excelencia | La excelencia es un hábito, no un golpe de suerte. | Disciplina | ✅ |
-| 003 | Hospitalidad → Experiencia → Lealtad | La lealtad se gana en los detalles. | Hospitalidad | ✅ |
-| 004 | Servir → Confianza → Liderazgo | Primero sirves. El liderazgo se gana. | Hospitalidad | ✅ |
+Fichas: [`first-principles/`](first-principles/)
+
+## Principles (aplicación observable)
+
+| # | Principle (nodos) | Resumen | Nace de |
+|---|-------------------|---------|---------|
+| 001 | Personas → Cultura → Negocio | Las personas construyen cultura. La cultura construye el negocio. | FP-001 |
+| 002 | Disciplina → Constancia → Excelencia | La excelencia es un hábito, no un golpe de suerte. | FP-004 |
+| 003 | Hospitalidad → Experiencia → Lealtad | La lealtad se gana en los detalles. | FP-003 |
+| 004 | Servir → Confianza → Liderazgo | Primero sirves. El liderazgo se gana. | FP-002 |
 
 Fichas: [`principles/`](principles/)
 
-## Frameworks
+## Mental Models (formas de pensar)
 
-| # | Framework | Qué es | Estado |
-|---|-----------|--------|--------|
-| 001 | The Four Pillars | Hospitalidad · Mentalidad · Profesionalismo · Disciplina | ✅ Gráfico hecho |
-| 002 | The Leadership Loop | Ciclo Serve → Trust → Influence → Serve | ✅ Gráfico hecho |
-| 003 | The Daily Briefing | Rutina de 5 min antes del turno | ✅ Gráfico hecho |
+| # | Mental Model | Qué cambia |
+|---|--------------|------------|
+| MM-001 | The Four Pillars | Sobre qué se para un gran profesional. |
+| MM-002 | The Leadership Loop | El liderazgo como ciclo, no como línea. |
+
+Fichas: [`mental-models/`](mental-models/)
+
+## Frameworks (procesos)
+
+| # | Framework | Proceso |
+|---|-----------|---------|
+| FW-001 | The Daily Briefing | Rutina de 5 min antes del turno. |
 
 Fichas: [`frameworks/`](frameworks/)
+
+## Definitions (el lenguaje)
+
+| # | Palabra | Definición oficial |
+|---|---------|--------------------|
+| D-001 | Hospitalidad | No es servicio. Es hacer que alguien se sienta visto. |
+| D-002 | Profesionalismo | Cumplir el estándar incluso cuando nadie observa. |
+| D-003 | Cultura | Los comportamientos que un equipo repite. |
+| D-004 | Liderazgo | Servir de una manera que otros quieran seguirte. |
+
+Fichas: [`definitions/`](definitions/)
 
 ---
 
 ## The Principle Test
 
 Antes de que algo entre a la Biblia, pasa estas siete preguntas. Si falla una
-sola, no entra. (Definición completa en
-[`../05-THE-ARCHIVIST.md`](../05-THE-ARCHIVIST.md).)
+sola, no entra. (Definición completa en [`../05-THE-ARCHIVIST.md`](../05-THE-ARCHIVIST.md).)
 
 1. ¿Es atemporal?
 2. ¿Nace de una experiencia real?
@@ -74,30 +103,14 @@ sola, no entra. (Definición completa en
 
 ---
 
-## La regla bilingüe (oficial)
+## Reglas del canon
 
-Built to Serve vive en dos capas. La regla es simple: **solo los títulos en
-inglés; todo lo que la gente lee, en español.**
-
-- **Títulos → inglés.** Los nombres de Framework (The Four Pillars, The
-  Leadership Loop, The Daily Briefing), las etiquetas de catálogo (PRINCIPLE
-  001, FRAMEWORK 001) y el wordmark BUILT TO SERVE. Son la marca global.
-- **Todo lo que se lee → español.** Los nodos de los diagramas (PERSONAS,
-  CULTURA, NEGOCIO…), resúmenes, subtítulos, preguntas y descripciones. Es la
-  prosa, la cercanía con la comunidad.
-- **Caption → español.** Donde enseñas y conectas.
-
-El inglés es solo el rótulo de marca; el español es el mensaje. Así cada
-whiteboard le habla directo a la comunidad latina.
-
-> Nota: los archivos conservan su slug en inglés (`principle-001-people-culture-
-> business.png`) como ID estable interno; lo que cambia es lo que se ve.
-
-## Numeración
-
-- `PRINCIPLE 0XX` y `FRAMEWORK 0XX` — tres dígitos, secuencial, permanente.
-- El número se asigna al canonizar y no se reutiliza nunca.
-- **Una vez publicado, un número es permanente.** El re-baseline solo es
-  legítimo mientras nada se ha publicado.
-- Ritmo sugerido: **máximo 1 Principio nuevo por semana**. El canon vale por
-  lo que rechaza, no por lo que acumula.
+- **Idioma:** solo los títulos en inglés (nombres de Mental Model/Framework,
+  etiquetas FP-/PRINCIPLE/D-/MM-/FW-, wordmark BUILT TO SERVE). Todo lo que se
+  lee — nodos, prosa, definiciones, preguntas — en español. Caption en español.
+- **Numeración:** prefijo + tres dígitos, permanente, nunca se reutiliza.
+  `FP-0XX`, `PRINCIPLE 0XX`, `MM-0XX`, `FW-0XX`, `D-0XX`.
+- **Permanencia:** una vez publicado, un número es permanente. El re-baseline
+  solo es legítimo mientras nada se ha publicado.
+- **Ritmo:** máximo 1 entrada nueva por semana por tipo. El canon vale por lo
+  que rechaza, no por lo que acumula.

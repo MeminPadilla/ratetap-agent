@@ -3,6 +3,7 @@
 > La lealtad se gana en los detalles.
 
 - **Canon:** Principle 003
+- **Nace de:** FP-003 (La cultura se construye a diario)
 - **Pilar:** Hospitalidad
 - **Parte:** IV Operaciones (Experiencia del cliente)
 - **Representación visual:** whiteboard del mismo número (nodos en inglés, resumen en español)
