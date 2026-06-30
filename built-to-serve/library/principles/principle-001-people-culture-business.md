@@ -6,28 +6,28 @@
 - **Nace de:** AXIOM 001 (Las personas son la estrategia)
 - **Pilar:** Hospitalidad
 - **Parte:** I Fundamentos (Cultura)
-- **Representación visual:** whiteboard del mismo número (nodos en inglés, resumen en español)
+- **Representación visual:** whiteboard del mismo número (nodos y prosa en español; títulos en inglés)
 
 ![Principle 001](../assets/principle-001-people-culture-business.png)
 
 ## Caption (LinkedIn · ES)
 
-> Voz: abre con una verdad universal sobre el lector. La historia personal,
-> si la hay, va después.
+> Voz: abre con una verdad universal sobre el lector. Ángulo distinto al
+> manifiesto (no repetir "la mayoría de los líderes intenta arreglar el negocio").
 
-La mayoría de los líderes intenta arreglar el negocio.
+Todos quieren mejores resultados.
+Casi nadie trabaja donde de verdad se producen.
 
-Pocos entienden que un negocio nunca se arregla directamente.
-Se transforma a través de las personas.
+Los resultados no se arreglan. Se heredan.
+De la cultura. Y la cultura nace de la gente.
 
-Los negocios no crean cultura.
-Las personas sí.
-Y la cultura es la que, con el tiempo, construye el negocio.
+Es una cadena, y siempre corre en el mismo orden:
+Personas → Cultura → Negocio.
 
-Por eso perseguir el número rara vez funciona:
-estás trabajando en el resultado, no en su causa.
+Si el negocio no va bien, no mires el último eslabón.
+Mira el primero.
 
-¿Estás trabajando en tu negocio, o en la gente que lo construye?
+¿Dónde pones tu energía: en el resultado, o en su origen?
 
 #Cultura #Liderazgo #BuiltToServe
 
