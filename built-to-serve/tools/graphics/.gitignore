@@ -1,0 +1,4 @@
+# Artefactos generados (se reconstruyen con embed_fonts.py + gen.py + render.mjs)
+fonts/fonts.css
+*.html
+*.png

@@ -14,6 +14,9 @@ CONCEPTO GRÁFICO (carrusel de 5 tarjetas, o 1 imagen con los 4 pilares):
 
 # Post 2 — Los Cuatro Pilares (ES, corto)
 
+![Gráfico](../assets/post-02-four-pillars.png)
+
+
 El talento está sobrevalorado.
 La motivación se acaba el martes.
 

@@ -12,6 +12,9 @@ CONCEPTO GRÁFICO (quote card 1:1 o 4:5):
 
 # Post 3 — La hospitalidad empieza dentro (ES, corto)
 
+![Gráfico](../assets/post-03-hospitality.png)
+
+
 Todo restaurante dice que el cliente es primero.
 
 Yo también lo decía. Estaba equivocado.

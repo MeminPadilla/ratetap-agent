@@ -15,6 +15,9 @@ CONCEPTO GRÁFICO (imagen 1:1 o 4:5):
 
 # Post 1 — Built to Serve (ES, corto)
 
+![Gráfico](../assets/post-01-built-to-serve.png)
+
+
 No construimos restaurantes.
 
 Construimos personas.
