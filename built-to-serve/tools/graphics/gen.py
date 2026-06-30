@@ -79,11 +79,11 @@ body{background:#6b7280;display:flex;align-items:center;justify-content:center;
 .t{font-family:'Hand';font-weight:700;color:var(--ink);line-height:1.04}
 .hand{font-family:'Hand'}
 .cav{font-family:'Caveat'}
-.wm{position:absolute;left:60px;bottom:64px;z-index:2;font-family:'Hand';font-weight:700;
-  font-size:25px;letter-spacing:1px;color:#8a93a0}
-.wm b{color:var(--red)}
-.sig{position:absolute;right:60px;bottom:60px;z-index:2;font-family:'Caveat';
-  font-size:40px;color:#41506a;transform:rotate(-2deg)}
+/* Lockup de marca: la filosofía es protagonista; el fundador, en pequeño */
+.brand{position:absolute;left:0;right:0;bottom:44px;z-index:2;text-align:center}
+.brand .bw{font-family:'Hand';font-weight:700;font-size:34px;letter-spacing:3px;color:var(--ink)}
+.brand .bw b{color:var(--red);font-weight:700}
+.brand .by{font-family:'Caveat';font-size:31px;color:#8a93a0;margin-top:-2px}
 </style></head><body><div class="board"><div class="surface">
 <svg id="ink"></svg>
 <div class="content">
@@ -91,8 +91,10 @@ body{background:#6b7280;display:flex;align-items:center;justify-content:center;
 
 FOOT = """
 </div>
-<div class="wm">BUILT TO <b>SERVE</b></div>
-<div class="sig">— Guillermo Padilla</div>
+<div class="brand">
+  <div class="bw">BUILT TO <b>SERVE</b></div>
+  <div class="by">by Guillermo Padilla</div>
+</div>
 </div>
 <div class="tray"></div>
 <div class="mk k"></div><div class="mk b"></div><div class="mk r"></div>
@@ -185,6 +187,41 @@ post3 = """
 </div>
 """
 
-for name, body in [("post1.html", post1), ("post2.html", post2), ("post3.html", post3)]:
+# ---------- SERIE : Diagramas mentales (cadenas causa → efecto) ----------
+def diagrama(kicker, n1, n2, n3, cierre):
+    """Tres nodos a mano conectados por flechas. El resultado (n3) en rojo."""
+    return f"""
+<div class="cav" style="text-align:center;font-size:34px;color:#8a93a0;letter-spacing:1px">{kicker}</div>
+
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:0">
+  <div class="ink-box t" style="font-size:52px;padding:18px 70px">{n1}</div>
+  <div class="ink-arrow" style="width:130px;height:78px"></div>
+  <div class="ink-box t" style="font-size:52px;padding:18px 70px">{n2}</div>
+  <div class="ink-arrow" data-c="red" style="width:130px;height:78px"></div>
+  <div class="ink-box t" data-c="red" style="font-size:52px;padding:18px 70px">{n3}</div>
+</div>
+
+<div style="text-align:center;padding-bottom:108px">
+  <div class="cav" style="font-size:50px;color:var(--ink)">{cierre}</div>
+</div>
+"""
+
+SERIE = [
+    ("diag1.html", diagrama("La cadena #1",
+        "PERSONAS", "CULTURA", "RESULTADOS",
+        "Todo empieza por la gente.")),
+    ("diag2.html", diagrama("La cadena #2",
+        "SERVIR", "CONFIANZA", "LIDERAZGO",
+        "Sirve primero. El liderazgo se gana.")),
+    ("diag3.html", diagrama("La cadena #3",
+        "DISCIPLINA", "CONSTANCIA", "EXCELENCIA",
+        "La excelencia es un hábito, no un golpe de suerte.")),
+    ("diag4.html", diagrama("La cadena #4",
+        "HOSPITALIDAD", "EXPERIENCIA", "LEALTAD",
+        "La lealtad se gana en cada detalle.")),
+]
+
+salidas = [("post1.html", post1), ("post2.html", post2), ("post3.html", post3)] + SERIE
+for name, body in salidas:
     open(os.path.join(BASE, name), "w").write(HEAD + body + FOOT)
     print("wrote", name)
