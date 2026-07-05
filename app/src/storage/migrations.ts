@@ -4,8 +4,12 @@ import {
   StoreStateValidated,
   storeStateSchema,
   transactionSchema,
+  loanSchema,
   leadSchema,
 } from './schemas';
+import { ACCOUNTS } from '../constants/accounts';
+import { AccountId } from '../types';
+import { seedLoans, seedOpeningBalances } from './seed';
 
 // ============================================================
 // Migration system for AsyncStorage payloads
@@ -16,18 +20,16 @@ import {
 //
 // Schema version history:
 //   v0  pre-versioning (no __schemaVersion field). Original
-//       shape: { transactions: Transaction[], leads: Lead[] }.
-//   v1  current. Adds __schemaVersion. Same field shapes; just
-//       enforces validation and dedupes/drops malformed items.
+//       shape: { transactions, leads }.
+//   v1  adds __schemaVersion. Same field shapes.
+//   v2  current. New account model (real accounts + credit cards),
+//       expanded TxType, plus `loans` and `openingBalances`.
+//       Transactions/leads referencing the old model that no longer
+//       validate are dropped item-by-item (never throws on one bad row).
 //
-// To add v2: write `migrateV1ToV2`, append to the chain, bump
-// CURRENT_SCHEMA_VERSION in schemas.ts.
+// To add v3: bump CURRENT_SCHEMA_VERSION in schemas.ts and extend
+// the seed/merge logic below as needed.
 // ============================================================
-
-interface UnvalidatedState {
-  transactions: unknown[];
-  leads: unknown[];
-}
 
 interface ArrayResult<T> {
   valid: T[];
@@ -46,22 +48,21 @@ const safeParseArray = <T>(items: unknown, schema: z.ZodSchema<T>): ArrayResult<
   return { valid, dropped };
 };
 
-interface StepResult {
-  state: UnvalidatedState;
-  droppedTransactions: number;
-  droppedLeads: number;
-}
-
-// v0 → v1: validate each item individually, drop bad ones, attach version field
-const migrateV0ToV1 = (raw: unknown): StepResult => {
-  const obj = (raw ?? {}) as { transactions?: unknown; leads?: unknown };
-  const tx = safeParseArray(obj.transactions, transactionSchema);
-  const ld = safeParseArray(obj.leads, leadSchema);
-  return {
-    state: { transactions: tx.valid, leads: ld.valid },
-    droppedTransactions: tx.dropped,
-    droppedLeads: ld.dropped,
-  };
+/**
+ * Merges any stored opening-balance overrides on top of the seed
+ * defaults, guaranteeing every account id is present with a finite
+ * number (so the final strict parse never fails on this field).
+ */
+const mergeOpeningBalances = (raw: unknown): Record<AccountId, number> => {
+  const base = seedOpeningBalances();
+  if (raw && typeof raw === 'object') {
+    const obj = raw as Record<string, unknown>;
+    for (const a of ACCOUNTS) {
+      const v = obj[a.id];
+      if (typeof v === 'number' && Number.isFinite(v)) base[a.id] = v;
+    }
+  }
+  return base;
 };
 
 export interface MigrateResult {
@@ -74,40 +75,44 @@ export interface MigrateResult {
 
 /**
  * Reads any past or present payload shape and returns a fully
- * validated state at the current schema version. Throws only on
- * the final zod parse — call sites should treat throws as
- * "data corrupt, back up the raw blob and start fresh".
+ * validated state at the current schema version. Individual malformed
+ * items are dropped rather than throwing; the final zod parse only
+ * throws if the assembled shape is fundamentally broken — call sites
+ * treat that as "data corrupt, back up the raw blob and start fresh".
  */
 export const migrate = (raw: unknown): MigrateResult => {
-  const obj = (raw ?? {}) as { __schemaVersion?: unknown };
+  const obj = (raw ?? {}) as {
+    __schemaVersion?: unknown;
+    transactions?: unknown;
+    leads?: unknown;
+    loans?: unknown;
+    openingBalances?: unknown;
+  };
   const fromVersion =
     typeof obj.__schemaVersion === 'number' ? obj.__schemaVersion : 0;
 
-  let working: UnvalidatedState = {
-    transactions: ((obj as { transactions?: unknown }).transactions ?? []) as unknown[],
-    leads: ((obj as { leads?: unknown }).leads ?? []) as unknown[],
-  };
-  let droppedTransactions = 0;
-  let droppedLeads = 0;
+  const tx = safeParseArray(obj.transactions, transactionSchema);
+  const ld = safeParseArray(obj.leads, leadSchema);
 
-  if (fromVersion < 1) {
-    const step = migrateV0ToV1(obj);
-    working = step.state;
-    droppedTransactions += step.droppedTransactions;
-    droppedLeads += step.droppedLeads;
-  }
-  // future: if (fromVersion < 2) { ... }
+  // loans: when the field is entirely absent (upgrade from v0/v1) seed the
+  // initial loans; otherwise validate + drop malformed rows.
+  const loans =
+    obj.loans === undefined ? seedLoans() : safeParseArray(obj.loans, loanSchema).valid;
+
+  const openingBalances = mergeOpeningBalances(obj.openingBalances);
 
   const validated = storeStateSchema.parse({
     __schemaVersion: CURRENT_SCHEMA_VERSION,
-    transactions: working.transactions,
-    leads: working.leads,
+    transactions: tx.valid,
+    leads: ld.valid,
+    loans,
+    openingBalances,
   });
 
   return {
     state: validated,
-    droppedTransactions,
-    droppedLeads,
+    droppedTransactions: tx.dropped,
+    droppedLeads: ld.dropped,
     fromVersion,
     migrated: fromVersion < CURRENT_SCHEMA_VERSION,
   };

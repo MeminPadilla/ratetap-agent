@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { Account } from '../constants/accounts';
+import { Account } from '../types';
 import { colors, fontSize, radius, spacing } from '../constants/theme';
 
 interface Props {

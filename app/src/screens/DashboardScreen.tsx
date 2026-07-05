@@ -1,6 +1,8 @@
-import { useMemo } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useMemo, useState } from 'react';
+import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { ScreenContainer } from '../components/ScreenContainer';
+import { LoansScreen } from './LoansScreen';
+import { EditBalancesScreen } from './EditBalancesScreen';
 import { ListRow } from '../components/ListRow';
 import { SplitBalanceCard } from '../components/SplitBalanceCard';
 import { InsightsCard } from '../components/InsightsCard';
@@ -18,8 +20,11 @@ import {
 } from '../utils/analytics';
 
 export const DashboardScreen = () => {
-  const { transactions, leads, balances, balanceFor } = useStore();
+  const { transactions, leads, balances, balanceFor, finances } = useStore();
   const recent = transactions.slice(0, 5);
+
+  const [showLoans, setShowLoans] = useState(false);
+  const [showEditBalances, setShowEditBalances] = useState(false);
 
   const buckets = useMemo(() => weeklyBuckets(transactions), [transactions]);
   const monthSpend = useMemo(() => monthSpendByAccount(transactions), [transactions]);
@@ -42,16 +47,54 @@ export const DashboardScreen = () => {
         contentContainerStyle={styles.scroll}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.greeting}>Hello 👋</Text>
-        <Text style={styles.heading}>Net balance</Text>
+        <Text style={styles.greeting}>Hola 👋</Text>
+        <Text style={styles.heading}>Patrimonio neto</Text>
         <Text
           style={[
             styles.netAmount,
-            { color: balances.total >= 0 ? colors.income : colors.expense },
+            { color: finances.patrimonioNeto >= 0 ? colors.income : colors.expense },
           ]}
         >
-          {formatMoney(balances.total)}
+          {formatMoney(finances.patrimonioNeto)}
         </Text>
+
+        <View style={styles.finRow}>
+          <View style={styles.finBox}>
+            <Text style={styles.finLabel}>Líquido</Text>
+            <Text style={styles.finValue}>{formatMoney(finances.liquido)}</Text>
+          </View>
+          <View style={styles.finBox}>
+            <Text style={styles.finLabel}>Deuda TC</Text>
+            <Text style={[styles.finValue, { color: colors.expense }]}>
+              {formatMoney(finances.deudaUsada)}
+            </Text>
+          </View>
+          <Pressable style={styles.finBox} onPress={() => setShowLoans(true)}>
+            <Text style={styles.finLabel}>Por cobrar</Text>
+            <Text style={[styles.finValue, { color: colors.income }]}>
+              {formatMoney(finances.porCobrar)}
+            </Text>
+          </Pressable>
+        </View>
+
+        <Text style={styles.totalLine}>
+          Patrimonio total (con por cobrar):{' '}
+          <Text style={styles.totalStrong}>
+            {formatMoney(finances.patrimonioTotal)}
+          </Text>
+        </Text>
+
+        <View style={styles.actionsRow}>
+          <Pressable
+            style={styles.actionBtn}
+            onPress={() => setShowEditBalances(true)}
+          >
+            <Text style={styles.actionText}>Editar saldos</Text>
+          </Pressable>
+          <Pressable style={styles.actionBtn} onPress={() => setShowLoans(true)}>
+            <Text style={styles.actionText}>Por cobrar</Text>
+          </Pressable>
+        </View>
 
         <SplitBalanceCard balanceFor={balanceFor} />
 
@@ -59,10 +102,12 @@ export const DashboardScreen = () => {
 
         <InsightsCard insights={insights} />
 
-        <Text style={styles.section}>Accounts</Text>
+        <Text style={styles.section}>Cuentas</Text>
         <View style={styles.grid}>
           {ACCOUNTS.map((acc) => {
-            const bal = balances[acc.id];
+            const bal = balances[acc.id] ?? 0;
+            const isCredit = acc.kind === 'credit';
+            const util = finances.utilizacionPorCuenta[acc.id];
             return (
               <View
                 key={acc.id}
@@ -70,17 +115,31 @@ export const DashboardScreen = () => {
               >
                 <View style={styles.cardHead}>
                   <View style={[styles.dot, { backgroundColor: acc.color }]} />
-                  <Text style={styles.cardKind}>{acc.kind}</Text>
+                  <Text style={styles.cardKind}>
+                    {isCredit ? 'crédito' : 'débito'}
+                  </Text>
                 </View>
                 <Text style={styles.cardName}>{acc.label}</Text>
                 <Text
                   style={[
                     styles.cardAmount,
-                    { color: bal >= 0 ? colors.text : colors.expense },
+                    {
+                      color: isCredit
+                        ? colors.expense
+                        : bal >= 0
+                          ? colors.text
+                          : colors.expense,
+                    },
                   ]}
                 >
                   {formatMoney(bal)}
                 </Text>
+                {isCredit && acc.limit ? (
+                  <Text style={styles.cardMeta}>
+                    {util != null ? `${Math.round(util * 100)}% usado · ` : ''}
+                    límite {formatMoney(acc.limit)}
+                  </Text>
+                ) : null}
               </View>
             );
           })}
@@ -125,6 +184,24 @@ export const DashboardScreen = () => {
           })
         )}
       </ScrollView>
+
+      <Modal
+        visible={showLoans}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setShowLoans(false)}
+      >
+        <LoansScreen onClose={() => setShowLoans(false)} />
+      </Modal>
+
+      <Modal
+        visible={showEditBalances}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setShowEditBalances(false)}
+      >
+        <EditBalancesScreen onClose={() => setShowEditBalances(false)} />
+      </Modal>
     </ScreenContainer>
   );
 };
@@ -149,7 +226,66 @@ const styles = StyleSheet.create({
     fontSize: fontSize.display,
     fontWeight: '800',
     marginTop: spacing.xs,
+    marginBottom: spacing.md,
+  },
+  finRow: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginBottom: spacing.sm,
+  },
+  finBox: {
+    flex: 1,
+    backgroundColor: colors.surface,
+    borderRadius: radius.md,
+    padding: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  finLabel: {
+    color: colors.textDim,
+    fontSize: fontSize.xs,
+    textTransform: 'uppercase',
+    letterSpacing: 0.6,
+    fontWeight: '700',
+  },
+  finValue: {
+    color: colors.text,
+    fontSize: fontSize.md,
+    fontWeight: '800',
+    marginTop: spacing.xs,
+  },
+  totalLine: {
+    color: colors.textDim,
+    fontSize: fontSize.sm,
+    marginBottom: spacing.md,
+  },
+  totalStrong: {
+    color: colors.text,
+    fontWeight: '800',
+  },
+  actionsRow: {
+    flexDirection: 'row',
+    gap: spacing.sm,
     marginBottom: spacing.lg,
+  },
+  actionBtn: {
+    flex: 1,
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: radius.md,
+    paddingVertical: spacing.md,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  actionText: {
+    color: colors.text,
+    fontSize: fontSize.sm,
+    fontWeight: '700',
+  },
+  cardMeta: {
+    color: colors.textDim,
+    fontSize: fontSize.xs,
+    marginTop: spacing.xs,
   },
   section: {
     color: colors.text,

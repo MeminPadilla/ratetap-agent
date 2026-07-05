@@ -8,25 +8,25 @@ interface Props {
 }
 
 export const SplitBalanceCard = ({ balanceFor }: Props) => {
-  const personalAccs = ACCOUNTS.filter((a) => a.kind === 'Personal');
-  const businessAccs = ACCOUNTS.filter((a) => a.kind !== 'Personal');
+  const debitAccs = ACCOUNTS.filter((a) => a.kind === 'debit');
+  const creditAccs = ACCOUNTS.filter((a) => a.kind === 'credit');
 
-  const personalTotal = personalAccs.reduce((s, a) => s + balanceFor(a.id), 0);
-  const businessTotal = businessAccs.reduce((s, a) => s + balanceFor(a.id), 0);
+  const debitTotal = debitAccs.reduce((s, a) => s + balanceFor(a.id), 0);
+  const creditTotal = creditAccs.reduce((s, a) => s + balanceFor(a.id), 0);
 
   return (
     <View style={styles.row}>
       <View style={[styles.col, styles.personal]}>
-        <Text style={styles.kind}>Personal</Text>
+        <Text style={styles.kind}>Líquido</Text>
         <Text
           style={[
             styles.amount,
-            { color: personalTotal >= 0 ? colors.text : colors.expense },
+            { color: debitTotal >= 0 ? colors.text : colors.expense },
           ]}
         >
-          {formatMoney(personalTotal)}
+          {formatMoney(debitTotal)}
         </Text>
-        {personalAccs.map((a) => (
+        {debitAccs.map((a) => (
           <View key={a.id} style={styles.subRow}>
             <View style={[styles.dot, { backgroundColor: a.color }]} />
             <Text style={styles.subLabel}>{a.label}</Text>
@@ -43,23 +43,23 @@ export const SplitBalanceCard = ({ balanceFor }: Props) => {
       </View>
 
       <View style={[styles.col, styles.business]}>
-        <Text style={styles.kind}>Business</Text>
+        <Text style={styles.kind}>Deuda TC (usado)</Text>
         <Text
           style={[
             styles.amount,
-            { color: businessTotal >= 0 ? colors.text : colors.expense },
+            { color: creditTotal > 0 ? colors.expense : colors.text },
           ]}
         >
-          {formatMoney(businessTotal)}
+          {formatMoney(creditTotal)}
         </Text>
-        {businessAccs.map((a) => (
+        {creditAccs.map((a) => (
           <View key={a.id} style={styles.subRow}>
             <View style={[styles.dot, { backgroundColor: a.color }]} />
             <Text style={styles.subLabel}>{a.label}</Text>
             <Text
               style={[
                 styles.subAmount,
-                { color: balanceFor(a.id) < 0 ? colors.expense : colors.textDim },
+                { color: balanceFor(a.id) > 0 ? colors.expense : colors.textDim },
               ]}
             >
               {formatMoney(balanceFor(a.id))}
