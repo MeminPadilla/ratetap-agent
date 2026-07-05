@@ -1,6 +1,6 @@
 import { ACCOUNTS, accountById } from '../constants/accounts';
 import { formatMoney } from '../constants/theme';
-import { AccountId, Lead, LeadStatus, Transaction } from '../types';
+import { AccountId, AccountKind, Lead, LeadStatus, Transaction } from '../types';
 
 const DAY_MS = 86_400_000;
 
@@ -91,26 +91,26 @@ export const leadCountsByStatus = (leads: Lead[]): Record<LeadStatus, number> =>
 };
 
 export interface BalanceSplit {
-  personal: number;
-  business: number;
-  byKind: { kind: 'Personal' | 'Business' | 'Ads' | 'Credit'; amount: number }[];
+  debito: number; // dinero disponible (cuentas débito)
+  credito: number; // usado en tarjetas de crédito
+  byKind: { kind: AccountKind; amount: number }[];
 }
 
 export const balanceSplit = (
   balanceFor: (id: AccountId) => number,
 ): BalanceSplit => {
-  let personal = 0;
-  let business = 0;
-  const byKindMap = new Map<BalanceSplit['byKind'][number]['kind'], number>();
+  let debito = 0;
+  let credito = 0;
+  const byKindMap = new Map<AccountKind, number>();
   for (const acc of ACCOUNTS) {
     const bal = balanceFor(acc.id);
     byKindMap.set(acc.kind, (byKindMap.get(acc.kind) ?? 0) + bal);
-    if (acc.kind === 'Personal') personal += bal;
-    else business += bal; // Business + Ads + Credit treated as business-side
+    if (acc.kind === 'debit') debito += bal;
+    else credito += bal;
   }
   return {
-    personal,
-    business,
+    debito,
+    credito,
     byKind: [...byKindMap.entries()].map(([kind, amount]) => ({ kind, amount })),
   };
 };
@@ -237,7 +237,7 @@ export const generateInsights = (
   // Negative account balances
   for (const acc of ACCOUNTS) {
     const bal = balanceFor(acc.id);
-    if (bal < 0 && acc.kind !== 'Credit') {
+    if (bal < 0 && acc.kind === 'debit') {
       out.push({
         id: `neg-${acc.id}`,
         kind: 'warn',
