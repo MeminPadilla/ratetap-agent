@@ -12,9 +12,12 @@ import {
 } from 'react-native';
 import { ScreenContainer } from '../components/ScreenContainer';
 import { AmountInput } from '../components/AmountInput';
+import { AccountChip } from '../components/AccountChip';
 import { PrimaryButton } from '../components/PrimaryButton';
+import { ACCOUNTS } from '../constants/accounts';
 import { colors, fontSize, formatMoney, radius, spacing } from '../constants/theme';
 import { useStore } from '../storage/useStore';
+import { AccountId } from '../types';
 
 const DAY_MS = 86_400_000;
 
@@ -28,22 +31,35 @@ interface Props {
   onClose: () => void;
 }
 
-export const LoansScreen = ({ onClose }: Props) => {
-  const { loans, finances, addLoanRepayment } = useStore();
+// Solo se puede abonar a cuentas de débito (ahí entra el dinero cobrado).
+const DEBIT_ACCOUNTS = ACCOUNTS.filter((a) => a.kind === 'debit');
 
-  // Préstamo actualmente en modo "registrar abono" y el monto tecleado.
+export const LoansScreen = ({ onClose }: Props) => {
+  const { loans, finances, addLoanRepayment, lastAccountId } = useStore();
+
+  // Préstamo actualmente en modo "registrar abono", el monto tecleado y la
+  // cuenta destino donde entra el dinero cobrado.
   const [activeLoanId, setActiveLoanId] = useState<string | null>(null);
   const [amountText, setAmountText] = useState('');
+  const [depositAccountId, setDepositAccountId] = useState<AccountId>(
+    DEBIT_ACCOUNTS[0].id,
+  );
+
+  const defaultDeposit = (): AccountId =>
+    lastAccountId && DEBIT_ACCOUNTS.some((a) => a.id === lastAccountId)
+      ? lastAccountId
+      : DEBIT_ACCOUNTS[0].id;
 
   const startAbono = (loanId: string) => {
     setActiveLoanId(loanId);
     setAmountText('');
+    setDepositAccountId(defaultDeposit());
   };
 
   const confirmAbono = (loanId: string) => {
     const amount = parseFloat(amountText || '0');
     if (!(amount > 0)) return;
-    addLoanRepayment(loanId, amount);
+    addLoanRepayment(loanId, amount, depositAccountId);
     setActiveLoanId(null);
     setAmountText('');
   };
@@ -109,6 +125,22 @@ export const LoansScreen = ({ onClose }: Props) => {
                       tint={colors.income}
                       autoFocus
                     />
+                    <Text style={styles.abonoLabel}>Entra a</Text>
+                    <ScrollView
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      keyboardShouldPersistTaps="handled"
+                      contentContainerStyle={styles.chipsRow}
+                    >
+                      {DEBIT_ACCOUNTS.map((acc) => (
+                        <AccountChip
+                          key={acc.id}
+                          account={acc}
+                          selected={depositAccountId === acc.id}
+                          onPress={() => setDepositAccountId(acc.id)}
+                        />
+                      ))}
+                    </ScrollView>
                     <View style={styles.abonoActions}>
                       <Pressable
                         onPress={() => setActiveLoanId(null)}
@@ -229,6 +261,18 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
     borderTopWidth: 1,
     borderTopColor: colors.border,
+  },
+  abonoLabel: {
+    color: colors.textDim,
+    fontSize: fontSize.xs,
+    textTransform: 'uppercase',
+    letterSpacing: 0.6,
+    fontWeight: '700',
+    marginBottom: spacing.sm,
+  },
+  chipsRow: {
+    paddingBottom: spacing.sm,
+    paddingRight: spacing.md,
   },
   abonoActions: {
     flexDirection: 'row',

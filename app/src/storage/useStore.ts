@@ -43,7 +43,10 @@ interface StoreApi extends StoreState {
   addTransaction: (t: Omit<Transaction, 'id' | 'createdAt'>) => void;
   addLead: (l: Omit<Lead, 'id' | 'createdAt'>) => void;
   addLoan: (l: Omit<Loan, 'id' | 'createdAt'>) => void;
-  addLoanRepayment: (loanId: string, amount: number) => void;
+  // Registra un abono: baja el pendiente del préstamo Y acredita el dinero
+  // en una cuenta débito (transacción loan_repayment), dejando el patrimonio
+  // total constante — el dinero pasa de "por cobrar" a "líquido".
+  addLoanRepayment: (loanId: string, amount: number, accountId: AccountId) => void;
   setOpeningBalance: (accountId: AccountId, value: number) => void;
   // Saldo actual por cuenta (openingBalance + transacciones que la afectan).
   balances: Record<AccountId, number>;
@@ -244,19 +247,32 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const addLoanRepayment: StoreApi['addLoanRepayment'] = useCallback(
-    (loanId, amount) => {
+    (loanId, amount, accountId) => {
       if (!(amount > 0)) return;
-      setState((prev) => ({
-        ...prev,
-        loans: prev.loans.map((loan) =>
-          loan.id === loanId
-            ? {
-                ...loan,
-                amountOutstanding: Math.max(0, loan.amountOutstanding - amount),
-              }
-            : loan,
-        ),
-      }));
+      setState((prev) => {
+        const loan = prev.loans.find((l) => l.id === loanId);
+        if (!loan) return prev;
+        // El dinero entra a una cuenta débito: registramos la transacción
+        // loan_repayment (sube el saldo) y bajamos el pendiente del préstamo.
+        // Así el patrimonio total no cambia: sale de "por cobrar", entra a "líquido".
+        const tx: Transaction = {
+          id: newId(),
+          type: 'loan_repayment',
+          amount,
+          accountId,
+          note: `Abono préstamo · ${loan.debtor}`,
+          createdAt: new Date().toISOString(),
+        };
+        return {
+          ...prev,
+          transactions: [tx, ...prev.transactions],
+          loans: prev.loans.map((l) =>
+            l.id === loanId
+              ? { ...l, amountOutstanding: Math.max(0, l.amountOutstanding - amount) }
+              : l,
+          ),
+        };
+      });
     },
     [],
   );
