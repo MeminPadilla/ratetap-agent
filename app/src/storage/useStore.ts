@@ -15,7 +15,10 @@ import { CURRENT_SCHEMA_VERSION } from './schemas';
 import { migrate } from './migrations';
 import { seedLoans, seedOpeningBalances } from './seed';
 
-const STORAGE_KEY = '@ratetap/v1';
+// Bump this key para forzar un reseed cuando cambian los saldos semilla base
+// (así el navegador no sigue mostrando el seed viejo cacheado). A partir de
+// aquí, los ajustes del día a día van por "Editar saldos" / transacciones.
+const STORAGE_KEY = '@ratetap/v2-20260802';
 const LAST_ACCOUNT_KEY = '@ratetap/lastAccount';
 const BACKUP_KEY_PREFIX = '@ratetap/backup/';
 
