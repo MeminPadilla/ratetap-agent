@@ -45,13 +45,21 @@ Prioriza **face-to-camera** (hablar a cámara) como formato principal — es el
 que más conecta y construye marca personal. Los carruseles y las frases-imagen
 son soporte, no el plato fuerte.
 
-## Estándar de marca visual (para el diseñador de carruseles)
+## Estándar de marca visual (ESTILO FINAL)
 
-- Fondo blanco cálido (#FAF9F6). Tinta casi negra (#1A1A1A).
-- Acento oro **#C9A04E**. Vino #6E202A como secundario ocasional.
-- Serif condensada para titulares; palabras clave en itálica oro.
-- Firma: GUILLERMO PADILLA / @meminpadilla. Monograma M·H·D·P.
-- Sin emojis, sin stock genérico, sin degradados baratos.
+El estilo visual oficial de TODOS los artes es el **pizarrón a mano
+(whiteboard)** definido en `estilo-visual-whiteboard.md`. Léelo antes de
+producir cualquier arte, carrusel o frase-imagen.
+
+- Pizarrón blanco con marco de aluminio y bandeja de marcadores.
+- Letra manuscrita de marcador; cajas/flechas/subrayados dibujados a mano.
+- Tinta navy `#1d2b3c`, acento rojo `#cf3a2c`, subrayado azul `#1f6fb2`.
+- Firma BUILT TO SERVE / by Guillermo Padilla (o @meminpadilla en IG).
+- Idioma: títulos/etiquetas en inglés; todo lo que se lee, en español.
+
+> Esto **reemplaza** el estándar anterior (blanco cálido + oro + serif). Ese
+> queda obsoleto. El motor reproducible vive en
+> `built-to-serve/tools/graphics/`.
 
 ## Cuentas
 
